@@ -1,0 +1,76 @@
+.bg-jade {
+    --bs-bg-opacity: 1;
+    background-color: mediumseagreen !important;
+}
+.mtext {
+    margin-top: -0.15rem !important;
+}
+.me-none {
+    margin-bottom: -10px;
+}
+.sm-circle {
+    height: 48px;
+    width: 48px;
+    background: mediumseagreen;
+    border-radius: 100%;
+}
+
+.search-box {
+    min-height: fit-content;
+    max-width: fit-content;
+    border-radius: 0 0 25px 25px;
+    padding: 5px 17px 0 17px;
+    background-color: mediumseagreen !important;
+}
+.bd-search {
+    width: 75%;
+}
+
+.auth-box {
+    min-height: fit-content;
+    max-width: fit-content;
+    border: 1.5px solid lightgray;
+    border-radius: 25px;
+    margin-top: 150px;
+    padding: 15px 25px;
+    box-shadow: 3px 2px 5px lightgray;
+}
+
+.item-box {
+    min-height: fit-content;
+    max-width: fit-content;
+    border: 1.5px solid lightgray;
+    border-radius: 25px;
+    margin-top: 15px;
+    padding: 15px 25px;
+    box-shadow: 3px 2px 5px lightgray;
+}
+a.nav-link{
+    color: white;
+    opacity: 75%;
+}
+a.nav-link:hover {
+    color:white;
+    opacity: 100%;
+}
+.active {
+    font-weight: 500;
+    opacity: 100% !important;
+}
+button.btn-jade{
+    color: mediumseagreen;
+    border-color: mediumseagreen;
+}
+button.btn-jade:hover {
+    background: mediumseagreen;
+    color: white;
+}
+button.btn-jade-reversed{
+    color: white;
+    background: mediumseagreen;
+    border-color: mediumseagreen;
+}
+button.btn-jade-reversed:hover {
+    background: white;
+    color: mediumseagreen;
+}

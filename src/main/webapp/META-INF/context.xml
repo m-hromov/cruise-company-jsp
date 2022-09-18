@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/CruiseCompany">
+    <Resource auth="Container" driverClassName="org.postgresql.Driver" maxIdle="1" maxTotal="2"
+              global="jdbc/cruise_company"
+              name="jdbc/cruise_company" password="GuysIcaughtAnOlive" type="javax.sql.DataSource"
+              url="jdbc:postgresql://localhost:5432/cruise_company" username="MarkedOne"/>
+</Context>
