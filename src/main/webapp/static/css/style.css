@@ -1,3 +1,12 @@
+.br-color {
+    border: 1.5px solid darkgray;
+}
+.bg-table-col1 {
+    background: lavender;
+}
+.bg-table-col2 {
+    background: lemonchiffon;
+}
 .bg-jade {
     --bs-bg-opacity: 1;
     background-color: mediumseagreen !important;
@@ -37,10 +46,7 @@
 }
 
 .item-box {
-    min-height: fit-content;
-    max-width: fit-content;
     border: 1.5px solid lightgray;
-    border-radius: 25px;
     margin-top: 15px;
     padding: 15px 25px;
     box-shadow: 3px 2px 5px lightgray;
@@ -57,20 +63,20 @@ a.nav-link:hover {
     font-weight: 500;
     opacity: 100% !important;
 }
-button.btn-jade{
+.btn-jade{
     color: mediumseagreen;
     border-color: mediumseagreen;
 }
-button.btn-jade:hover {
+.btn-jade:hover {
     background: mediumseagreen;
     color: white;
 }
-button.btn-jade-reversed{
+.btn-jade-reversed{
     color: white;
     background: mediumseagreen;
     border-color: mediumseagreen;
 }
-button.btn-jade-reversed:hover {
+.btn-jade-reversed:hover {
     background: white;
     color: mediumseagreen;
 }

@@ -1,4 +1,4 @@
-package com.cruisecompany.db.dao.mapper;
+package com.cruisecompany.db;
 
 public class Tables {
     public static final String SHIP = "ship";

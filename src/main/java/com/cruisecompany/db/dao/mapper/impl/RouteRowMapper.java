@@ -13,25 +13,24 @@ import com.cruisecompany.db.entity.Station;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static com.cruisecompany.db.dao.mapper.Tables.CRUISE;
-import static com.cruisecompany.db.dao.mapper.Tables.STATION;
-import static com.cruisecompany.db.dao.mapper.impl.Columns.*;
+import static com.cruisecompany.db.Tables.CRUISE;
+import static com.cruisecompany.db.Tables.STATION;
+import static com.cruisecompany.db.Columns.*;
 
 public class RouteRowMapper implements RowMapper<Route> {
     @Override
     public Route map(ResultSet rs) {
         try {
             RowMapper<Cruise> cruiseRowMapper = RowMapperFactory.getInstance().getCruiseRowMapper();
-            CruiseDAO cruiseDAO = new CruiseDAOImpl(cruiseRowMapper, CRUISE);
-            Cruise cruise = cruiseDAO.get(rs.getLong(ID_SHIP)).orElse(new Cruise());
+            CruiseDAO cruiseDAO = new CruiseDAOImpl(cruiseRowMapper);
+            Cruise cruise = cruiseDAO.get(rs.getLong(SHIP_ID)).orElse(new Cruise());
 
             RowMapper<Station> stationRowMapper = RowMapperFactory.getInstance().getStationRowMapper();
             StationDAO stationDAO = new StationDAOImpl(stationRowMapper, STATION);
-            Station station = stationDAO.get(rs.getLong(ID_STATION)).orElse(new Station());
+            Station station = stationDAO.get(rs.getLong(STATION_ID)).orElse(new Station());
 
             Route route = new Route();
-            route.setId(rs.getLong(ID))
-                    .setCruise(cruise)
+            route.setCruise(cruise)
                     .setStation(station)
                     .setOrderNumber(rs.getInt(ORDER_NUMBER));
             return route;

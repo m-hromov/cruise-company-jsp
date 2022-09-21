@@ -44,6 +44,32 @@
                     </a>
                 </c:if>
             </li>
+            <c:if test="${sessionScope.role=='admin'}">
+                <li class="nav-item">
+                    <c:if test="${pageContext.request.requestURI.equals('/orders.jsp')}">
+                        <a class="nav-link active" href="orders.jsp">
+                            Orders
+                        </a>
+                    </c:if>
+                    <c:if test="${!pageContext.request.requestURI.equals('/orders.jsp')}">
+                        <a class="nav-link" href="orders.jsp">
+                            Orders
+                        </a>
+                    </c:if>
+                </li>
+                <li class="nav-item">
+                    <c:if test="${pageContext.request.requestURI.equals('/add_cruise.jsp')}">
+                        <a class="nav-link active" href="add_cruise.jsp">
+                            Add cruise
+                        </a>
+                    </c:if>
+                    <c:if test="${!pageContext.request.requestURI.equals('/add_cruise.jsp')}">
+                        <a class="nav-link" href="add_cruise.jsp">
+                            Add cruise
+                        </a>
+                    </c:if>
+                </li>
+            </c:if>
         </ul>
 
         <c:if test="${pageContext.request.requestURI.equals('/find_cruise.jsp')}">
@@ -62,38 +88,53 @@
         </c:if>
 
         <ul class="navbar-nav me-3">
-            <li class="nav-item">
-                <c:if test="${pageContext.request.requestURI.equals('/signin.jsp')}">
-                    <a class="nav-link active" href="../signin.jsp">
-                        Sign in
+            <c:if test="${sessionScope.role=='admin'}">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                       aria-expanded="false">${sessionScope.role}</a>
+                    <ul class="dropdown-menu" style="right: 0;left: auto;">
+                        <li><a class="dropdown-item" href="cruise/edit_profile">Edit profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="cruise/sign_out">Sign out</a></li>
+                    </ul>
+                </li>
+            </c:if>
+            <c:if test="${sessionScope.role!='admin'}">
+                <li class="nav-item">
+                    <c:if test="${pageContext.request.requestURI.equals('/signin.jsp')}">
+                        <a class="nav-link active" href="../signin.jsp">
+                            Sign in
 
-                    </a>
-                </c:if>
-                <c:if test="${!pageContext.request.requestURI.equals('/signin.jsp')}">
-                    <a class="nav-link" href="../signin.jsp">
-                        Sign in
+                        </a>
+                    </c:if>
+                    <c:if test="${!pageContext.request.requestURI.equals('/signin.jsp')}">
+                        <a class="nav-link" href="../signin.jsp">
+                            Sign in
 
-                    </a>
-                </c:if>
-            </li>
-            <li class="nav-item py-1 col-12 col-lg-auto">
-                <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
-                <hr class="d-lg-none text-white-50">
-            </li>
-            <li class="nav-item">
-                <c:if test="${pageContext.request.requestURI.equals('/signup.jsp')}">
-                    <a class="nav-link active" href="../signup.jsp">
-                        Sign up
+                        </a>
+                    </c:if>
+                </li>
+                <li class="nav-item py-1 col-12 col-lg-auto">
+                    <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+                    <hr class="d-lg-none text-white-50">
+                </li>
+                <li class="nav-item">
+                    <c:if test="${pageContext.request.requestURI.equals('/signup.jsp')}">
+                        <a class="nav-link active" href="../signup.jsp">
+                            Sign up
 
-                    </a>
-                </c:if>
-                <c:if test="${!pageContext.request.requestURI.equals('/signup.jsp')}">
-                    <a class="nav-link" href="../signup.jsp">
-                        Sign up
+                        </a>
+                    </c:if>
+                    <c:if test="${!pageContext.request.requestURI.equals('/signup.jsp')}">
+                        <a class="nav-link" href="../signup.jsp">
+                            Sign up
 
-                    </a>
-                </c:if>
-            </li>
+                        </a>
+                    </c:if>
+                </li>
+            </c:if>
         </ul>
     </div>
 

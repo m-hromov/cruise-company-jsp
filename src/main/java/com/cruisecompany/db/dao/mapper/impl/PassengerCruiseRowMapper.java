@@ -13,9 +13,9 @@ import com.cruisecompany.db.entity.PassengerCruise;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static com.cruisecompany.db.dao.mapper.Tables.CRUISE;
-import static com.cruisecompany.db.dao.mapper.Tables.PASSENGER;
-import static com.cruisecompany.db.dao.mapper.impl.Columns.*;
+import static com.cruisecompany.db.Tables.CRUISE;
+import static com.cruisecompany.db.Tables.PASSENGER;
+import static com.cruisecompany.db.Columns.*;
 
 public class PassengerCruiseRowMapper implements RowMapper<PassengerCruise> {
     @Override
@@ -23,15 +23,14 @@ public class PassengerCruiseRowMapper implements RowMapper<PassengerCruise> {
         try {
             RowMapper<Passenger> passengerRowMapper = RowMapperFactory.getInstance().getPassengerRowMapper();
             PassengerDAO passengerDAO = new PassengerDAOImpl(passengerRowMapper, PASSENGER);
-            Passenger passenger = passengerDAO.get(rs.getLong(ID_PASSENGER)).orElse(new Passenger());
+            Passenger passenger = passengerDAO.get(rs.getLong(PASSENGER_ID)).orElse(new Passenger());
 
             RowMapper<Cruise> cruiseRowMapper = RowMapperFactory.getInstance().getCruiseRowMapper();
-            CruiseDAO cruiseDAO = new CruiseDAOImpl(cruiseRowMapper, CRUISE);
-            Cruise cruise = cruiseDAO.get(rs.getLong(ID_CRUISE)).orElse(new Cruise());
+            CruiseDAO cruiseDAO = new CruiseDAOImpl(cruiseRowMapper);
+            Cruise cruise = cruiseDAO.get(rs.getLong(CRUISE_ID)).orElse(new Cruise());
 
             PassengerCruise passengerCruise = new PassengerCruise();
-            passengerCruise.setId(rs.getLong(ID))
-                    .setCruise(cruise)
+            passengerCruise.setCruise(cruise)
                     .setPaid(rs.getBoolean(PAID))
                     .setPassenger(passenger);
             return passengerCruise;

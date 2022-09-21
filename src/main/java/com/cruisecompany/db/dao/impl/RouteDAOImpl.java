@@ -5,6 +5,8 @@ import com.cruisecompany.db.dao.RouteDAO;
 import com.cruisecompany.db.dao.mapper.RowMapper;
 import com.cruisecompany.db.entity.Route;
 
+import java.util.List;
+
 public class RouteDAOImpl extends AbstractDAO<Route> implements RouteDAO {
 
 
@@ -22,4 +24,7 @@ public class RouteDAOImpl extends AbstractDAO<Route> implements RouteDAO {
     public void update(Route obj) {
 
     }
+
+
+
 }

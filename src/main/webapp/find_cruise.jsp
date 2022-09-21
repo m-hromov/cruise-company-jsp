@@ -23,33 +23,31 @@
 <body>
 <jsp:include page="page_elements/header.jsp"/>
 <div class="container">
-
+    <jsp:useBean id="listCruise" scope="request" type="java.util.List<com.cruisecompany.db.dto.CruiseShowDTO>"/>
     <c:forEach items="${listCruise}" var="cruise">
-        <div class="container flex-column item-box rounded-0 justify-content-center text-center bd-search">
+        <div class="container item-box justify-content-center text-center bd-search">
             <div class="row">
-                <div class="col">
-                    <img src="${cruise.ship.photoPath}" height="360" width="480" alt="ship"/>
+                <div class="col ">
+                    <img src="${cruise.photoPath}" height="360" width="480" alt="ship"/>
                 </div>
-                <div class="col">
-                    <div class="text-start fw-bold fs-4">Getaway from Odesa, Ukraine</div>
-                    <div class="text-start fw-bold fs-6 mt-sm-0">${cruise.ship.name}</div>
-                    <div class="row align-items-center ms-auto">
-                        <div class="col col-auto sm-circle bg-jade ">
-                            <div class="fw-bold fs-5 text-white me-none">${cruise.daysTotal}</div>
-                            <div class="text-white">DAY</div>
-                        </div>
-                        <div class="col text-start">
-                            Start: Odesa -> End: Lviv
+                <div class="col d-flex flex-column ">
+                    <div class="text-start fw-bold fs-4">Getaway from ${cruise.start}, Ukraine</div>
+                    <div class="text-start fw-bold fs-6 mt-sm-0">${cruise.shipName}</div>
+                    <div class="align-items-center ">
+                        <div class="d-flex flex-row">
+                            <div class="sm-circle bg-jade me-2">
+                                <div class="fw-bold fs-5 text-white me-none">${cruise.daysTotal}</div>
+                                <div class="text-white">DAY</div>
+                            </div>
+                            <div class="text-start align-self-center">
+                                Start: ${cruise.start} -> End: ${cruise.end}
+                            </div>
                         </div>
                     </div>
                     <p class="text-start text-wrap">${cruise.description}</p>
-                    <div class="d-flex flex-row justify-content-end">
-                        <div class="p-2 fs-4 fw-bold ">
-                            ${cruise.price}$
-                        </div>
-                        <div class="p-2">
-                            <button class="btn btn-jade-reversed">Buy</button>
-                        </div>
+                    <div class="row align-self-end mt-auto">
+                        <div class="col fs-4 fw-bold me-2">${cruise.price}$</div>
+                        <a class="col btn btn-jade-reversed">Buy</a>
                     </div>
                 </div>
             </div>

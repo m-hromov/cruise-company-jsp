@@ -6,14 +6,14 @@ import com.cruisecompany.db.entity.Ship;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static com.cruisecompany.db.dao.mapper.impl.Columns.*;
+import static com.cruisecompany.db.Columns.*;
 
 public class ShipRowMapper implements RowMapper<Ship> {
     @Override
     public Ship map(ResultSet rs) {
         try {
             Ship ship = new Ship();
-            ship.setId(rs.getLong(ID))
+            ship.setId(rs.getLong(SHIP_ID))
                     .setName(rs.getString(SHIP_NAME))
                     .setPassengerCapacity(rs.getInt(PASSENGER_CAPACITY))
                     .setPhotoPath(rs.getString(PHOTO_PATH));

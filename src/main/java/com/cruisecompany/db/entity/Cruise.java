@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public class Cruise implements Identifiable{
 
@@ -16,6 +17,8 @@ public class Cruise implements Identifiable{
     private BigDecimal price;
     private String description;
     private Ship ship;
+
+    private List<Station> stationList;
 
     @Override
     public long getId() {
@@ -88,5 +91,24 @@ public class Cruise implements Identifiable{
     public Cruise setDescription(String description) {
         this.description = description;
         return this;
+    }
+
+    public List<Station> getStationList() {
+        return stationList;
+    }
+
+    public Cruise setStationList(List<Station> stationList) {
+        this.stationList = stationList;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this)
+            return true;
+        if (!(obj instanceof Cruise))
+            return false;
+        Cruise cruise = (Cruise)obj;
+        return cruise.getId() == id;
     }
 }

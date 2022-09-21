@@ -6,14 +6,14 @@ import com.cruisecompany.db.entity.UserAccount;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static com.cruisecompany.db.dao.mapper.impl.Columns.*;
+import static com.cruisecompany.db.Columns.*;
 
 public class UserAccountRowMapper implements RowMapper<UserAccount> {
     @Override
     public UserAccount map(ResultSet rs) {
         try {
             UserAccount userAccount = new UserAccount();
-            userAccount.setId(rs.getLong(ID))
+            userAccount.setId(rs.getLong(USER_ACCOUNT_ID))
                     .setLogin(rs.getString(LOGIN))
                     .setPassword(rs.getString(PASSWORD))
                     .setRole(rs.getString(ROLE));

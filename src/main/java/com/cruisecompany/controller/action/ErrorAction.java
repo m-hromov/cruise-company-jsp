@@ -1,19 +1,21 @@
 package com.cruisecompany.controller.action;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class SignInAction implements Action{
+public class ErrorAction implements Action{
+    private String strError;
+
+    public ErrorAction(String strError) {
+        this.strError = strError;
+    }
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
         try {
-            HttpSession session = request.getSession();
-            session.setAttribute("role","admin");
-            response.sendRedirect("/");
+            request.setAttribute("error",strError);
+            response.sendRedirect("/error.jsp");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

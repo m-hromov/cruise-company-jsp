@@ -10,8 +10,8 @@ import com.cruisecompany.db.entity.UserAccount;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static com.cruisecompany.db.dao.mapper.Tables.USER_ACCOUNT;
-import static com.cruisecompany.db.dao.mapper.impl.Columns.*;
+import static com.cruisecompany.db.Tables.USER_ACCOUNT;
+import static com.cruisecompany.db.Columns.*;
 
 public class PassengerRowMapper implements RowMapper<Passenger> {
     @Override
@@ -19,10 +19,10 @@ public class PassengerRowMapper implements RowMapper<Passenger> {
         try {
             RowMapper<UserAccount> userAccountRowMapper = RowMapperFactory.getInstance().getUserAccountRowMapper();
             UserAccountDAO userAccountDAO = new UserAccountDAOImpl(userAccountRowMapper, USER_ACCOUNT);
-            UserAccount userAccount = userAccountDAO.get(rs.getLong(ID_USER_ACCOUNT)).orElse(new UserAccount());
+            UserAccount userAccount = userAccountDAO.get(rs.getLong(USER_ACCOUNT_ID)).orElse(new UserAccount());
 
             Passenger passenger = new Passenger();
-            passenger.setId(rs.getLong(ID))
+            passenger.setId(rs.getLong(PASSENGER_ID))
                     .setFirstName(rs.getString(FIRST_NAME))
                     .setLastName(rs.getString(LAST_NAME))
                     .setPhone(rs.getString(PHONE))
