@@ -14,7 +14,8 @@ public class StationRowMapper implements RowMapper<Station> {
         try {
             Station station = new Station();
             station.setId(rs.getLong(STATION_ID))
-                    .setName(rs.getString(STATION_NAME));
+                    .setCity(rs.getString(STATION_CITY))
+                    .setCountry(rs.getString(STATION_COUNTRY));
             return station;
         } catch (SQLException e) {
             throw new RuntimeException(e);

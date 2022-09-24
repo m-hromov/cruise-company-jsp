@@ -7,7 +7,7 @@ public class RowMapperFactory {
     private static RowMapperFactory INSTANCE;
     private final RowMapper<Cruise> cruiseRowMapper;
     private final RowMapper<Passenger> passengerRowMapper;
-    private final RowMapper<PassengerCruise> passengerCruiseRowMapper;
+    private final RowMapper<Order> orderRowMapper;
     private final RowMapper<Route> routeRowMapper;
     private final RowMapper<Ship> shipRowMapper;
     private final RowMapper<Staff> staffRowMapper;
@@ -17,7 +17,7 @@ public class RowMapperFactory {
     private RowMapperFactory() {
         cruiseRowMapper = new CruiseRowMapper();
         passengerRowMapper = new PassengerRowMapper();
-        passengerCruiseRowMapper = new PassengerCruiseRowMapper();
+        orderRowMapper = new OrderRowMapper();
         routeRowMapper = new RouteRowMapper();
         shipRowMapper = new ShipRowMapper();
         staffRowMapper = new StaffRowMapper();
@@ -38,8 +38,8 @@ public class RowMapperFactory {
         return passengerRowMapper;
     }
 
-    public RowMapper<PassengerCruise> getPassengerCruiseRowMapper() {
-        return passengerCruiseRowMapper;
+    public RowMapper<Order> getPassengerCruiseRowMapper() {
+        return orderRowMapper;
     }
 
     public RowMapper<Route> getRouteRowMapper() {

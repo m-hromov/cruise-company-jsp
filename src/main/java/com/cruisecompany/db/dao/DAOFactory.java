@@ -1,10 +1,7 @@
 package com.cruisecompany.db.dao;
 
 import com.cruisecompany.db.dao.impl.*;
-import com.cruisecompany.db.dao.mapper.RowMapper;
 import com.cruisecompany.db.dao.mapper.RowMapperFactory;
-import com.cruisecompany.db.dao.mapper.impl.*;
-import com.cruisecompany.db.entity.*;
 
 import static com.cruisecompany.db.Tables.*;
 
@@ -17,7 +14,7 @@ public class DAOFactory {
     private final StaffDAO staffDAO;
     private final StationDAO stationDAO;
     private final UserAccountDAO userAccountDAO;
-    private final PassengerCruiseDAO passengerCruiseDAO;
+    private final OrderDAO orderDAO;
     private DAOFactory() {
         RowMapperFactory rowMapperFactory = RowMapperFactory.getInstance();
 
@@ -28,7 +25,7 @@ public class DAOFactory {
         staffDAO = new StaffDAOImpl(rowMapperFactory.getStaffRowMapper(),STAFF );
         stationDAO = new StationDAOImpl(rowMapperFactory.getStationRowMapper(),STATION );
         userAccountDAO = new UserAccountDAOImpl(rowMapperFactory.getUserAccountRowMapper(),USER_ACCOUNT );
-        passengerCruiseDAO = new PassengerCruiseDAOImpl(rowMapperFactory.getPassengerCruiseRowMapper(),PASSENGER_CRUISE );
+        orderDAO = new OrderDAOImpl(rowMapperFactory.getPassengerCruiseRowMapper(), ORDER);
     }
 
     public static DAOFactory getInstance() {
@@ -64,7 +61,7 @@ public class DAOFactory {
         return userAccountDAO;
     }
 
-    public PassengerCruiseDAO getPassengerCruiseDAO() {
-        return passengerCruiseDAO;
+    public OrderDAO getOrderDAO() {
+        return orderDAO;
     }
 }

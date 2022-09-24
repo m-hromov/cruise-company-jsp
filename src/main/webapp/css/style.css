@@ -14,6 +14,9 @@
 .mtext {
     margin-top: -0.15rem !important;
 }
+.mtext2 {
+    margin-top: -0.65rem !important;
+}
 .me-none {
     margin-bottom: -10px;
 }
@@ -23,7 +26,41 @@
     background: mediumseagreen;
     border-radius: 100%;
 }
+.nav-link.active {
+    font-weight: 500 !important;
+    opacity: 100% !important;
+    color: white !important;
+}
+.navbar-nav > .active > a{
+    font-weight: 500 !important;
+    opacity: 100% !important;
+    color: white !important;
+}
+.nav-link:active {
+    font-weight: 500 !important;
+    opacity: 100% !important;
+    color: white !important;
+}
+.nav-item > a:hover {
+    color: white;
+}
+.parent{
+    overflow: hidden;
+}
+.child{
+    float: left;
 
+}
+.box-divider {
+    width: 500px;
+    height: 1px;
+    background-color: lightgray;
+    border: 0;
+    padding-left: 1500px;
+    padding-right: 1500px;
+    margin-left: -1500px;
+    margin-right: -1500px;
+}
 .search-box {
     min-height: fit-content;
     max-width: fit-content;
@@ -58,10 +95,6 @@ a.nav-link{
 a.nav-link:hover {
     color:white;
     opacity: 100%;
-}
-.active {
-    font-weight: 500;
-    opacity: 100% !important;
 }
 .btn-jade{
     color: mediumseagreen;

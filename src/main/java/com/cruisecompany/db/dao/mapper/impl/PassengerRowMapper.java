@@ -27,7 +27,7 @@ public class PassengerRowMapper implements RowMapper<Passenger> {
                     .setLastName(rs.getString(LAST_NAME))
                     .setPhone(rs.getString(PHONE))
                     .setEmail(rs.getString(EMAIL))
-                    .setMoney(rs.getInt(MONEY))
+                    .setMoney(rs.getDouble(MONEY))
                     .setDocumentPath(rs.getString(DOCUMENT_PATH))
                     .setUserAccount(userAccount);
             return passenger;

@@ -14,14 +14,14 @@
     <base href="${pageContext.servletContext.contextPath}/">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="static/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css"/>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
             crossorigin="anonymous"></script>
     <title>Cruises | Cruise company</title>
 </head>
 <body>
-<jsp:include page="page_elements/header.jsp"/>
+<jsp:include page="../page_elements/header.jsp"/>
 <div class="container">
     <jsp:useBean id="listCruise" scope="request" type="java.util.List<com.cruisecompany.db.dto.CruiseShowDTO>"/>
     <c:forEach items="${listCruise}" var="cruise">
@@ -31,7 +31,7 @@
                     <img src="${cruise.photoPath}" height="360" width="480" alt="ship"/>
                 </div>
                 <div class="col d-flex flex-column ">
-                    <div class="text-start fw-bold fs-4">Getaway from ${cruise.start}, Ukraine</div>
+                    <div class="text-start fw-bold fs-4">Getaway from ${cruise.start.city}, Ukraine</div>
                     <div class="text-start fw-bold fs-6 mt-sm-0">${cruise.shipName}</div>
                     <div class="align-items-center ">
                         <div class="d-flex flex-row">
@@ -40,14 +40,19 @@
                                 <div class="text-white">DAY</div>
                             </div>
                             <div class="text-start align-self-center">
-                                Start: ${cruise.start} -> End: ${cruise.end}
+                                Start: ${cruise.start.city} -> End: ${cruise.end.city}
                             </div>
                         </div>
                     </div>
                     <p class="text-start text-wrap">${cruise.description}</p>
                     <div class="row align-self-end mt-auto">
                         <div class="col fs-4 fw-bold me-2">${cruise.price}$</div>
-                        <a class="col btn btn-jade-reversed">Buy</a>
+                        <c:if test="${sessionScope.role.equals('USER')}">
+                            <a href="cruise/buy_action" class="col btn btn-jade-reversed">Buy</a>
+                        </c:if>
+                        <c:if test="${sessionScope.role==null}">
+                            <a href="signin.jsp" class="col btn btn-jade-reversed">Buy</a>
+                        </c:if>
                     </div>
                 </div>
             </div>
@@ -91,6 +96,6 @@
     </div>
 </div>
 
-<jsp:include page="page_elements/footer.jsp"/>
+<jsp:include page="../page_elements/footer.jsp"/>
 </body>
 </html>

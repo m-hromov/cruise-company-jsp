@@ -3,7 +3,8 @@ package com.cruisecompany.db.entity;
 public class Station implements Identifiable{
 
     private long id;
-    private String name;
+    private String city;
+    private String country;
     @Override
     public long getId() {
         return id;
@@ -14,12 +15,21 @@ public class Station implements Identifiable{
         return this;
     }
 
-    public String getName() {
-        return name;
+    public String getCity() {
+        return city;
     }
 
-    public Station setName(String name) {
-        this.name = name;
+    public Station setCity(String city) {
+        this.city = city;
+        return this;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public Station setCountry(String country) {
+        this.country = country;
         return this;
     }
 }

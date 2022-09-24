@@ -1,5 +1,7 @@
 package com.cruisecompany.db.entity;
 
+import java.math.BigDecimal;
+
 public class Passenger implements Identifiable{
 
     private long id;
@@ -7,7 +9,7 @@ public class Passenger implements Identifiable{
     private String lastName;
     private String phone;
     private String email;
-    private long money;
+    private double money;
     private String documentPath;
     private UserAccount userAccount;
 
@@ -48,11 +50,11 @@ public class Passenger implements Identifiable{
         return this;
     }
 
-    public long getMoney() {
+    public double getMoney() {
         return money;
     }
 
-    public Passenger setMoney(long money) {
+    public Passenger setMoney(double money) {
         this.money = money;
         return this;
     }

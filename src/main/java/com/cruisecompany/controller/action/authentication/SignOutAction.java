@@ -1,10 +1,12 @@
-package com.cruisecompany.controller.action;
+package com.cruisecompany.controller.action.authentication;
+
+import com.cruisecompany.controller.action.Action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class SignOutAction implements Action{
+public class SignOutAction implements Action {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
         try {

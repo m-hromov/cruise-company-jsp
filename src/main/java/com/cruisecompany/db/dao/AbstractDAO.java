@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class AbstractDAO<T extends Identifiable> extends SimpleQueryExecutor<T> implements DAO<T> {
-    private final String DELETE = "DELETE FROM %s WHERE id = ?";
-    private final String GET = "SELECT * FROM %s WHERE id = ?";
+    private final String DELETE = "DELETE FROM %s WHERE %s_id = ?";
+    private final String GET = "SELECT * FROM %s WHERE %s_id = ?";
     private final String GET_ALL = "SELECT * FROM %s";
     private final String table;
 
@@ -19,7 +19,7 @@ public abstract class AbstractDAO<T extends Identifiable> extends SimpleQueryExe
 
     @Override
     public Optional<T> get(long id) {
-        return Optional.ofNullable(executeQuery(String.format(GET, table), id).get(0));
+        return Optional.ofNullable(executeQuery(String.format(GET, table, table), id).get(0));
     }
 
     @Override
@@ -29,6 +29,6 @@ public abstract class AbstractDAO<T extends Identifiable> extends SimpleQueryExe
 
     @Override
     public void delete(long id) {
-        executeUpdate(String.format(DELETE, table), id);
+        executeUpdate(String.format(DELETE, table, table), id);
     }
 }

@@ -22,10 +22,13 @@ public class Columns {
 
     //STATION
     public static final String STATION_ID = "station_id";
-    public static final String STATION_NAME = "name";
+    public static final String STATION_CITY = "city";
+    public static final String STATION_COUNTRY = "country";
 
-    //PASSENGER_CRUISE
+    //ORDER
+    public static final String ORDER_ID = "order_id";
     public static final String PAID = "paid";
+    public static final String BANNED = "banned";
 
     //PASSENGER
     public static final String PASSENGER_ID = "passenger_id";
