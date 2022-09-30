@@ -4,8 +4,8 @@ import com.cruisecompany.db.dao.ShipDAO;
 import com.cruisecompany.db.dao.impl.ShipDAOImpl;
 import com.cruisecompany.db.dao.mapper.RowMapper;
 import com.cruisecompany.db.dao.mapper.RowMapperFactory;
-import com.cruisecompany.db.entity.Ship;
-import com.cruisecompany.db.entity.Staff;
+import com.cruisecompany.entity.Ship;
+import com.cruisecompany.entity.Staff;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

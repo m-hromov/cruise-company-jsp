@@ -1,7 +1,7 @@
 package com.cruisecompany.db.dao;
 
 import com.cruisecompany.db.dao.mapper.RowMapper;
-import com.cruisecompany.db.entity.Identifiable;
+import com.cruisecompany.entity.Identifiable;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +19,7 @@ public abstract class AbstractDAO<T extends Identifiable> extends SimpleQueryExe
 
     @Override
     public Optional<T> get(long id) {
-        return Optional.ofNullable(executeQuery(String.format(GET, table, table), id).get(0));
+        return Optional.ofNullable(executeQuery(String.format(GET, table, table.replace("\"","")), id).get(0));
     }
 
     @Override
@@ -29,6 +29,6 @@ public abstract class AbstractDAO<T extends Identifiable> extends SimpleQueryExe
 
     @Override
     public void delete(long id) {
-        executeUpdate(String.format(DELETE, table, table), id);
+        executeUpdate(String.format(DELETE, table, table.replace("\"","")), id);
     }
 }

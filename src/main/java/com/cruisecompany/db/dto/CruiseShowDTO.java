@@ -1,17 +1,16 @@
 package com.cruisecompany.db.dto;
 
-import com.cruisecompany.db.entity.Station;
+import com.cruisecompany.entity.Station;
 
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.sql.Time;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class CruiseShowDTO {
     private long id;
-    private Time timeDeparture;
-    private Date dateDeparture;
-    private Date dateArrival;
+    private LocalTime timeDeparture;
+    private LocalDate dateDeparture;
+    private LocalDate dateArrival;
     private int daysTotal;
     private BigDecimal price;
     private String description;
@@ -29,29 +28,29 @@ public class CruiseShowDTO {
         return this;
     }
 
-    public Time getTimeDeparture() {
+    public LocalTime getTimeDeparture() {
         return timeDeparture;
     }
 
-    public CruiseShowDTO setTimeDeparture(Time timeDeparture) {
+    public CruiseShowDTO setTimeDeparture(LocalTime timeDeparture) {
         this.timeDeparture = timeDeparture;
         return this;
     }
 
-    public Date getDateDeparture() {
+    public LocalDate getDateDeparture() {
         return dateDeparture;
     }
 
-    public CruiseShowDTO setDateDeparture(Date dateDeparture) {
+    public CruiseShowDTO setDateDeparture(LocalDate dateDeparture) {
         this.dateDeparture = dateDeparture;
         return this;
     }
 
-    public Date getDateArrival() {
+    public LocalDate getDateArrival() {
         return dateArrival;
     }
 
-    public CruiseShowDTO setDateArrival(Date dateArrival) {
+    public CruiseShowDTO setDateArrival(LocalDate dateArrival) {
         this.dateArrival = dateArrival;
         return this;
     }

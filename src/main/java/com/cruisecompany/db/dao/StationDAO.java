@@ -1,7 +1,6 @@
 package com.cruisecompany.db.dao;
 
-import com.cruisecompany.db.entity.Route;
-import com.cruisecompany.db.entity.Station;
+import com.cruisecompany.entity.Station;
 
 import java.util.List;
 

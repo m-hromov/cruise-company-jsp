@@ -6,14 +6,12 @@ import com.cruisecompany.db.dao.OrderDAO;
 import com.cruisecompany.db.dao.RouteDAO;
 import com.cruisecompany.db.dto.CruiseShowDTO;
 import com.cruisecompany.db.dto.DTOMapper;
-import com.cruisecompany.db.entity.Cruise;
-import com.cruisecompany.db.entity.Order;
-import com.cruisecompany.db.entity.Route;
+import com.cruisecompany.entity.Cruise;
+import com.cruisecompany.entity.Route;
+import com.cruisecompany.entity.Station;
 import com.cruisecompany.service.CruiseService;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CruiseServiceImpl implements CruiseService {
@@ -27,10 +25,6 @@ public class CruiseServiceImpl implements CruiseService {
         this.orderDAO = DAOFactory.getInstance().getOrderDAO();
     }
 
-    public List<CruiseShowDTO> findAll() {
-        return null;
-    }
-
     @Override
     public List<CruiseShowDTO> getAllCruiseShowDTO() {
         List<Cruise> cruiseList = cruiseDAO.getAll();
@@ -38,13 +32,21 @@ public class CruiseServiceImpl implements CruiseService {
     }
 
     @Override
-    public List<CruiseShowDTO> getAllPassengerCruiseShowDTO(long id) {
-        List<Order> orderList = orderDAO.getAllPassengerOrders(id);
-        return orderList.stream().map(DTOMapper::toCruiseShowDTO).collect(Collectors.toList());
+    public List<CruiseShowDTO> getAllCruiseShowDTOBySearch(String str) {
+        return null;
     }
 
     @Override
-    public List<CruiseShowDTO> getAllCruiseShowDTOBySearch(String str) {
-        return null;
+    public void addCruise(Cruise cruise) {
+        long cruiseId = cruiseDAO.save(cruise);
+        cruise.setId(cruiseId);
+        List<Station> stationList = cruise.getStationList();
+        for (int i = 0; i < stationList.size(); i++){
+            Route route = new Route();
+            route.setCruise(cruise)
+                    .setStation(stationList.get(i))
+                    .setOrderNumber(i);
+            routeDAO.save(route);
+        }
     }
 }

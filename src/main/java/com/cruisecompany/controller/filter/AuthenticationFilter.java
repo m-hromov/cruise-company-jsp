@@ -1,14 +1,13 @@
 package com.cruisecompany.controller.filter;
 
 import javax.servlet.*;
-import javax.servlet.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashSet;
 
 //@WebFilter(urlPatterns = "/*",filterName = "AuthorizationFilter")
-public class AuthorizationFilter implements Filter {
+public class AuthenticationFilter implements Filter {
     private static HashSet<String> adminURIs;
     private static HashSet<String> userURIs;
     private static HashSet<String> visitorURIs;

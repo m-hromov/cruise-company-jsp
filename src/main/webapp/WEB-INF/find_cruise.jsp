@@ -14,7 +14,7 @@
     <base href="${pageContext.servletContext.contextPath}/">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="../static/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
             crossorigin="anonymous"></script>
@@ -48,7 +48,12 @@
                     <div class="row align-self-end mt-auto">
                         <div class="col fs-4 fw-bold me-2">${cruise.price}$</div>
                         <c:if test="${sessionScope.role.equals('USER')}">
-                            <a href="cruise/buy_action" class="col btn btn-jade-reversed">Buy</a>
+                            <form class="col" action="cruise/buy_cruise" method="post">
+                                <input type="hidden" name="cruise_id" value="${cruise.id}">
+                                <button type="submit" class="btn btn-jade-reversed">
+                                    Buy
+                                </button>
+                            </form>
                         </c:if>
                         <c:if test="${sessionScope.role==null}">
                             <a href="signin.jsp" class="col btn btn-jade-reversed">Buy</a>

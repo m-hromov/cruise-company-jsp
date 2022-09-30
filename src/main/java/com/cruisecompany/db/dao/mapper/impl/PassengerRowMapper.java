@@ -4,8 +4,8 @@ import com.cruisecompany.db.dao.UserAccountDAO;
 import com.cruisecompany.db.dao.impl.UserAccountDAOImpl;
 import com.cruisecompany.db.dao.mapper.RowMapper;
 import com.cruisecompany.db.dao.mapper.RowMapperFactory;
-import com.cruisecompany.db.entity.Passenger;
-import com.cruisecompany.db.entity.UserAccount;
+import com.cruisecompany.entity.Passenger;
+import com.cruisecompany.entity.UserAccount;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,7 +27,7 @@ public class PassengerRowMapper implements RowMapper<Passenger> {
                     .setLastName(rs.getString(LAST_NAME))
                     .setPhone(rs.getString(PHONE))
                     .setEmail(rs.getString(EMAIL))
-                    .setMoney(rs.getDouble(MONEY))
+                    .setMoney(rs.getBigDecimal(MONEY))
                     .setDocumentPath(rs.getString(DOCUMENT_PATH))
                     .setUserAccount(userAccount);
             return passenger;

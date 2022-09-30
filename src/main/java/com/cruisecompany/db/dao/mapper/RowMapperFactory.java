@@ -1,7 +1,7 @@
 package com.cruisecompany.db.dao.mapper;
 
 import com.cruisecompany.db.dao.mapper.impl.*;
-import com.cruisecompany.db.entity.*;
+import com.cruisecompany.entity.*;
 
 public class RowMapperFactory {
     private static RowMapperFactory INSTANCE;

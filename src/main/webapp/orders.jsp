@@ -35,15 +35,15 @@
                 <div class="col d-flex flex-column bg-table-col2 justify-content-center ">
                     <div>
                         Full Name:
-                        ${order.firstName.concat(" ").concat(order.lastName)}
+                            ${order.firstName.concat(" ").concat(order.lastName)}
                     </div>
                     <div>
                         Email:
-                        ${order.email}
+                            ${order.email}
                     </div>
                     <div>
                         Phone:
-                        ${order.phone}
+                            ${order.phone}
                     </div>
                     <a class="col-auto link-dark" href="${order.documentPath}" target="_blank">View document</a>
 
@@ -54,14 +54,48 @@
                             ${order.paid}
                     </div>
                     <div>
-                        Banned:
+                        Blocked:
                             ${order.banned}
                     </div>
+                    <div>
+                        Confirmed:
+                            ${order.confirmed}
+                    </div>
+                    <a class="link-dark" href="cruise/find_cruise?cruise_id=${order.cruiseId}" target="_blank">View
+                        cruise</a>
                 </div>
                 <div class="col-auto d-flex flex-column bg-table-col2 justify-content-center">
-                    <a class="link-dark" href="cruise/find_cruise?cruise_id=${order.cruiseId}" target="_blank">View cruise</a>
-                    <a class="link-dark" href="cruise/find_cruise">Block</a>
-                    <a class="link-dark" href="cruise/find_cruise">Approve</a>
+                    <form class="mx-0 my-auto row" method="post" action="cruise/confirm_order">
+                        <input type="hidden" name="order_id" value="${order.orderId}">
+                        <c:if test="${order.confirmed==false}">
+                            <button class="btn btn-jade" type="submit">Confirm</button>
+                        </c:if>
+                        <c:if test="${order.confirmed==true}">
+                            <button class="btn btn-jade" type="submit" disabled>Confirm</button>
+                        </c:if>
+                    </form>
+                    <c:if test="${order.banned==false}">
+                        <form class="mx-0 mt-2 mb-auto row" method="post" action="cruise/block_order?block=true">
+                            <input type="hidden" name="order_id" value="${order.orderId}">
+                            <c:if test="${order.confirmed==false}">
+                                <button class="btn btn-outline-danger" type="submit">Block</button>
+                            </c:if>
+                            <c:if test="${order.confirmed==true}">
+                                <button class="btn btn-outline-danger" type="submit" disabled>Block</button>
+                            </c:if>
+                        </form>
+                    </c:if>
+                    <c:if test="${order.banned==true}">
+                        <form class="mx-0 mt-2 mb-auto row" method="post" action="cruise/block_order?block=false">
+                            <input type="hidden" name="order_id" value="${order.orderId}">
+                            <c:if test="${order.confirmed==false}">
+                                <button class="btn btn-outline-danger" type="submit">Unblock</button>
+                            </c:if>
+                            <c:if test="${order.confirmed==true}">
+                                <button class="btn btn-outline-danger" type="submit" disabled>Unblock</button>
+                            </c:if>
+                        </form>
+                    </c:if>
                 </div>
             </div>
         </c:forEach>

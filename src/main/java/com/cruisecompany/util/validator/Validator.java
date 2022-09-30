@@ -1,4 +1,4 @@
-package com.cruisecompany.utils.validator;
+package com.cruisecompany.util.validator;
 
 public interface Validator<T> {
     boolean validate(T obj);

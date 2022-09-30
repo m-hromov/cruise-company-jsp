@@ -5,10 +5,11 @@ import com.cruisecompany.db.dao.OrderDAO;
 import com.cruisecompany.db.dao.PassengerDAO;
 import com.cruisecompany.db.dto.DTOMapper;
 import com.cruisecompany.db.dto.PassengerOrderDTO;
-import com.cruisecompany.db.entity.Order;
-import com.cruisecompany.db.entity.Passenger;
+import com.cruisecompany.entity.Order;
+import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.service.PassengerService;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,4 +34,11 @@ public class PassengerServiceImpl implements PassengerService {
         Optional<Passenger> optional = passengerDAO.getByUserAccountId(id);
         return optional.orElseGet(Passenger::new);
     }
+
+    @Override
+    public void addMoney(long passengerId,BigDecimal money) {
+        passengerDAO.addMoney(passengerId,money);
+    }
+
+
 }

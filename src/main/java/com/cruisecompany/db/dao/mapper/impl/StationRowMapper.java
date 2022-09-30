@@ -1,7 +1,7 @@
 package com.cruisecompany.db.dao.mapper.impl;
 
 import com.cruisecompany.db.dao.mapper.RowMapper;
-import com.cruisecompany.db.entity.Station;
+import com.cruisecompany.entity.Station;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

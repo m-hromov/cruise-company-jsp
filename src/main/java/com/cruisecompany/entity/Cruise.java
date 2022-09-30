@@ -1,8 +1,6 @@
-package com.cruisecompany.db.entity;
+package com.cruisecompany.entity;
 
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -10,9 +8,9 @@ import java.util.List;
 public class Cruise implements Identifiable{
 
     private long id;
-    private Time timeDeparture;
-    private Date dateDeparture;
-    private Date dateArrival;
+    private LocalTime timeDeparture;
+    private LocalDate dateDeparture;
+    private LocalDate dateArrival;
     private int daysTotal;
     private BigDecimal price;
     private String description;
@@ -30,29 +28,29 @@ public class Cruise implements Identifiable{
         return this;
     }
 
-    public Time getTimeDeparture() {
+    public LocalTime getTimeDeparture() {
         return timeDeparture;
     }
 
-    public Cruise setTimeDeparture(Time timeDeparture) {
+    public Cruise setTimeDeparture(LocalTime timeDeparture) {
         this.timeDeparture = timeDeparture;
         return this;
     }
 
-    public Date getDateDeparture() {
+    public LocalDate getDateDeparture() {
         return dateDeparture;
     }
 
-    public Cruise setDateDeparture(Date dateDeparture) {
+    public Cruise setDateDeparture(LocalDate dateDeparture) {
         this.dateDeparture = dateDeparture;
         return this;
     }
 
-    public Date getDateArrival() {
+    public LocalDate getDateArrival() {
         return dateArrival;
     }
 
-    public Cruise setDateArrival(Date dateArrival) {
+    public Cruise setDateArrival(LocalDate dateArrival) {
         this.dateArrival = dateArrival;
         return this;
     }

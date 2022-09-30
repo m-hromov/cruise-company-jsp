@@ -30,13 +30,13 @@
             $(".chosen-select").chosen();
         });
     </script>
-    <title>Add Cruise | Cruise company</title>
+    <title>Add Ship | Cruise company</title>
 </head>
 <body>
 <jsp:include page="page_elements/header.jsp"/>
 
 <div class="container auth-box">
-    <form class="col flex-column" action="index.jsp" method="post" enctype="multipart/form-data">
+    <form class="col flex-column" action="cruise/add_ship" method="post" enctype="multipart/form-data">
         <div class="row">
             <div class="col px-1 mb-2">
                 <label for="name" class="ms-2 position-absolute mtext">
@@ -58,7 +58,7 @@
                 <label for="photo" class="ms-2 position-absolute mtext">
                     <span class="h6 small bg-white text-muted px-1">Photo</span>
                 </label>
-                <input type="file" class="form-control mt-2" id="photo" >
+                <input type="file" class="form-control mt-2" name="photo" id="photo" >
             </div>
         </div>
 

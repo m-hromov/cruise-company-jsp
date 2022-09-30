@@ -1,6 +1,6 @@
 package com.cruisecompany.db.dao;
 
-import com.cruisecompany.db.entity.UserAccount;
+import com.cruisecompany.entity.UserAccount;
 
 import java.util.Optional;
 

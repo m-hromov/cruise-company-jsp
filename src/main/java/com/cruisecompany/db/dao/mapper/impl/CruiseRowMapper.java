@@ -1,22 +1,20 @@
 package com.cruisecompany.db.dao.mapper.impl;
 
 import com.cruisecompany.db.dao.DAOFactory;
-import com.cruisecompany.db.dao.ShipDAO;
 import com.cruisecompany.db.dao.StationDAO;
-import com.cruisecompany.db.dao.impl.ShipDAOImpl;
 import com.cruisecompany.db.dao.mapper.RowMapper;
 import com.cruisecompany.db.dao.mapper.RowMapperFactory;
-import com.cruisecompany.db.entity.Cruise;
-import com.cruisecompany.db.entity.Ship;
-import com.cruisecompany.db.entity.Station;
+import com.cruisecompany.entity.Cruise;
+import com.cruisecompany.entity.Ship;
+import com.cruisecompany.entity.Station;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
-import static com.cruisecompany.db.Tables.SHIP;
 import static com.cruisecompany.db.Columns.*;
 
 public class CruiseRowMapper implements RowMapper<Cruise> {
@@ -30,9 +28,9 @@ public class CruiseRowMapper implements RowMapper<Cruise> {
 
             Cruise cruise = new Cruise();
             cruise.setId(rs.getLong(CRUISE_ID))
-                    .setTimeDeparture(rs.getTime(TIME_DEPARTURE))
-                    .setDateDeparture(rs.getDate(DATE_DEPARTURE))
-                    .setDateArrival(rs.getDate(DATE_ARRIVAL))
+                    .setTimeDeparture(LocalTime.parse(rs.getString(TIME_DEPARTURE)))
+                    .setDateDeparture(LocalDate.parse(rs.getString(DATE_DEPARTURE)))
+                    .setDateArrival(LocalDate.parse(rs.getString(DATE_ARRIVAL)))
                     .setDaysTotal(rs.getInt(DAYS_TOTAL))
                     .setDescription(rs.getString(CRUISE_DESCRIPTION))
                     .setPrice(BigDecimal.valueOf(rs.getDouble(PRICE)))

@@ -56,10 +56,16 @@
                         </a>
                     <ul class="dropdown-menu" style="right: 0;left: auto;">
                         <li>
-                            <a class="dropdown-item" href="add_cruise.jsp">Cruise</a>
+                            <a class="dropdown-item" href="cruise/add_cruise">Cruise</a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="add_ship.jsp">Ship</a>
+                            <a class="dropdown-item" href="cruise/add_ship">Ship</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="cruise/add_staff">Staff</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="cruise/add_station">Station</a>
                         </li>
                     </ul>
                 </li>
@@ -70,17 +76,17 @@
                     </a>
                     <ul class="dropdown-menu" style="right: 0;left: auto;">
                         <li>
-                            <a class="dropdown-item" href="edit_cruise.jsp">Cruise</a>
+                            <a class="dropdown-item" href="cruise/edit_cruise">Cruise</a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="edit_ship.jsp">Ship</a>
+                            <a class="dropdown-item" href="cruise/edit_ship">Ship</a>
                         </li>
                     </ul>
                 </li>
             </c:if>
         </ul>
 
-        <c:if test="${pageContext.request.requestURI.equals('/find_cruise.jsp')}">
+        <c:if test="${pageContext.request.requestURI.equals('/WEB-INF/find_cruise.jsp')}">
             <form action="cruise/search" class="me-auto d-flex my-auto" role="search" method="get">
                 <div class="input-group">
                     <input class="form-control" type="search" name="search_str" placeholder="Search"
@@ -122,11 +128,13 @@
                                 <a class="dropdown-item"
                                    href="balance.jsp">Balance: ${sessionScope.user.money}</a></li>
                             </li>
+                            <li><a class="dropdown-item" href="cruise/edit_profile">Edit profile</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
                         </c:if>
-                        <li><a class="dropdown-item" href="cruise/edit_profile">Edit profile</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
+
+
                         <li><a class="dropdown-item" href="cruise/sign_out">Sign out</a></li>
                     </ul>
                 </li>

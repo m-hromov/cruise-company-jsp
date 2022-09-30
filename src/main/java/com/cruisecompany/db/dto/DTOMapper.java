@@ -1,11 +1,9 @@
 package com.cruisecompany.db.dto;
 
-import com.cruisecompany.db.entity.Cruise;
-import com.cruisecompany.db.entity.Order;
-import com.cruisecompany.db.entity.Passenger;
-import com.cruisecompany.db.entity.UserAccount;
-
-import static com.cruisecompany.db.Columns.*;
+import com.cruisecompany.entity.Cruise;
+import com.cruisecompany.entity.Order;
+import com.cruisecompany.entity.Passenger;
+import com.cruisecompany.entity.UserAccount;
 
 public class DTOMapper {
     public static CruiseShowDTO toCruiseShowDTO(Cruise cruise) {
@@ -42,6 +40,7 @@ public class DTOMapper {
                 .setEmail(passenger.getEmail())
                 .setPaid(order.isPaid())
                 .setBanned(order.isBanned())
+                .setConfirmed(order.isConfirmed())
                 .setDocumentPath(passenger.getDocumentPath());
         return passengerOrderDTO;
     }

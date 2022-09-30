@@ -11,6 +11,7 @@ public class PassengerOrderDTO   {
     private String email;
     private boolean paid;
     private boolean banned;
+    private boolean confirmed;
     private String documentPath;
 
     public long getOrderId() {
@@ -91,6 +92,15 @@ public class PassengerOrderDTO   {
 
     public PassengerOrderDTO setBanned(boolean banned) {
         this.banned = banned;
+        return this;
+    }
+
+    public boolean isConfirmed() {
+        return confirmed;
+    }
+
+    public PassengerOrderDTO setConfirmed(boolean confirmed) {
+        this.confirmed = confirmed;
         return this;
     }
 

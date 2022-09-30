@@ -18,12 +18,16 @@
 </head>
 <body>
 <jsp:include page="page_elements/header.jsp"/>
-<div class="container flex-row auth-box justify-content-center text-center">
+<div style="width: 100% !important;">
     <div class="row pb-2">
     <b>Yo ho ho. No girls, just rum.</b>
     </div>
 
-    <img src="static/images/ship.jpg" alt="ship"/>
+    <img src="static/images/ship.jpg" style="width: 100% !important;" alt="ship"/>
+    <img src="static/images/ship.jpg" style="width: 100% !important;" alt="ship"/>
+    <img src="static/images/ship.jpg" style="width: 100% !important;" alt="ship"/>
+    <img src="static/images/ship.jpg" style="width: 100% !important;" alt="ship"/>
+    <img src="static/images/ship.jpg" style="width: 100% !important;" alt="ship"/>
 
 </div>
 

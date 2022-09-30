@@ -1,4 +1,4 @@
-package com.cruisecompany.db.entity;
+package com.cruisecompany.entity;
 
 public class Order implements Identifiable{
 
@@ -7,6 +7,7 @@ public class Order implements Identifiable{
     private Cruise cruise;
     private boolean paid;
     private boolean banned;
+    private boolean confirmed;
     @Override
     public long getId() {
         return id;
@@ -50,6 +51,15 @@ public class Order implements Identifiable{
 
     public Order setBanned(boolean banned) {
         this.banned = banned;
+        return this;
+    }
+
+    public boolean isConfirmed() {
+        return confirmed;
+    }
+
+    public Order setConfirmed(boolean confirmed) {
+        this.confirmed = confirmed;
         return this;
     }
 }

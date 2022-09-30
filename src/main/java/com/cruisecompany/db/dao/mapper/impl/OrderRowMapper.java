@@ -1,18 +1,19 @@
 package com.cruisecompany.db.dao.mapper.impl;
 
-import com.cruisecompany.db.dao.CruiseDAO;
+import com.cruisecompany.db.Columns;
 import com.cruisecompany.db.dao.DAOFactory;
 import com.cruisecompany.db.dao.PassengerDAO;
 import com.cruisecompany.db.dao.StationDAO;
-import com.cruisecompany.db.dao.impl.CruiseDAOImpl;
 import com.cruisecompany.db.dao.impl.PassengerDAOImpl;
 import com.cruisecompany.db.dao.mapper.RowMapper;
 import com.cruisecompany.db.dao.mapper.RowMapperFactory;
-import com.cruisecompany.db.entity.*;
+import com.cruisecompany.entity.*;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import static com.cruisecompany.db.Tables.PASSENGER;
@@ -33,9 +34,9 @@ public class OrderRowMapper implements RowMapper<Order> {
             
             Cruise cruise = new Cruise();
             cruise.setId(rs.getLong(CRUISE_ID))
-                    .setTimeDeparture(rs.getTime(TIME_DEPARTURE))
-                    .setDateDeparture(rs.getDate(DATE_DEPARTURE))
-                    .setDateArrival(rs.getDate(DATE_ARRIVAL))
+                    .setTimeDeparture(LocalTime.parse(rs.getString(TIME_DEPARTURE)))
+                    .setDateDeparture(LocalDate.parse(rs.getString(DATE_DEPARTURE)))
+                    .setDateArrival(LocalDate.parse(rs.getString(DATE_ARRIVAL)))
                     .setDaysTotal(rs.getInt(DAYS_TOTAL))
                     .setDescription(rs.getString(CRUISE_DESCRIPTION))
                     .setPrice(BigDecimal.valueOf(rs.getDouble(PRICE)))
@@ -47,6 +48,7 @@ public class OrderRowMapper implements RowMapper<Order> {
                     .setCruise(cruise)
                     .setPaid(rs.getBoolean(PAID))
                     .setBanned(rs.getBoolean(BANNED))
+                    .setConfirmed(rs.getBoolean(Columns.CONFIRMED))
                     .setPassenger(passenger);
             return order;
         } catch (SQLException e) {

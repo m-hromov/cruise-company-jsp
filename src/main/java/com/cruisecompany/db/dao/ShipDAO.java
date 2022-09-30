@@ -1,6 +1,6 @@
 package com.cruisecompany.db.dao;
 
-import com.cruisecompany.db.entity.Ship;
+import com.cruisecompany.entity.Ship;
 
 public interface ShipDAO extends DAO<Ship>{
 }

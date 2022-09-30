@@ -1,4 +1,4 @@
-package com.cruisecompany.db.entity;
+package com.cruisecompany.entity;
 
 public interface Identifiable {
     public long getId();

@@ -6,14 +6,13 @@ import com.cruisecompany.db.dao.impl.CruiseDAOImpl;
 import com.cruisecompany.db.dao.impl.StationDAOImpl;
 import com.cruisecompany.db.dao.mapper.RowMapper;
 import com.cruisecompany.db.dao.mapper.RowMapperFactory;
-import com.cruisecompany.db.entity.Cruise;
-import com.cruisecompany.db.entity.Route;
-import com.cruisecompany.db.entity.Station;
+import com.cruisecompany.entity.Cruise;
+import com.cruisecompany.entity.Route;
+import com.cruisecompany.entity.Station;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static com.cruisecompany.db.Tables.CRUISE;
 import static com.cruisecompany.db.Tables.STATION;
 import static com.cruisecompany.db.Columns.*;
 

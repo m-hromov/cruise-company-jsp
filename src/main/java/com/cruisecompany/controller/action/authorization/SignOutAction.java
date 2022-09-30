@@ -1,4 +1,4 @@
-package com.cruisecompany.controller.action.authentication;
+package com.cruisecompany.controller.action.authorization;
 
 import com.cruisecompany.controller.action.Action;
 

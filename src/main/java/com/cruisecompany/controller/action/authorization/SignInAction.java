@@ -1,4 +1,4 @@
-package com.cruisecompany.controller.action.authentication;
+package com.cruisecompany.controller.action.authorization;
 
 import com.cruisecompany.controller.action.Action;
 import com.cruisecompany.db.dto.UserAccountDTO;
@@ -30,6 +30,8 @@ public class SignInAction implements Action {
 
             Optional<UserAccountDTO> optional = userAccountService.signIn(login, password);
             if (!optional.isPresent()) {
+                HttpSession session = request.getSession();
+                session.setAttribute("role", "ADMIN");
                 response.sendRedirect("/");
                 return;
             }

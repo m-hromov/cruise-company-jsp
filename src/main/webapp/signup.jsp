@@ -25,7 +25,7 @@
 <body>
 <jsp:include page="page_elements/header.jsp"/>
 <div class="container auth-box">
-    <form class="col flex-column" action="cruise/signup" method="post">
+    <form class="col flex-column" action="cruise/sign_up" method="post">
         <div class="row">
             <div class="col px-1 mb-2">
                 <label for="fname" class="ms-2 position-absolute mtext">

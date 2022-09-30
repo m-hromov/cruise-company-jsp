@@ -1,3 +1,4 @@
+
 <%--
   Created by IntelliJ IDEA.
   User: hromov
@@ -6,6 +7,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -33,9 +35,10 @@
 </head>
 <body>
 <jsp:include page="page_elements/header.jsp"/>
-
+<jsp:useBean id="listStation" scope="request" type="java.util.List<com.cruisecompany.entity.Station>"/>
+<jsp:useBean id="listShip" scope="request" type="java.util.List<com.cruisecompany.entity.Ship>"/>
 <div class="container auth-box">
-    <form class="col flex-column" action="index.jsp" method="post" enctype="multipart/form-data">
+    <form class="col flex-column" action="cruise/add_cruise" method="post" enctype="multipart/form-data">
         <div class="row">
             <div class="col px-1 mb-2">
                 <label for="ship" class="ms-2 position-absolute mtext">
@@ -43,8 +46,9 @@
                 </label>
                 <input list="ships" type="text" class="form-control mt-2" name="ship" id="ship">
                 <datalist id="ships">
-                    <option>Black Pearl</option>
-                    <option>Chernomorets</option>
+                    <c:forEach items="${listShip}" var="ship">
+                        <option value="${ship.id}">${ship.name}</option>
+                    </c:forEach>
                 </datalist>
             </div>
         </div>
@@ -75,7 +79,7 @@
                 <label for="time_departure" class="ms-2 position-absolute mtext">
                     <span class="h6 small bg-white text-muted px-1">Time departure</span>
                 </label>
-                <input type="time" class="form-control mt-2" id="time_departure">
+                <input type="time" class="form-control mt-2" id="time_departure" name="time_departure">
             </div>
         </div>
         <div class="row">
@@ -85,10 +89,9 @@
                 </label>
                 <select class="chosen-select form-control mt-2" id="stations"  tabindex="8" multiple
                         name="stations" data-placeholder="Select stations in correct order">
-                    <option value="AR">American Black Bear</option>
-                    <option value="DR">Asiatic Black Bear</option>
-                    <option>Brown Bear</option>
-                    <option>Giant Panda</option>
+                    <c:forEach items="${listStation}" var="station">
+                        <option value="${station.id}">${station.city}, ${station.country}</option>
+                    </c:forEach>
                 </select>
 
             </div>

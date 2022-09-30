@@ -1,9 +1,9 @@
 package com.cruisecompany.controller.action.show;
 
 import com.cruisecompany.controller.action.Action;
-import com.cruisecompany.db.dto.CruiseShowDTO;
-import com.cruisecompany.db.entity.Passenger;
-import com.cruisecompany.service.CruiseService;
+import com.cruisecompany.entity.Order;
+import com.cruisecompany.entity.Passenger;
+import com.cruisecompany.service.OrderService;
 import com.cruisecompany.service.ServiceFactory;
 
 import javax.servlet.RequestDispatcher;
@@ -17,10 +17,10 @@ public class UserOrdersAction implements Action {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
         Passenger passenger = (Passenger) request.getSession().getAttribute("user");
-        CruiseService cruiseService = ServiceFactory.getInstance().getCruiseService();
-        List<CruiseShowDTO> cruiseList = cruiseService.getAllPassengerCruiseShowDTO(passenger.getId());
+        OrderService orderService = ServiceFactory.getInstance().getOrderService();
+        List<Order> orderList = orderService.getAllPassengerOrders(passenger.getId());
 
-        request.setAttribute("listCruise",cruiseList);
+        request.setAttribute("orderList",orderList);
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/user_orders.jsp");
         try {
             rd.forward(request,response);

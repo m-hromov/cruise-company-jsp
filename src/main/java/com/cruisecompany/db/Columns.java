@@ -29,6 +29,7 @@ public class Columns {
     public static final String ORDER_ID = "order_id";
     public static final String PAID = "paid";
     public static final String BANNED = "banned";
+    public static final String CONFIRMED = "confirmed";
 
     //PASSENGER
     public static final String PASSENGER_ID = "passenger_id";

@@ -1,12 +1,7 @@
 package com.cruisecompany.controller.action.show;
 
 import com.cruisecompany.controller.action.Action;
-import com.cruisecompany.db.dao.CruiseDAO;
-import com.cruisecompany.db.dao.mapper.RowMapper;
-import com.cruisecompany.db.dao.mapper.RowMapperFactory;
 import com.cruisecompany.db.dto.CruiseShowDTO;
-import com.cruisecompany.db.entity.Cruise;
-import com.cruisecompany.db.dao.impl.CruiseDAOImpl;
 import com.cruisecompany.service.CruiseService;
 import com.cruisecompany.service.ServiceFactory;
 
@@ -15,10 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.cruisecompany.db.Tables.CRUISE;
 
 public class FindCruiseAction implements Action {
     @Override
