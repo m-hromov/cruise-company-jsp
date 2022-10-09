@@ -40,5 +40,20 @@ public class PassengerServiceImpl implements PassengerService {
         passengerDAO.addMoney(passengerId,money);
     }
 
+    @Override
+    public boolean updateProfile(Passenger passenger) {
+        try {
+            passengerDAO.updateProfile(passenger);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void updateDocument(Passenger passenger) {
+        passengerDAO.updateDocument(passenger);
+    }
+
 
 }

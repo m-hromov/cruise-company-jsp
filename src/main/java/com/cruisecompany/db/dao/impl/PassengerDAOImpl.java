@@ -15,18 +15,25 @@ public class PassengerDAOImpl extends AbstractDAO<Passenger> implements Passenge
             "WHERE " + Columns.PASSENGER_ID + " = ?";
     private static final String ADD_MONEY = "UPDATE " + Tables.PASSENGER + " SET " + Columns.MONEY + " = " +
             Columns.MONEY + " + ? " + "WHERE " + Columns.PASSENGER_ID + " = ?";
-    private final String GET_BY_USER_ACCOUNT_ID = "SELECT * FROM " + Tables.PASSENGER + " WHERE " + Columns.USER_ACCOUNT_ID + " = ?";
+    private static final String GET_BY_USER_ACCOUNT_ID = "SELECT * FROM " + Tables.PASSENGER +
+            " WHERE " + Columns.USER_ACCOUNT_ID + " = ?";
+    private final static String INSERT = "INSERT INTO " + Tables.PASSENGER + " (" + Columns.FIRST_NAME + "," +
+            Columns.LAST_NAME + "," + Columns.PHONE + "," + Columns.EMAIL + "," + Columns.MONEY + "," +
+            Columns.USER_ACCOUNT_ID + ") VALUES (?,?,?,?,?,?)";
+    private static final String UPDATE_PROFILE = "UPDATE " + Tables.PASSENGER + " SET " + Columns.FIRST_NAME + " = ? ," +
+            Columns.LAST_NAME + " = ? ," + Columns.PHONE + " = ? ," + Columns.EMAIL + " = ? " +
+            "WHERE " + Columns.PASSENGER_ID + " = ?";
+    private static final String UPDATE_DOCUMENT = "UPDATE " + Tables.PASSENGER + " SET " + Columns.DOCUMENT_PATH + " = ? " +
+            "WHERE " + Columns.PASSENGER_ID + " = ?";
 
     public PassengerDAOImpl(RowMapper<Passenger> rowMapper, String table) {
         super(rowMapper, table);
     }
-    private final static String INSERT = "INSERT INTO " + Tables.PASSENGER + " ("+Columns.FIRST_NAME+"," +
-            Columns.LAST_NAME+","+Columns.PHONE+","+Columns.EMAIL+","+Columns.MONEY+"," +
-            Columns.USER_ACCOUNT_ID+") VALUES (?,?,?,?,?,?)";
+
     @Override
     public long save(Passenger passenger) {
-        return executeInsert(INSERT,passenger.getFirstName(), passenger.getLastName(),
-                passenger.getPhone(),passenger.getEmail(),passenger.getMoney(), passenger.getUserAccount().getId());
+        return executeInsert(INSERT, passenger.getFirstName(), passenger.getLastName(),
+                passenger.getPhone(), passenger.getEmail(), passenger.getMoney(), passenger.getUserAccount().getId());
     }
 
     @Override
@@ -45,7 +52,20 @@ public class PassengerDAOImpl extends AbstractDAO<Passenger> implements Passenge
     }
 
     @Override
+    public void updateProfile(Passenger passenger) {
+
+        executeUpdate(UPDATE_PROFILE, passenger.getFirstName(), passenger.getLastName(),
+                passenger.getPhone(), passenger.getEmail(), passenger.getId());
+
+    }
+
+    @Override
+    public void updateDocument(Passenger passenger) {
+        executeUpdate(UPDATE_DOCUMENT, passenger.getDocumentPath(), passenger.getId());
+    }
+
+    @Override
     public void addMoney(long passengerId, BigDecimal money) {
-        executeUpdate(ADD_MONEY, money,passengerId);
+        executeUpdate(ADD_MONEY, money, passengerId);
     }
 }

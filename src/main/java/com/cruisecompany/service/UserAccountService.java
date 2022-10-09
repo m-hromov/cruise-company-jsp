@@ -8,5 +8,6 @@ import java.util.Optional;
 public interface UserAccountService {
     Optional<UserAccountDTO> signIn(String login, String password);
     boolean signUp(Passenger passenger);
+    boolean updatePassword(long userId, String oldPassword, String newPassword);
 
 }

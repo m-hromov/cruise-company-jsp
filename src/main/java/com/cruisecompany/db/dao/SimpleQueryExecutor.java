@@ -65,6 +65,19 @@ public class SimpleQueryExecutor<T> {
         }
     }
 
+    protected long executeSingleGetLongQuery(String query, Object... params) {
+        try (Connection connection = DBProvider.getInstance().getConnection();
+             PreparedStatement ps = preparedStatement(query, connection, params)) {
+            ResultSet rs = ps.executeQuery();
+
+            if (!rs.next()) throw new SQLException("0 rows affected");
+            return rs.getLong(1);
+
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     private PreparedStatement preparedStatement(String query, Connection connection, Object... params) {
         try {
             PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);

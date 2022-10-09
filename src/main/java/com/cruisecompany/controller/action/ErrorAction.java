@@ -5,19 +5,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ErrorAction implements Action{
-    private String strError;
+    private final String strError;
 
     public ErrorAction(String strError) {
         this.strError = strError;
     }
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) {
-        try {
+    public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
             request.setAttribute("error",strError);
-            response.sendRedirect("/error.jsp");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+            return new ActionMethod("/WEB-INF/view/error.jsp", Method.REDIRECT);
     }
 }

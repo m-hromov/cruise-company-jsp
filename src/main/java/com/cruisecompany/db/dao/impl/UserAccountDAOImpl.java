@@ -30,4 +30,10 @@ public class UserAccountDAOImpl extends AbstractDAO<UserAccount> implements User
     public Optional<UserAccount> getUserAccountByLogin(String login) {
         return executeSingleGetQuery(GET_BY_LOGIN,login);
     }
+    private static final String UPDATE_PASSWORD = "UPDATE " + Tables.USER_ACCOUNT + " SET " + Columns.PASSWORD + " = ? " +
+            "WHERE " + Columns.USER_ACCOUNT_ID + " = ?";
+    @Override
+    public void updatePassword(UserAccount userAccount) {
+        executeUpdate(UPDATE_PASSWORD, userAccount.getPassword(), userAccount.getId());
+    }
 }

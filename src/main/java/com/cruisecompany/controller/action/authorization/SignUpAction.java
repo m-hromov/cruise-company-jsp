@@ -1,11 +1,14 @@
 package com.cruisecompany.controller.action.authorization;
 
 import com.cruisecompany.controller.action.Action;
+import com.cruisecompany.controller.action.ActionMethod;
+import com.cruisecompany.controller.action.Method;
 import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.entity.UserAccount;
 import com.cruisecompany.service.ServiceFactory;
 import com.cruisecompany.service.UserAccountService;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,14 +17,17 @@ import java.math.BigDecimal;
 
 public class SignUpAction implements Action {
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) {
+    public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
+        if (request.getParameterMap().isEmpty()) {
+            return new ActionMethod("/WEB-INF/view/sign_up.jsp", Method.FORWARD);
+        }
         UserAccount userAccount = new UserAccount();
         userAccount.setLogin(request.getParameter("email"))
                 .setPassword(request.getParameter("password"))
                 .setRole("USER");
         Passenger passenger = new Passenger();
-        passenger.setFirstName(request.getParameter("fname"))
-                .setLastName(request.getParameter("lname"))
+        passenger.setFirstName(request.getParameter("first_name"))
+                .setLastName(request.getParameter("last_name"))
                 .setPhone(request.getParameter("phone"))
                 .setEmail(request.getParameter("email"))
                 .setMoney(BigDecimal.ZERO)
@@ -32,10 +38,6 @@ public class SignUpAction implements Action {
         HttpSession session = request.getSession();
         session.setAttribute("role",userAccount.getRole());
         session.setAttribute("user",passenger);
-        try {
-            response.sendRedirect("/");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return new ActionMethod("/", Method.REDIRECT);
     }
 }

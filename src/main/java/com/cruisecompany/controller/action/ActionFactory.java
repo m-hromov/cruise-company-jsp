@@ -43,6 +43,6 @@ public class ActionFactory {
     }
 
     public Action get(String name) {
-        return Optional.ofNullable(actions.get(name)).orElse(new ErrorAction("Page not found"));
+        return Optional.ofNullable(actions.get(name)).orElse(new ErrorAction("404"));
     }
 }

@@ -9,6 +9,7 @@ import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.service.OrderService;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 public class OrderServiceImpl implements OrderService {
@@ -45,6 +46,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getAllPassengerOrders(long id) {
         return orderDAO.getAllPassengerOrders(id);
+    }
+
+    @Override
+    public List<Order> getAllFiltred(LocalDate dateFrom, LocalDate dateTo, int durationFrom, int durationTo, int limit, int offset) {
+
+        return orderDAO.getAllFiltred(dateFrom,dateTo,durationFrom,durationTo,limit,offset);
     }
 
     @Override

@@ -11,7 +11,9 @@ import com.cruisecompany.entity.Route;
 import com.cruisecompany.entity.Station;
 import com.cruisecompany.service.CruiseService;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class CruiseServiceImpl implements CruiseService {
@@ -32,6 +34,18 @@ public class CruiseServiceImpl implements CruiseService {
     }
 
     @Override
+    public List<CruiseShowDTO> getAllFilteredCruiseShowDTO(LocalDate dateFrom, LocalDate dateTo, int durationFrom, int durationTo, int limit, int offset) {
+        List<Cruise> cruiseList = cruiseDAO.getAllFiltered(dateFrom, dateTo, durationFrom, durationTo, limit, offset);
+        return cruiseList.stream().map(DTOMapper::toCruiseShowDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public int getPageAmount(LocalDate dateFrom, LocalDate dateTo, int durationFrom, int durationTo, int limit) {
+        long rowAmount = cruiseDAO.getCruiseRowAmount(dateFrom, dateTo, durationFrom, durationTo);
+        return (int) Math.ceil((double)rowAmount / limit);
+    }
+
+    @Override
     public List<CruiseShowDTO> getAllCruiseShowDTOBySearch(String str) {
         return null;
     }
@@ -41,12 +55,21 @@ public class CruiseServiceImpl implements CruiseService {
         long cruiseId = cruiseDAO.save(cruise);
         cruise.setId(cruiseId);
         List<Station> stationList = cruise.getStationList();
-        for (int i = 0; i < stationList.size(); i++){
+        for (int i = 0; i < stationList.size(); i++) {
             Route route = new Route();
             route.setCruise(cruise)
                     .setStation(stationList.get(i))
                     .setOrderNumber(i);
             routeDAO.save(route);
         }
+    }
+
+    @Override
+    public Optional<CruiseShowDTO> getCruiseShowDTOById(long id) {
+        Optional<Cruise> optional = cruiseDAO.get(id);
+        if (optional.isEmpty()){
+            return Optional.empty();
+        }
+        return Optional.of(DTOMapper.toCruiseShowDTO(optional.get()));
     }
 }

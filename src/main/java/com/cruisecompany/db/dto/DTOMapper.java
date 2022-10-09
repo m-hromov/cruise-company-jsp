@@ -16,7 +16,7 @@ public class DTOMapper {
                 .setTimeDeparture(cruise.getTimeDeparture())
                 .setDaysTotal(cruise.getDaysTotal())
                 .setDateArrival(cruise.getDateArrival())
-                .setDateArrival(cruise.getDateArrival())
+                .setDateDeparture(cruise.getDateDeparture())
                 .setStart(cruise.getStationList().get(0))
                 .setEnd(cruise.getStationList().get(cruise.getStationList().size()-1));
         return cruiseShowDTO;

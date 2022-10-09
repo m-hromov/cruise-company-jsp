@@ -42,4 +42,16 @@ public class UserAccountServiceImpl implements UserAccountService {
         return true;
     }
 
+    @Override
+    public boolean updatePassword(long userId, String oldPassword, String newPassword) {
+        Optional<UserAccount> optional = userAccountDAO.get(userId);
+        if (optional.isEmpty()) return false;
+        UserAccount userAccount = optional.get();
+        String confirmOldPassword = userAccount.getPassword();
+        if(!oldPassword.equals(confirmOldPassword)) return false;
+        userAccount.setPassword(newPassword);
+        userAccountDAO.updatePassword(userAccount);
+        return true;
+    }
+
 }

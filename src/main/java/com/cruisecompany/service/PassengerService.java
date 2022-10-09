@@ -10,4 +10,6 @@ public interface PassengerService {
     List<PassengerOrderDTO> getAllPassengerOrderDTOList();
     Passenger getPassengerByAccountId(long id);
     void addMoney(long passengerId,BigDecimal money);
+    boolean updateProfile(Passenger passenger);
+    void updateDocument(Passenger passenger);
 }

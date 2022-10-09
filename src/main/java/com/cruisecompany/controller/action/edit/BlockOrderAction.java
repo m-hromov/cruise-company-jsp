@@ -1,6 +1,8 @@
 package com.cruisecompany.controller.action.edit;
 
 import com.cruisecompany.controller.action.Action;
+import com.cruisecompany.controller.action.ActionMethod;
+import com.cruisecompany.controller.action.Method;
 import com.cruisecompany.service.OrderService;
 import com.cruisecompany.service.ServiceFactory;
 
@@ -10,7 +12,7 @@ import java.io.IOException;
 
 public class BlockOrderAction implements Action {
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) {
+    public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
         OrderService orderService = ServiceFactory.getInstance().getOrderService();
         boolean block = Boolean.parseBoolean(request.getParameter("block"));
         long orderId = Long.parseLong(request.getParameter("order_id"));
@@ -19,10 +21,6 @@ public class BlockOrderAction implements Action {
         } else {
             orderService.unblock(orderId);
         }
-        try {
-            response.sendRedirect("/cruise/orders");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return new ActionMethod("/cruise/orders", Method.REDIRECT);
     }
 }
