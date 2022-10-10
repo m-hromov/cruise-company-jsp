@@ -1,5 +1,6 @@
 package com.cruisecompany.service.impl;
 
+import com.cruisecompany.db.DBProvider;
 import com.cruisecompany.db.dao.CruiseDAO;
 import com.cruisecompany.db.dao.DAOFactory;
 import com.cruisecompany.db.dao.OrderDAO;
@@ -9,7 +10,11 @@ import com.cruisecompany.db.dto.DTOMapper;
 import com.cruisecompany.entity.Cruise;
 import com.cruisecompany.entity.Route;
 import com.cruisecompany.entity.Station;
+import com.cruisecompany.exception.DAOException;
+import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.CruiseService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,32 +22,46 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class CruiseServiceImpl implements CruiseService {
+    final static Logger logger = LogManager.getLogger(CruiseServiceImpl.class);
     private final CruiseDAO cruiseDAO;
     private final RouteDAO routeDAO;
-    private final OrderDAO orderDAO;
 
     public CruiseServiceImpl() {
         this.cruiseDAO = DAOFactory.getInstance().getCruiseDAO();
         this.routeDAO = DAOFactory.getInstance().getRouteDAO();
-        this.orderDAO = DAOFactory.getInstance().getOrderDAO();
     }
 
     @Override
-    public List<CruiseShowDTO> getAllCruiseShowDTO() {
-        List<Cruise> cruiseList = cruiseDAO.getAll();
-        return cruiseList.stream().map(DTOMapper::toCruiseShowDTO).collect(Collectors.toList());
+    public List<CruiseShowDTO> getAllCruiseShowDTO() throws ServiceException {
+        try {
+            List<Cruise> cruiseList = cruiseDAO.getAll();
+            return cruiseList.stream().map(DTOMapper::toCruiseShowDTO).collect(Collectors.toList());
+        } catch (DAOException e) {
+            logger.error("Unable to get all CruiseShowDTO!");
+            throw new ServiceException(e.getMessage(),e);
+        }
     }
 
     @Override
-    public List<CruiseShowDTO> getAllFilteredCruiseShowDTO(LocalDate dateFrom, LocalDate dateTo, int durationFrom, int durationTo, int limit, int offset) {
-        List<Cruise> cruiseList = cruiseDAO.getAllFiltered(dateFrom, dateTo, durationFrom, durationTo, limit, offset);
-        return cruiseList.stream().map(DTOMapper::toCruiseShowDTO).collect(Collectors.toList());
+    public List<CruiseShowDTO> getAllFilteredCruiseShowDTO(LocalDate dateFrom, LocalDate dateTo, int durationFrom, int durationTo, int limit, int offset) throws ServiceException {
+        try {
+            List<Cruise> cruiseList = cruiseDAO.getAllFiltered(dateFrom, dateTo, durationFrom, durationTo, limit, offset);
+            return cruiseList.stream().map(DTOMapper::toCruiseShowDTO).collect(Collectors.toList());
+        } catch (DAOException e) {
+            logger.error("Unable to get all filtered CruiseShowDTO!");
+            throw new ServiceException(e.getMessage(),e);
+        }
     }
 
     @Override
-    public int getPageAmount(LocalDate dateFrom, LocalDate dateTo, int durationFrom, int durationTo, int limit) {
-        long rowAmount = cruiseDAO.getCruiseRowAmount(dateFrom, dateTo, durationFrom, durationTo);
-        return (int) Math.ceil((double)rowAmount / limit);
+    public int getPageAmount(LocalDate dateFrom, LocalDate dateTo, int durationFrom, int durationTo, int limit) throws ServiceException {
+        try {
+            long rowAmount = cruiseDAO.getCruiseRowAmount(dateFrom, dateTo, durationFrom, durationTo);
+            return (int) Math.ceil((double)rowAmount / limit);
+        } catch (DAOException e) {
+            logger.error("Unable to get page amount!");
+            throw new ServiceException(e.getMessage(),e);
+        }
     }
 
     @Override
@@ -51,25 +70,35 @@ public class CruiseServiceImpl implements CruiseService {
     }
 
     @Override
-    public void addCruise(Cruise cruise) {
-        long cruiseId = cruiseDAO.save(cruise);
-        cruise.setId(cruiseId);
-        List<Station> stationList = cruise.getStationList();
-        for (int i = 0; i < stationList.size(); i++) {
-            Route route = new Route();
-            route.setCruise(cruise)
-                    .setStation(stationList.get(i))
-                    .setOrderNumber(i);
-            routeDAO.save(route);
+    public void addCruise(Cruise cruise) throws ServiceException {
+        try {
+            long cruiseId = cruiseDAO.save(cruise);
+            cruise.setId(cruiseId);
+            List<Station> stationList = cruise.getStationList();
+            for (int i = 0; i < stationList.size(); i++) {
+                Route route = new Route();
+                route.setCruise(cruise)
+                        .setStation(stationList.get(i))
+                        .setOrderNumber(i);
+                routeDAO.save(route);
+            }
+        } catch (DAOException e) {
+            logger.error("Unable to add cruise!");
+            throw new ServiceException(e.getMessage(),e);
         }
     }
 
     @Override
-    public Optional<CruiseShowDTO> getCruiseShowDTOById(long id) {
-        Optional<Cruise> optional = cruiseDAO.get(id);
-        if (optional.isEmpty()){
-            return Optional.empty();
+    public Optional<CruiseShowDTO> getCruiseShowDTOById(long id) throws ServiceException {
+        try {
+            Optional<Cruise> optional = cruiseDAO.get(id);
+            if (optional.isEmpty()){
+                return Optional.empty();
+            }
+            return Optional.of(DTOMapper.toCruiseShowDTO(optional.get()));
+        } catch (DAOException e) {
+            logger.error("Unable to get CruiseShowDTO by id!");
+            throw new ServiceException(e.getMessage(),e);
         }
-        return Optional.of(DTOMapper.toCruiseShowDTO(optional.get()));
     }
 }

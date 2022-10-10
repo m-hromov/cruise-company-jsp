@@ -3,6 +3,7 @@ package com.cruisecompany.controller.action.edit;
 import com.cruisecompany.controller.action.Action;
 import com.cruisecompany.controller.action.ActionMethod;
 import com.cruisecompany.controller.action.Method;
+import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.OrderService;
 import com.cruisecompany.service.ServiceFactory;
 
@@ -13,9 +14,15 @@ import java.io.IOException;
 public class ConfirmOrderAction implements Action {
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
-        OrderService orderService = ServiceFactory.getInstance().getOrderService();
-        long orderId = Long.parseLong(request.getParameter("order_id"));
-        orderService.confirm(orderId);
-        return new ActionMethod("/cruise/orders", Method.REDIRECT);
+        try {
+            OrderService orderService = ServiceFactory.getInstance().getOrderService();
+            long orderId = Long.parseLong(request.getParameter("order_id"));
+            orderService.confirm(orderId);
+            return new ActionMethod("/cruise/orders", Method.REDIRECT);
+        } catch (ServiceException e) {
+            request.getSession().setAttribute("error", 500);
+            request.getSession().setAttribute("errorMsg", "Something went wrong!");
+            return new ActionMethod("/cruise/error", Method.REDIRECT);
+        }
     }
 }

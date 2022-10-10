@@ -6,6 +6,7 @@ import com.cruisecompany.controller.action.Method;
 import com.cruisecompany.entity.Cruise;
 import com.cruisecompany.entity.Ship;
 import com.cruisecompany.entity.Station;
+import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.CruiseService;
 import com.cruisecompany.service.ServiceFactory;
 import com.cruisecompany.service.ShipService;
@@ -23,11 +24,17 @@ public class AddCruiseAction implements Action {
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
         if (request.getParameterMap().isEmpty()) {
-            ShipService shipService = ServiceFactory.getInstance().getShipService();
-            StationService stationService = ServiceFactory.getInstance().getStationService();
-            request.setAttribute("listShip", shipService.getAll());
-            request.setAttribute("listStation", stationService.getAll());
-            return new ActionMethod("/WEB-INF/view/add_cruise.jsp", Method.FORWARD);
+            try {
+                ShipService shipService = ServiceFactory.getInstance().getShipService();
+                StationService stationService = ServiceFactory.getInstance().getStationService();
+                request.setAttribute("listShip", shipService.getAll());
+                request.setAttribute("listStation", stationService.getAll());
+                return new ActionMethod("/WEB-INF/view/add_cruise.jsp", Method.FORWARD);
+            } catch (ServiceException e) {
+                request.getSession().setAttribute("error",500);
+                request.getSession().setAttribute("errorMsg","Unable to load page!");
+                return new ActionMethod("/WEB-INF/view/error.jsp", Method.FORWARD);
+            }
         }
 
         long shipId = Long.parseLong(request.getParameter("ship"));
@@ -51,7 +58,13 @@ public class AddCruiseAction implements Action {
                 .setStationList(stationList);
 
         CruiseService cruiseService = ServiceFactory.getInstance().getCruiseService();
-        cruiseService.addCruise(cruise);
-        return new ActionMethod("/cruise/add_cruise", Method.REDIRECT);
+        try {
+            cruiseService.addCruise(cruise);
+            return new ActionMethod("/cruise/add_cruise", Method.REDIRECT);
+        } catch (ServiceException e) {
+            request.getSession().setAttribute("error",500);
+            request.getSession().setAttribute("errorMsg","Unable to add new cruise");
+            return new ActionMethod("/cruise/error", Method.REDIRECT);
+        }
     }
 }

@@ -5,6 +5,7 @@ import com.cruisecompany.controller.action.ActionMethod;
 import com.cruisecompany.controller.action.Method;
 import com.cruisecompany.entity.Ship;
 import com.cruisecompany.entity.Staff;
+import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.ServiceFactory;
 import com.cruisecompany.service.ShipService;
 import com.cruisecompany.service.StaffService;
@@ -17,10 +18,15 @@ public class AddStaffAction implements Action {
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
         if (request.getParameterMap().isEmpty()) {
-            ShipService shipService = ServiceFactory.getInstance().getShipService();
-            request.setAttribute("listShip", shipService.getAll());
-            return new ActionMethod("/WEB-INF/view/add_staff.jsp", Method.FORWARD);
-
+            try {
+                ShipService shipService = ServiceFactory.getInstance().getShipService();
+                request.setAttribute("listShip", shipService.getAll());
+                return new ActionMethod("/WEB-INF/view/add_staff.jsp", Method.FORWARD);
+            } catch (ServiceException e) {
+                request.getSession().setAttribute("error",500);
+                request.getSession().setAttribute("errorMsg","Something went wrong!");
+                return new ActionMethod("/WEB-INF/view/error.jsp", Method.FORWARD);
+            }
         }
         String firstName = request.getParameter("first_name");
         String lastName = request.getParameter("last_name");
@@ -34,10 +40,14 @@ public class AddStaffAction implements Action {
                 .setSpeciality(speciality)
                 .setShip(new Ship().setId(shipId));
 
-        StaffService staffService = ServiceFactory.getInstance().getStaffService();
-        staffService.addStaff(staff);
-
-        return new ActionMethod("/cruise/add_staff", Method.REDIRECT);
-
+        try {
+            StaffService staffService = ServiceFactory.getInstance().getStaffService();
+            staffService.addStaff(staff);
+            return new ActionMethod("/cruise/add_staff", Method.REDIRECT);
+        } catch (ServiceException e) {
+            request.getSession().setAttribute("error",500);
+            request.getSession().setAttribute("errorMsg","Something went wrong!");
+            return new ActionMethod("/cruise/error", Method.REDIRECT);
+        }
     }
 }

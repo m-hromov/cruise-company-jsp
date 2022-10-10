@@ -1,21 +1,19 @@
 package com.cruisecompany.db.dao;
 
 import com.cruisecompany.entity.Order;
+import com.cruisecompany.exception.DAOException;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderDAO extends DAO<Order> {
-    List<Order> getAllPassengerOrders(long id);
+    List<Order> getAllPassengerOrders(long id) throws DAOException;
 
-    List<Order> getAllFiltred(LocalDate dateFrom, LocalDate dateTo, int durationFrom, int durationTo,
-                              int limit, int offset);
+    void updatePaidStatus(long orderId) throws DAOException;
 
-    void updatePaidStatus(long orderId);
+    void block(long orderId) throws DAOException;
 
-    void block(long orderId);
+    void unblock(long orderId) throws DAOException;
 
-    void unblock(long orderId);
-
-    void confirm(long orderId);
+    void confirm(long orderId) throws DAOException;
 }

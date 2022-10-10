@@ -3,6 +3,7 @@ package com.cruisecompany.controller.action.edit;
 import com.cruisecompany.controller.action.Action;
 import com.cruisecompany.controller.action.ActionMethod;
 import com.cruisecompany.controller.action.Method;
+import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.OrderService;
 import com.cruisecompany.service.ServiceFactory;
 
@@ -16,11 +17,17 @@ public class BlockOrderAction implements Action {
         OrderService orderService = ServiceFactory.getInstance().getOrderService();
         boolean block = Boolean.parseBoolean(request.getParameter("block"));
         long orderId = Long.parseLong(request.getParameter("order_id"));
-        if(block) {
-            orderService.block(orderId);
-        } else {
-            orderService.unblock(orderId);
+        try {
+            if(block) {
+                orderService.block(orderId);
+            } else {
+                orderService.unblock(orderId);
+            }
+            return new ActionMethod("/cruise/orders", Method.REDIRECT);
+        } catch (ServiceException e) {
+            request.getSession().setAttribute("error", 500);
+            request.getSession().setAttribute("errorMsg", "Something went wrong!");
+            return new ActionMethod("/cruise/error", Method.REDIRECT);
         }
-        return new ActionMethod("/cruise/orders", Method.REDIRECT);
     }
 }

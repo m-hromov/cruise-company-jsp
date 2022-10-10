@@ -4,6 +4,7 @@ import com.cruisecompany.controller.action.Action;
 import com.cruisecompany.controller.action.ActionMethod;
 import com.cruisecompany.controller.action.Method;
 import com.cruisecompany.entity.Station;
+import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.ServiceFactory;
 import com.cruisecompany.service.StationService;
 
@@ -24,9 +25,14 @@ public class AddStationAction implements Action {
         station.setCity(city)
                 .setCountry(country);
 
-        StationService stationService = ServiceFactory.getInstance().getStationService();
-        stationService.addStation(station);
-
-        return new ActionMethod("/cruise/add_station", Method.REDIRECT);
+        try {
+            StationService stationService = ServiceFactory.getInstance().getStationService();
+            stationService.addStation(station);
+            return new ActionMethod("/cruise/add_station", Method.REDIRECT);
+        } catch (ServiceException e) {
+            request.getSession().setAttribute("error",500);
+            request.getSession().setAttribute("errorMsg","Something went wrong!");
+            return new ActionMethod("/cruise/error", Method.REDIRECT);
+        }
     }
 }

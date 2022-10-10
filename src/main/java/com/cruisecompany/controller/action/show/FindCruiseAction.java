@@ -4,6 +4,7 @@ import com.cruisecompany.controller.action.Action;
 import com.cruisecompany.controller.action.ActionMethod;
 import com.cruisecompany.controller.action.Method;
 import com.cruisecompany.db.dto.CruiseShowDTO;
+import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.CruiseService;
 import com.cruisecompany.service.ServiceFactory;
 
@@ -30,14 +31,20 @@ public class FindCruiseAction implements Action {
         Optional<String> searchById = Optional.ofNullable(request.getParameter("cruise_id"));
         List<CruiseShowDTO> cruiseList = new ArrayList<>();
         if (searchById.isPresent()) {
-            Optional<CruiseShowDTO> optionalCruise = cruiseService.getCruiseShowDTOById(Long.parseLong(searchById.get()));
-            if (optionalCruise.isEmpty()) {
-                request.setAttribute("error", true);
-            } else {
-                cruiseList.add(optionalCruise.get());
+            try {
+                Optional<CruiseShowDTO> optionalCruise = cruiseService.getCruiseShowDTOById(Long.parseLong(searchById.get()));
+                if (optionalCruise.isEmpty()) {
+                    request.setAttribute("error", true);
+                } else {
+                    cruiseList.add(optionalCruise.get());
+                }
+                request.setAttribute("listCruise", cruiseList);
+                return new ActionMethod("/WEB-INF/view/find_cruise.jsp", Method.FORWARD);
+            } catch (ServiceException e) {
+                request.getSession().setAttribute("error", 500);
+                request.getSession().setAttribute("errorMsg", "Something went wrong!");
+                return new ActionMethod("/WEB-INF/view/error.jsp", Method.FORWARD);
             }
-            request.setAttribute("listCruise", cruiseList);
-            return new ActionMethod("/WEB-INF/view/find_cruise.jsp", Method.FORWARD);
         }
 
         Optional<String> dateFromOptional = Optional.ofNullable(request.getParameter("dateFrom"));
@@ -67,18 +74,23 @@ public class FindCruiseAction implements Action {
             offset = page * limit - limit;
         }
 
-        cruiseList = cruiseService.getAllFilteredCruiseShowDTO(dateFrom, dateTo, durationFrom, durationTo, limit, offset);
-        long pageAmount = cruiseService.getPageAmount(dateFrom, dateTo, durationFrom, durationTo, limit);
-        LocalDate currentDate = LocalDate.now();
-        request.setAttribute("currentDate", currentDate);
-        request.setAttribute("dateFrom", dateFrom);
-        request.setAttribute("dateTo", dateTo);
-        request.setAttribute("duration", duration);
-        request.setAttribute("limit", limit);
-        request.setAttribute("page", page);
-        request.setAttribute("listCruise", cruiseList);
-        request.setAttribute("pageAmount", pageAmount);
-        return new ActionMethod("/WEB-INF/view/find_cruise.jsp", Method.FORWARD);
-
+        try {
+            cruiseList = cruiseService.getAllFilteredCruiseShowDTO(dateFrom, dateTo, durationFrom, durationTo, limit, offset);
+            long pageAmount = cruiseService.getPageAmount(dateFrom, dateTo, durationFrom, durationTo, limit);
+            LocalDate currentDate = LocalDate.now();
+            request.setAttribute("currentDate", currentDate);
+            request.setAttribute("dateFrom", dateFrom);
+            request.setAttribute("dateTo", dateTo);
+            request.setAttribute("duration", duration);
+            request.setAttribute("limit", limit);
+            request.setAttribute("page", page);
+            request.setAttribute("listCruise", cruiseList);
+            request.setAttribute("pageAmount", pageAmount);
+            return new ActionMethod("/WEB-INF/view/find_cruise.jsp", Method.FORWARD);
+        } catch (ServiceException e) {
+            request.getSession().setAttribute("error", 500);
+            request.getSession().setAttribute("errorMsg", "Something went wrong!");
+            return new ActionMethod("/WEB-INF/view/error.jsp", Method.FORWARD);
+        }
     }
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+
+    <Properties>
+        <Property name="logdir">../logs</Property>
+        <Property name="layout_file">[%p] %d{HH:mm:ss.SSS} [%t] %c %M - %m%n</Property>
+        <Property name="layout_console">%d{yyyy-MM-dd HH:mm:ss} %p %m%n</Property>
+    </Properties>
+
+    <Appenders>
+        <RollingFile name="file_logger"
+                     fileName="${logdir}/cruise.log"
+                     append="true"
+                     filePattern="${logdir}p/cruise-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${layout_file}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="2 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10" />
+        </RollingFile>
+        <Console name="stdout_logger" target="SYSTEM_OUT">
+            <PatternLayout pattern="${layout_console}"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Root level="all">
+            <AppenderRef ref="file_logger"/>
+            <AppenderRef ref="stdout_logger"/>
+        </Root>
+    </Loggers>
+</Configuration>

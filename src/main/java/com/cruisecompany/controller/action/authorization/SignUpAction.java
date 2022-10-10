@@ -5,6 +5,7 @@ import com.cruisecompany.controller.action.ActionMethod;
 import com.cruisecompany.controller.action.Method;
 import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.entity.UserAccount;
+import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.ServiceFactory;
 import com.cruisecompany.service.UserAccountService;
 
@@ -34,10 +35,16 @@ public class SignUpAction implements Action {
                 .setUserAccount(userAccount);
 
         UserAccountService userAccountService = ServiceFactory.getInstance().getUserAccountService();
-        userAccountService.signUp(passenger);
-        HttpSession session = request.getSession();
-        session.setAttribute("role",userAccount.getRole());
-        session.setAttribute("user",passenger);
-        return new ActionMethod("/", Method.REDIRECT);
+        try {
+            userAccountService.signUp(passenger);
+            HttpSession session = request.getSession();
+            session.setAttribute("role",userAccount.getRole());
+            session.setAttribute("user",passenger);
+            return new ActionMethod("/", Method.REDIRECT);
+        } catch (ServiceException e) {
+            request.getSession().setAttribute("error",500);
+            request.getSession().setAttribute("errorMsg","Unable to sign up");
+            return new ActionMethod("/cruise/error", Method.REDIRECT);
+        }
     }
 }

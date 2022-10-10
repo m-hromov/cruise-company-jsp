@@ -4,6 +4,7 @@ import com.cruisecompany.controller.action.Action;
 import com.cruisecompany.controller.action.ActionMethod;
 import com.cruisecompany.controller.action.Method;
 import com.cruisecompany.db.dto.UserAccountDTO;
+import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.PassengerService;
 import com.cruisecompany.service.ServiceFactory;
 import com.cruisecompany.service.UserAccountService;
@@ -32,22 +33,27 @@ public class SignInAction implements Action {
         String password = request.getParameter("password");
         String rememberMe = request.getParameter("remember_me");
 
-        Optional<UserAccountDTO> optional = userAccountService.signIn(login, password);
-        if (!optional.isPresent()) {
+        try {
+            Optional<UserAccountDTO> optional = userAccountService.signIn(login, password);
+            if (optional.isEmpty()) {
+                HttpSession session = request.getSession();
+                session.setAttribute("error", true);
+                return new ActionMethod("/cruise/sign_in", Method.REDIRECT);
+
+            }
+
+            UserAccountDTO userAccountDTO = optional.get();
             HttpSession session = request.getSession();
-            session.setAttribute("error", true);
-            return new ActionMethod("/cruise/sign_in", Method.REDIRECT);
-
+            session.setAttribute("role", userAccountDTO.getRole());
+            if (userAccountDTO.getRole().equals("USER")) {
+                session.setAttribute("user",
+                        passengerService.getPassengerByAccountId(userAccountDTO.getId()));
+            }
+            return new ActionMethod("/", Method.REDIRECT);
+        } catch (ServiceException e) {
+            request.getSession().setAttribute("error", 500);
+            request.getSession().setAttribute("errorMsg", "Something went wrong!");
+            return new ActionMethod("/cruise/error", Method.REDIRECT);
         }
-
-        UserAccountDTO userAccountDTO = optional.get();
-        HttpSession session = request.getSession();
-        session.setAttribute("role", userAccountDTO.getRole());
-        if (userAccountDTO.getRole().equals("USER")) {
-            session.setAttribute("user",
-                    passengerService.getPassengerByAccountId(userAccountDTO.getId()));
-        }
-        return new ActionMethod("/", Method.REDIRECT);
-
     }
 }

@@ -4,6 +4,7 @@ import com.cruisecompany.controller.action.Action;
 import com.cruisecompany.controller.action.ActionMethod;
 import com.cruisecompany.controller.action.Method;
 import com.cruisecompany.entity.Passenger;
+import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.PassengerService;
 import com.cruisecompany.service.ServiceFactory;
 
@@ -20,12 +21,18 @@ public class EditMoneyAction implements Action {
         if (request.getParameterMap().isEmpty()) {
             return new ActionMethod("/WEB-INF/view/balance.jsp", Method.FORWARD);
         }
-        PassengerService passengerService = ServiceFactory.getInstance().getPassengerService();
-        BigDecimal money = new BigDecimal(request.getParameter("money"));
-        HttpSession session = request.getSession();
-        Passenger passenger = (Passenger) session.getAttribute("user");
-        passenger.setMoney(passenger.getMoney().add(money));
-        passengerService.addMoney(passenger.getId(),money);
-        return new ActionMethod("/cruise/edit_money", Method.REDIRECT);
+        try {
+            PassengerService passengerService = ServiceFactory.getInstance().getPassengerService();
+            BigDecimal money = new BigDecimal(request.getParameter("money"));
+            HttpSession session = request.getSession();
+            Passenger passenger = (Passenger) session.getAttribute("user");
+            passenger.setMoney(passenger.getMoney().add(money));
+            passengerService.addMoney(passenger.getId(),money);
+            return new ActionMethod("/cruise/edit_money", Method.REDIRECT);
+        } catch (ServiceException e) {
+            request.getSession().setAttribute("error", 500);
+            request.getSession().setAttribute("errorMsg", "Something went wrong!");
+            return new ActionMethod("/cruise/error", Method.REDIRECT);
+        }
     }
 }

@@ -6,6 +6,7 @@ import com.cruisecompany.db.dao.AbstractDAO;
 import com.cruisecompany.db.dao.CruiseDAO;
 import com.cruisecompany.db.dao.mapper.RowMapper;
 import com.cruisecompany.entity.Cruise;
+import com.cruisecompany.exception.DAOException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -40,34 +41,34 @@ public class CruiseDAOImpl extends AbstractDAO<Cruise> implements CruiseDAO {
 
     @Override
     public List<Cruise> getAllFiltered(LocalDate dateFrom, LocalDate dateTo, int durationFrom, int durationTo,
-                                       int limit, int offset) {
+                                       int limit, int offset) throws DAOException {
         return executeQuery(GET_ALL_FILTERED, dateFrom, dateTo, dateFrom, dateTo, durationFrom, durationTo,
                 limit, offset);
     }
 
     @Override
-    public long getCruiseRowAmount(LocalDate dateFrom, LocalDate dateTo, int durationFrom, int durationTo) {
+    public long getCruiseRowAmount(LocalDate dateFrom, LocalDate dateTo, int durationFrom, int durationTo) throws DAOException {
         return executeSingleGetLongQuery(GET_ROW_AMOUNT, dateFrom, dateTo, dateFrom, dateTo, durationFrom, durationTo);
     }
 
     @Override
-    public long save(Cruise cruise) {
+    public long save(Cruise cruise) throws DAOException {
         return executeInsert(INSERT, cruise.getTimeDeparture(), cruise.getDateDeparture(),
                 cruise.getDateArrival(), cruise.getPrice(), cruise.getDescription(), cruise.getShip().getId());
     }
 
     @Override
-    public void update(Cruise obj) {
+    public void update(Cruise obj) throws DAOException {
 
     }
 
     @Override
-    public List<Cruise> getAll() {
+    public List<Cruise> getAll() throws DAOException {
         return executeQuery(GET_ALL_CRUISE_STATIONS);
     }
 
     @Override
-    public Optional<Cruise> get(long id) {
+    public Optional<Cruise> get(long id) throws DAOException {
         return executeSingleGetQuery(GET, id);
     }
 }

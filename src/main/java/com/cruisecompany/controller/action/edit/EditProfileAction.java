@@ -4,12 +4,13 @@ import com.cruisecompany.controller.action.Action;
 import com.cruisecompany.controller.action.ActionMethod;
 import com.cruisecompany.controller.action.Method;
 import com.cruisecompany.entity.Passenger;
+import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.PassengerService;
 import com.cruisecompany.service.ServiceFactory;
-import com.cruisecompany.service.ShipService;
 import com.cruisecompany.service.UserAccountService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +20,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class EditProfileAction implements Action {
+    final static Logger logger = LogManager.getLogger(EditProfileAction.class);
+
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
         if (request.getParameterMap().isEmpty()) {
@@ -30,7 +33,7 @@ public class EditProfileAction implements Action {
 
         Passenger passenger = (Passenger) session.getAttribute("user");
         String profilePart = request.getParameter("part");
-        if(profilePart.equals("info")) {
+        if (profilePart.equals("info")) {
             String firstName = request.getParameter("first_name");
             String lastName = request.getParameter("last_name");
             String phone = request.getParameter("phone");
@@ -41,8 +44,9 @@ public class EditProfileAction implements Action {
                     .setLastName(lastName)
                     .setPhone(phone)
                     .setEmail(email);
-            boolean updated = passengerService.updateProfile(newPassenger);
-            if(!updated) {
+            try {
+                passengerService.updateProfile(newPassenger);
+            } catch (ServiceException e) {
                 session.setAttribute("wrongEmail", true);
                 return new ActionMethod("/cruise/edit_profile", Method.REDIRECT);
             }
@@ -51,7 +55,7 @@ public class EditProfileAction implements Action {
                     .setPhone(phone)
                     .setEmail(email);
         }
-        if(profilePart.equals("document")) {
+        if (profilePart.equals("document")) {
             try {
                 String uploadPath = request.getServletContext().getRealPath("") + "resources" + File.separator + "files";
                 File uploadDir = new File(uploadPath);
@@ -62,18 +66,24 @@ public class EditProfileAction implements Action {
 
                 passenger.setDocumentPath("resources/files/" + fileName);
                 passengerService.updateDocument(passenger);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (ServletException e) {
-                throw new RuntimeException(e);
+            } catch (IOException | ServletException e) {
+                logger.error("Unable to save an image!");
+                request.getSession().setAttribute("error", 500);
+                request.getSession().setAttribute("errorMsg", "Unable to save an image!");
+                return new ActionMethod("/cruise/error", Method.REDIRECT);
+            } catch (ServiceException e) {
+                request.getSession().setAttribute("error", 500);
+                request.getSession().setAttribute("errorMsg", "Something went wrong!");
+                return new ActionMethod("/cruise/error", Method.REDIRECT);
             }
         }
-        if(profilePart.equals("password")) {
-            String oldPassword = request.getParameter("old_password");
-            String newPassword = request.getParameter("new_password");
-            boolean updated = userAccountService.updatePassword(passenger.getUserAccount().getId(),
-                    oldPassword,newPassword);
-            if(!updated) {
+        if (profilePart.equals("password")) {
+            try {
+                String oldPassword = request.getParameter("old_password");
+                String newPassword = request.getParameter("new_password");
+                userAccountService.updatePassword(passenger.getUserAccount().getId(),
+                        oldPassword, newPassword);
+            } catch (ServiceException e) {
                 session.setAttribute("wrongPassword", true);
             }
         }
