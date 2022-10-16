@@ -12,5 +12,6 @@
 </head>
 <body>
   Error occurred: ${error}
+${errorMsg}
 </body>
 </html>

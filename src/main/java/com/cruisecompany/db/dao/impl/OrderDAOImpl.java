@@ -8,6 +8,7 @@ import com.cruisecompany.db.dao.mapper.RowMapper;
 import com.cruisecompany.entity.Order;
 import com.cruisecompany.exception.DAOException;
 
+import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,48 +47,48 @@ public class OrderDAOImpl extends AbstractDAO<Order> implements OrderDAO {
     }
 
     @Override
-    public Optional<Order> get(long id) throws DAOException {
-        return executeSingleGetQuery(GET, id);
+    public Optional<Order> get(Connection connection, long id) throws DAOException {
+        return executeSingleGetQuery(connection, GET, id);
     }
 
     @Override
-    public long save(Order order) throws DAOException {
-        return executeInsert(INSERT, order.getPassenger().getId(), order.getCruise().getId());
+    public long save(Connection connection, Order order) throws DAOException {
+        return executeInsert(connection, INSERT, order.getPassenger().getId(), order.getCruise().getId());
     }
 
     @Override
-    public void update(Order order) throws DAOException {
+    public void update(Connection connection, Order order) throws DAOException {
 
     }
 
     @Override
-    public List<Order> getAll() throws DAOException {
-        return executeQuery(GET_ALL_ORDERS);
+    public List<Order> getAll(Connection connection) throws DAOException {
+        return executeQuery(connection, GET_ALL_ORDERS);
     }
 
     @Override
-    public List<Order> getAllPassengerOrders(long id) throws DAOException {
-        return executeQuery(GET_ALL_PASSENGER_ORDERS, id);
+    public List<Order> getAllPassengerOrders(Connection connection, long id) throws DAOException {
+        return executeQuery(connection, GET_ALL_PASSENGER_ORDERS, id);
     }
 
 
     @Override
-    public void updatePaidStatus(long orderId) throws DAOException {
-        executeUpdate(PAY, orderId);
+    public void updatePaidStatus(Connection connection, long orderId) throws DAOException {
+        executeUpdate(connection, PAY, orderId);
     }
 
     @Override
-    public void block(long orderId) throws DAOException {
-        executeUpdate(BLOCK, orderId);
+    public void block(Connection connection, long orderId) throws DAOException {
+        executeUpdate(connection, BLOCK, orderId);
     }
 
     @Override
-    public void unblock(long orderId) throws DAOException {
-        executeUpdate(UNBLOCK, orderId);
+    public void unblock(Connection connection, long orderId) throws DAOException {
+        executeUpdate(connection, UNBLOCK, orderId);
     }
 
     @Override
-    public void confirm(long orderId) throws DAOException {
-        executeUpdate(CONFIRMED, orderId);
+    public void confirm(Connection connection, long orderId) throws DAOException {
+        executeUpdate(connection, CONFIRMED, orderId);
     }
 }

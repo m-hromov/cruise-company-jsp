@@ -8,6 +8,8 @@ import com.cruisecompany.db.dao.mapper.RowMapper;
 import com.cruisecompany.entity.Staff;
 import com.cruisecompany.exception.DAOException;
 
+import java.sql.Connection;
+
 public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
     private static final String INSERT = "INSERT INTO " + Tables.STAFF + " (" + Columns.FIRST_NAME + ", " +
             Columns.LAST_NAME + "," + Columns.PHONE + "," + Columns.SPECIALITY + "," +
@@ -18,13 +20,13 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
     }
 
     @Override
-    public long save(Staff staff) throws DAOException {
-        return executeInsert(INSERT, staff.getFirstName(),
+    public long save(Connection connection, Staff staff) throws DAOException {
+        return executeInsert(connection, INSERT, staff.getFirstName(),
                 staff.getLastName(), staff.getPhone(), staff.getSpeciality(), staff.getShip().getId());
     }
 
     @Override
-    public void update(Staff obj) throws DAOException {
+    public void update(Connection connection, Staff obj) throws DAOException {
 
     }
 }

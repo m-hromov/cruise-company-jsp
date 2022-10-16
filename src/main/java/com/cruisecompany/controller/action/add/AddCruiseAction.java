@@ -23,10 +23,12 @@ import java.util.List;
 public class AddCruiseAction implements Action {
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
+        ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
+                .getAttribute("ServiceFactory");
         if (request.getParameterMap().isEmpty()) {
             try {
-                ShipService shipService = ServiceFactory.getInstance().getShipService();
-                StationService stationService = ServiceFactory.getInstance().getStationService();
+                ShipService shipService = serviceFactory.getShipService();
+                StationService stationService = serviceFactory.getStationService();
                 request.setAttribute("listShip", shipService.getAll());
                 request.setAttribute("listStation", stationService.getAll());
                 return new ActionMethod("/WEB-INF/view/add_cruise.jsp", Method.FORWARD);
@@ -57,7 +59,7 @@ public class AddCruiseAction implements Action {
                 .setShip(new Ship().setId(shipId))
                 .setStationList(stationList);
 
-        CruiseService cruiseService = ServiceFactory.getInstance().getCruiseService();
+        CruiseService cruiseService = serviceFactory.getCruiseService();
         try {
             cruiseService.addCruise(cruise);
             return new ActionMethod("/cruise/add_cruise", Method.REDIRECT);

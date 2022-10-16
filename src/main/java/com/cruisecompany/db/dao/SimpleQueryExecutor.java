@@ -19,10 +19,9 @@ public class SimpleQueryExecutor<T> {
         this.rowMapper = rowMapper;
     }
 
-    protected List<T> executeQuery(String query, Object... params) throws DAOException {
+    protected List<T> executeQuery(Connection connection, String query, Object... params) throws DAOException {
         List<T> list = new ArrayList<>();
-        try (Connection connection = DBProvider.getInstance().getConnection();
-             PreparedStatement ps = preparedStatement(query, connection, params);
+        try (PreparedStatement ps = preparedStatement(query, connection, params);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 list.add(rowMapper.map(rs));
@@ -34,9 +33,8 @@ public class SimpleQueryExecutor<T> {
         }
     }
 
-    protected Optional<T> executeSingleGetQuery(String query, Object... params) throws DAOException {
-        try (Connection connection = DBProvider.getInstance().getConnection();
-             PreparedStatement ps = preparedStatement(query, connection, params);
+    protected Optional<T> executeSingleGetQuery(Connection connection, String query, Object... params) throws DAOException {
+        try (PreparedStatement ps = preparedStatement(query, connection, params);
              ResultSet rs = ps.executeQuery()) {
 
             if (rs.next())
@@ -48,9 +46,8 @@ public class SimpleQueryExecutor<T> {
         }
     }
 
-    protected long executeInsert(String query, Object... params) throws DAOException {
-        try (Connection connection = DBProvider.getInstance().getConnection();
-             PreparedStatement ps = preparedStatement(query, connection, params)) {
+    protected long executeInsert(Connection connection, String query, Object... params) throws DAOException {
+        try (PreparedStatement ps = preparedStatement(query, connection, params)) {
             ps.executeUpdate();
             ResultSet generatedKeys = ps.getGeneratedKeys();
 
@@ -63,9 +60,8 @@ public class SimpleQueryExecutor<T> {
         }
     }
 
-    protected void executeUpdate(String query, Object... params) throws DAOException {
-        try (Connection connection = DBProvider.getInstance().getConnection();
-             PreparedStatement ps = preparedStatement(query, connection, params)) {
+    protected void executeUpdate(Connection connection, String query, Object... params) throws DAOException {
+        try (PreparedStatement ps = preparedStatement(query, connection, params)) {
             ps.executeUpdate();
         } catch (SQLException e) {
             logger.error("Unable to execute an update!", e);
@@ -73,9 +69,8 @@ public class SimpleQueryExecutor<T> {
         }
     }
 
-    protected long executeSingleGetLongQuery(String query, Object... params) throws DAOException {
-        try (Connection connection = DBProvider.getInstance().getConnection();
-             PreparedStatement ps = preparedStatement(query, connection, params)) {
+    protected long executeSingleGetLongQuery(Connection connection, String query, Object... params) throws DAOException {
+        try (PreparedStatement ps = preparedStatement(query, connection, params)) {
             ResultSet rs = ps.executeQuery();
 
             if (!rs.next()) throw new SQLException("0 rows affected");
@@ -88,8 +83,7 @@ public class SimpleQueryExecutor<T> {
     }
 
     private PreparedStatement preparedStatement(String query, Connection connection, Object... params) throws DAOException {
-        try {
-            PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        try {PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             for (int i = 1; i <= params.length; i++) {
                 ps.setObject(i, params[i - 1]);
             }

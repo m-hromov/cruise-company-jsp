@@ -19,9 +19,6 @@
 <body>
 <jsp:include page="${pageContext.request.contextPath}/page_elements/header.jsp"/>
 <div style="width: 100% !important;">
-    <div class="row pb-2">
-    <b>Yo ho ho. No girls, just rum.</b>
-    </div>
 
     <img src="${pageContext.request.contextPath}/resources/images/ship.jpg" style="width: 100% !important;" alt="ship"/>
     <img src="${pageContext.request.contextPath}/resources/images/ship.jpg" style="width: 100% !important;" alt="ship"/>

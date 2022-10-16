@@ -8,6 +8,7 @@ import com.cruisecompany.db.dao.mapper.RowMapper;
 import com.cruisecompany.entity.UserAccount;
 import com.cruisecompany.exception.DAOException;
 
+import java.sql.Connection;
 import java.util.Optional;
 
 public class UserAccountDAOImpl extends AbstractDAO<UserAccount> implements UserAccountDAO {
@@ -22,22 +23,22 @@ public class UserAccountDAOImpl extends AbstractDAO<UserAccount> implements User
     }
 
     @Override
-    public long save(UserAccount userAccount) throws DAOException {
-        return executeInsert(INSERT, userAccount.getLogin(), userAccount.getPassword(), userAccount.getRole());
+    public long save(Connection connection, UserAccount userAccount) throws DAOException {
+        return executeInsert(connection, INSERT, userAccount.getLogin(), userAccount.getPassword(), userAccount.getRole());
     }
 
     @Override
-    public void update(UserAccount obj) throws DAOException {
+    public void update(Connection connection, UserAccount obj) throws DAOException {
 
     }
 
     @Override
-    public Optional<UserAccount> getUserAccountByLogin(String login) throws DAOException {
-        return executeSingleGetQuery(GET_BY_LOGIN, login);
+    public Optional<UserAccount> getUserAccountByLogin(Connection connection, String login) throws DAOException {
+        return executeSingleGetQuery(connection, GET_BY_LOGIN, login);
     }
 
     @Override
-    public void updatePassword(UserAccount userAccount) throws DAOException {
-        executeUpdate(UPDATE_PASSWORD, userAccount.getPassword(), userAccount.getId());
+    public void updatePassword(Connection connection, UserAccount userAccount) throws DAOException {
+        executeUpdate(connection, UPDATE_PASSWORD, userAccount.getPassword(), userAccount.getId());
     }
 }

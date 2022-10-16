@@ -1,3 +1,4 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: hromov
@@ -19,7 +20,9 @@
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"
             integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
             crossorigin="anonymous"></script>
-    <title>Cruises | Cruise company</title>
+    <fmt:setLocale value="${sessionScope.lang}"/>
+    <fmt:setBundle basename="localization.lang" var="loc"/>
+    <title><fmt:message bundle="${loc}" key="lang.balance"/> | Cruise company</title>
 </head>
 <body>
 <jsp:include page="${pageContext.request.contextPath}/page_elements/header.jsp"/>
@@ -29,17 +32,17 @@
         <div class="row">
             <div class="col px-1 mb-2">
                 <label for="money" class="ms-2 position-absolute mtext">
-                    <span class="h6 small bg-white text-muted px-1">Money</span>
+                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}" key="lang.money"/></span>
                 </label>
                 <input type="text" class="form-control mt-2" name="money" id="money">
                 <div class="invalid-feedback">
-                    Wrong money format
+                    <fmt:message bundle="${loc}" key="lang.wrong_money"/>
                 </div>
             </div>
         </div>
         <div class="row justify-content-end">
             <span class="col-auto px-1 mb-2">
-                <button class="btn btn-jade" type="submit">Add</button>
+                <button class="btn btn-jade" type="submit"><fmt:message bundle="${loc}" key="lang.add"/></button>
             </span>
         </div>
     </form>

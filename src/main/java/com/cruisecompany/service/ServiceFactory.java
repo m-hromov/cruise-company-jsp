@@ -1,31 +1,35 @@
 package com.cruisecompany.service;
 
+import com.cruisecompany.db.DBProvider;
 import com.cruisecompany.db.dao.mapper.RowMapperFactory;
 import com.cruisecompany.db.dao.mapper.impl.*;
 import com.cruisecompany.service.impl.*;
 
 public class ServiceFactory {
-    private static ServiceFactory INSTANCE;
-    CruiseService cruiseService;
-    ShipService shipService;
-    StationService stationService;
-    StaffService staffService;
-    PassengerService passengerService;
-    UserAccountService userAccountService;
-    OrderService orderService;
-    private ServiceFactory() {
-        cruiseService = new CruiseServiceImpl();
-        passengerService = new PassengerServiceImpl();
-        userAccountService = new UserAccountServiceImpl();
-        orderService = new OrderServiceImpl();
-        shipService = new ShipServiceImpl();
-        stationService = new StationServiceImpl();
-        staffService = new StaffServiceImpl();
+    private CruiseService cruiseService;
+    private ShipService shipService;
+    private StationService stationService;
+    private StaffService staffService;
+    private PassengerService passengerService;
+    private UserAccountService userAccountService;
+    private OrderService orderService;
+
+    public ServiceFactory() {
+        DBProvider dbProvider = new DBProvider();
+        initServices(dbProvider);
     }
 
-    public static ServiceFactory getInstance() {
-        if (INSTANCE == null) INSTANCE = new ServiceFactory();
-        return INSTANCE;
+    public ServiceFactory(DBProvider dbProvider) {
+        initServices(dbProvider);
+    }
+    private void initServices(DBProvider dbProvider) {
+        cruiseService = new CruiseServiceImpl(dbProvider);
+        passengerService = new PassengerServiceImpl(dbProvider);
+        userAccountService = new UserAccountServiceImpl(dbProvider);
+        orderService = new OrderServiceImpl(dbProvider);
+        shipService = new ShipServiceImpl(dbProvider);
+        stationService = new StationServiceImpl(dbProvider);
+        staffService = new StaffServiceImpl(dbProvider);
     }
 
     public CruiseService getCruiseService() {

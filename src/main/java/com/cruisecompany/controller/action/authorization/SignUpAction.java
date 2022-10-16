@@ -19,6 +19,8 @@ import java.math.BigDecimal;
 public class SignUpAction implements Action {
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
+        ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
+                .getAttribute("ServiceFactory");
         if (request.getParameterMap().isEmpty()) {
             return new ActionMethod("/WEB-INF/view/sign_up.jsp", Method.FORWARD);
         }
@@ -34,7 +36,7 @@ public class SignUpAction implements Action {
                 .setMoney(BigDecimal.ZERO)
                 .setUserAccount(userAccount);
 
-        UserAccountService userAccountService = ServiceFactory.getInstance().getUserAccountService();
+        UserAccountService userAccountService = serviceFactory.getUserAccountService();
         try {
             userAccountService.signUp(passenger);
             HttpSession session = request.getSession();

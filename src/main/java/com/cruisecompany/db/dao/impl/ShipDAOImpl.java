@@ -8,6 +8,8 @@ import com.cruisecompany.db.dao.mapper.RowMapper;
 import com.cruisecompany.entity.Ship;
 import com.cruisecompany.exception.DAOException;
 
+import java.sql.Connection;
+
 public class ShipDAOImpl extends AbstractDAO<Ship> implements ShipDAO {
     private static final String INSERT = "INSERT INTO " + Tables.SHIP + " (" + Columns.PASSENGER_CAPACITY + ", " +
             Columns.SHIP_NAME + "," + Columns.PHOTO_PATH + ") VALUES (?, ?, ?)";
@@ -17,13 +19,13 @@ public class ShipDAOImpl extends AbstractDAO<Ship> implements ShipDAO {
     }
 
     @Override
-    public long save(Ship ship) throws DAOException {
-        return executeInsert(INSERT, ship.getPassengerCapacity(),
+    public long save(Connection connection, Ship ship) throws DAOException {
+        return executeInsert(connection, INSERT, ship.getPassengerCapacity(),
                 ship.getName(), ship.getPhotoPath());
     }
 
     @Override
-    public void update(Ship obj) throws DAOException {
+    public void update(Connection connection, Ship obj) throws DAOException {
 
     }
 }

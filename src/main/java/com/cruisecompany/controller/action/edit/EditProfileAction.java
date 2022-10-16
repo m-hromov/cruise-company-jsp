@@ -24,11 +24,13 @@ public class EditProfileAction implements Action {
 
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
+        ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
+                .getAttribute("ServiceFactory");
         if (request.getParameterMap().isEmpty()) {
             return new ActionMethod("/WEB-INF/view/edit_profile.jsp", Method.FORWARD);
         }
-        UserAccountService userAccountService = ServiceFactory.getInstance().getUserAccountService();
-        PassengerService passengerService = ServiceFactory.getInstance().getPassengerService();
+        UserAccountService userAccountService = serviceFactory.getUserAccountService();
+        PassengerService passengerService = serviceFactory.getPassengerService();
         HttpSession session = request.getSession();
 
         Passenger passenger = (Passenger) session.getAttribute("user");

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
 
-@WebFilter(urlPatterns = "/*", filterName = "AuthorizationFilter")
+@WebFilter(filterName = "AuthenticationFilter")
 public class AuthenticationFilter implements Filter {
     private static HashMap<String, String> urisRestricted;
     private static HashSet<String> urisCommon;
@@ -61,7 +61,7 @@ public class AuthenticationFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        request.setAttribute("error", 404);
+        request.setAttribute("errorMsg", "Access denied");
         httpServletRequest.getRequestDispatcher("/WEB-INF/view/error.jsp").include(request, response);
     }
 }

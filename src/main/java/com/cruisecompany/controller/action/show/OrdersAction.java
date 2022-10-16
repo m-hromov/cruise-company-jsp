@@ -19,7 +19,9 @@ public class OrdersAction implements Action {
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
         try {
-            PassengerService passengerService = ServiceFactory.getInstance().getPassengerService();
+            ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
+                    .getAttribute("ServiceFactory");
+            PassengerService passengerService = serviceFactory.getPassengerService();
             List<PassengerOrderDTO> passengerOrderDTOList = passengerService.getAllPassengerOrderDTOList();
             request.setAttribute("orderList", passengerOrderDTOList);
             return new ActionMethod("/WEB-INF/view/orders.jsp", Method.FORWARD);

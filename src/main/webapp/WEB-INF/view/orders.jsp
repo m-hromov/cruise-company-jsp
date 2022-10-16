@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -17,7 +18,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
             crossorigin="anonymous"></script>
-    <title>Orders | Cruise company</title>
+    <fmt:setLocale value="${sessionScope.lang}"/>
+    <fmt:setBundle basename="localization.lang" var="loc"/>
+    <title><fmt:message bundle="${loc}" key="lang.orders"/> | Cruise company</title>
 </head>
 <body>
 <jsp:include page="${pageContext.request.contextPath}/page_elements/header.jsp"/>
@@ -26,57 +29,59 @@
     <div class="d-flex flex-column">
         <c:forEach items="${orderList}" var="order">
             <div class="row border-bottom br-color">
-                <div class="col-auto d-flex flex-column bg-table-col1 justify-content-center">
+                <div class="col-1 d-flex flex-column bg-table-col1 justify-content-center">
                     <div>
                         #${order.orderId}
                     </div>
                 </div>
-                <div class="col d-flex flex-column bg-table-col2 justify-content-center ">
+                <div class="col-5 d-flex flex-column bg-table-col2 justify-content-center ">
                     <div>
-                        Full Name:
+                        <fmt:message bundle="${loc}" key="lang.full_name"/>:
                             ${order.firstName.concat(" ").concat(order.lastName)}
                     </div>
                     <div>
-                        Email:
+                        <fmt:message bundle="${loc}" key="lang.email"/>:
                             ${order.email}
                     </div>
                     <div>
-                        Phone:
+                        <fmt:message bundle="${loc}" key="lang.phone"/>:
                             ${order.phone}
                     </div>
                     <c:if test="${not empty order.documentPath}">
-                    <a class="col-auto link-dark" href="${pageContext.request.contextPath}/${order.documentPath}"
-                       target="_blank">View document</a>
+                    <a class="link-dark" href="${pageContext.request.contextPath}/${order.documentPath}"
+                       target="_blank"><fmt:message bundle="${loc}" key="lang.view_document"/></a>
                     </c:if>
 
                 </div>
                 <div class="col d-flex flex-column bg-table-col1 justify-content-center ">
                     <div>
-                        Paid:
+                        <fmt:message bundle="${loc}" key="lang.paid"/>:
                             ${order.paid}
                     </div>
                     <div>
-                        Blocked:
+                        <fmt:message bundle="${loc}" key="lang.blocked"/>:
                             ${order.banned}
                     </div>
                     <div>
-                        Confirmed:
+                        <fmt:message bundle="${loc}" key="lang.confirmed"/>:
                             ${order.confirmed}
                     </div>
                     <a class="link-dark"
                        href="${pageContext.request.contextPath}/cruise/find_cruise?cruise_id=${order.cruiseId}"
-                       target="_blank">View
-                        cruise</a>
+                       target="_blank"><fmt:message bundle="${loc}" key="lang.view_cruise"/></a>
                 </div>
-                <div class="col-auto d-flex flex-column bg-table-col2 justify-content-center">
+                <div class="col-2 d-flex flex-column bg-table-col2 justify-content-center">
                     <form class="mx-0 my-auto row" method="post"
                           action="${pageContext.request.contextPath}/cruise/confirm_order">
                         <input type="hidden" name="order_id" value="${order.orderId}">
-                        <c:if test="${order.confirmed==false}">
-                            <button class="btn btn-jade" type="submit">Confirm</button>
+                        <c:if test="${order.confirmed==false && order.banned==false}">
+                            <button class="btn btn-jade" type="submit"><fmt:message bundle="${loc}" key="lang.confirm"/></button>
+                        </c:if>
+                        <c:if test="${order.banned==true}">
+                            <button class="btn btn-jade" type="submit" disabled><fmt:message bundle="${loc}" key="lang.confirm"/></button>
                         </c:if>
                         <c:if test="${order.confirmed==true}">
-                            <button class="btn btn-jade" type="submit" disabled>Confirm</button>
+                            <button class="btn btn-jade" type="submit" disabled><fmt:message bundle="${loc}" key="lang.confirmed"/></button>
                         </c:if>
                     </form>
                     <c:if test="${order.banned==false}">
@@ -84,10 +89,10 @@
                               action="${pageContext.request.contextPath}/cruise/block_order?block=true">
                             <input type="hidden" name="order_id" value="${order.orderId}">
                             <c:if test="${order.confirmed==false}">
-                                <button class="btn btn-outline-danger" type="submit">Block</button>
+                                <button class="btn btn-outline-danger" type="submit"><fmt:message bundle="${loc}" key="lang.block"/></button>
                             </c:if>
                             <c:if test="${order.confirmed==true}">
-                                <button class="btn btn-outline-danger" type="submit" disabled>Block</button>
+                                <button class="btn btn-outline-danger" type="submit" disabled><fmt:message bundle="${loc}" key="lang.block"/></button>
                             </c:if>
                         </form>
                     </c:if>
@@ -96,10 +101,10 @@
                               action="${pageContext.request.contextPath}/cruise/block_order?block=false">
                             <input type="hidden" name="order_id" value="${order.orderId}">
                             <c:if test="${order.confirmed==false}">
-                                <button class="btn btn-outline-danger" type="submit">Unblock</button>
+                                <button class="btn btn-outline-danger" type="submit"><fmt:message bundle="${loc}" key="lang.unblock"/></button>
                             </c:if>
                             <c:if test="${order.confirmed==true}">
-                                <button class="btn btn-outline-danger" type="submit" disabled>Unblock</button>
+                                <button class="btn btn-outline-danger" type="submit" disabled><fmt:message bundle="${loc}" key="lang.unblock"/></button>
                             </c:if>
                         </form>
                     </c:if>

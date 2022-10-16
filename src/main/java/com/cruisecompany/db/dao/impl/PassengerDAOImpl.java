@@ -9,6 +9,7 @@ import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.exception.DAOException;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.util.Optional;
 
 public class PassengerDAOImpl extends AbstractDAO<Passenger> implements PassengerDAO {
@@ -33,41 +34,41 @@ public class PassengerDAOImpl extends AbstractDAO<Passenger> implements Passenge
     }
 
     @Override
-    public long save(Passenger passenger) throws DAOException {
-        return executeInsert(INSERT, passenger.getFirstName(), passenger.getLastName(),
+    public long save(Connection connection, Passenger passenger) throws DAOException {
+        return executeInsert(connection,INSERT, passenger.getFirstName(), passenger.getLastName(),
                 passenger.getPhone(), passenger.getEmail(), passenger.getMoney(), passenger.getUserAccount().getId());
     }
 
     @Override
-    public void update(Passenger obj) throws DAOException {
+    public void update(Connection connection, Passenger obj) throws DAOException {
 
     }
 
     @Override
-    public Optional<Passenger> getByUserAccountId(long id) throws DAOException {
-        return executeSingleGetQuery(GET_BY_USER_ACCOUNT_ID, id);
+    public Optional<Passenger> getByUserAccountId(Connection connection, long id) throws DAOException {
+        return executeSingleGetQuery(connection,GET_BY_USER_ACCOUNT_ID, id);
     }
 
     @Override
-    public void updateMoney(long passengerId, BigDecimal money) throws DAOException {
-        executeUpdate(UPDATE_MONEY, money, passengerId);
+    public void updateMoney(Connection connection, long passengerId, BigDecimal money) throws DAOException {
+        executeUpdate(connection,UPDATE_MONEY, money, passengerId);
     }
 
     @Override
-    public void updateProfile(Passenger passenger) throws DAOException {
+    public void updateProfile(Connection connection, Passenger passenger) throws DAOException {
 
-        executeUpdate(UPDATE_PROFILE, passenger.getFirstName(), passenger.getLastName(),
+        executeUpdate(connection,UPDATE_PROFILE, passenger.getFirstName(), passenger.getLastName(),
                 passenger.getPhone(), passenger.getEmail(), passenger.getId());
 
     }
 
     @Override
-    public void updateDocument(Passenger passenger) throws DAOException {
-        executeUpdate(UPDATE_DOCUMENT, passenger.getDocumentPath(), passenger.getId());
+    public void updateDocument(Connection connection, Passenger passenger) throws DAOException {
+        executeUpdate(connection,UPDATE_DOCUMENT, passenger.getDocumentPath(), passenger.getId());
     }
 
     @Override
-    public void addMoney(long passengerId, BigDecimal money) throws DAOException {
-        executeUpdate(ADD_MONEY, money, passengerId);
+    public void addMoney(Connection connection, long passengerId, BigDecimal money) throws DAOException {
+        executeUpdate(connection,ADD_MONEY, money, passengerId);
     }
 }

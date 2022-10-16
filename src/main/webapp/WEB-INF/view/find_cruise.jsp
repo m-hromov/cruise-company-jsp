@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="utils" uri="WEB-INF/tld/utils.tld" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -21,7 +22,9 @@
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"
             integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
             crossorigin="anonymous"></script>
-    <title>Cruises | Cruise company</title>
+    <fmt:setLocale value="${sessionScope.lang}"/>
+    <fmt:setBundle basename="localization.lang" var="loc"/>
+    <title><fmt:message bundle="${loc}" key="lang.find_cruise"/> | Cruise company</title>
 </head>
 <body>
 <jsp:include page="${pageContext.request.contextPath}/page_elements/header.jsp"/>
@@ -29,7 +32,7 @@
     <jsp:useBean id="listCruise" scope="request" type="java.util.List<com.cruisecompany.db.dto.CruiseShowDTO>"/>
     <c:if test="${error eq true}">
         <div class="container alert alert-danger bd-search" role="alert">
-            Not found!
+            <fmt:message bundle="${loc}" key="lang.error_not_found"/>
         </div>
     </c:if>
     <c:if test="${empty param.cruise_id}">
@@ -67,38 +70,50 @@
 
                 </div>
                 <div class="col d-flex flex-column ">
-                    <div class="text-start fw-bold fs-4">Getaway from ${cruise.start.city}, Ukraine</div>
+                    <div class="text-start fw-bold fs-4">
+                        <fmt:message bundle="${loc}" key="lang.getaway"/> ${cruise.start.city}, ${cruise.start.country}
+                    </div>
                     <div class="text-start fw-bold fs-6 mt-sm-0">${cruise.shipName}</div>
                     <div class="align-items-center ">
                         <div class="d-flex flex-row">
                             <div class="sm-circle bg-jade me-2">
                                 <div class="fw-bold fs-5 text-white me-none">${cruise.daysTotal}</div>
-                                <div class="text-white">DAY</div>
+                                <div class="text-white">
+                                    <fmt:message bundle="${loc}" key="lang.day"/>
+                                </div>
                             </div>
                             <div class="text-start align-self-center">
-                                Start: ${cruise.start.city} -> End: ${cruise.end.city}
+                                <fmt:message bundle="${loc}" key="lang.start"/>: ${cruise.start.city} ->
+                                <fmt:message bundle="${loc}" key="lang.end"/>: ${cruise.end.city}
                             </div>
                         </div>
                     </div>
-                    <p class="text-start text-wrap mb-0">Time:${cruise.timeDeparture}</p>
-                    <p class="text-start text-wrap mt-0">Departure: ${cruise.dateDeparture} Arrival: ${cruise.dateArrival}</p>
+                    <p class="text-start text-wrap mb-0">
+                        <fmt:message bundle="${loc}" key="lang.time"/>: ${cruise.timeDeparture}
+                    </p>
+                    <p class="text-start text-wrap mt-0">
+                        <fmt:message bundle="${loc}" key="lang.departure"/>: ${cruise.dateDeparture}
+                        <fmt:message bundle="${loc}" key="lang.arrival"/>: ${cruise.dateArrival}</p>
                     <p class="text-start text-wrap">${cruise.description}</p>
                     <div class="row align-self-end mt-auto">
                         <div class="col fs-4 fw-bold me-2">
-                            <utils:currency value="${cruise.price}" convertedcurr="UAH"/>
+                            <utils:currency value="${cruise.price}" convertedcurr="${lang eq 'en' ? 'USD' : 'UAH'}"/>
                         </div>
                         <c:if test="${sessionScope.role.equals('USER')}">
                             <form class="col" action="${pageContext.request.contextPath}/cruise/buy_cruise"
                                   method="post">
                                 <input type="hidden" name="cruise_id" value="${cruise.id}">
-                                <button type="submit" class="btn btn-jade-reversed">
-                                    Buy
+                                <button type="submit"
+                                        class="btn btn-jade-reversed ${cruise.dateArrival.isBefore(currentDate) ? 'disabled':''}">
+                                    <fmt:message bundle="${loc}" key="lang.buy"/>
                                 </button>
                             </form>
                         </c:if>
                         <c:if test="${sessionScope.role=='VISITOR'}">
                             <a href="${pageContext.request.contextPath}/cruise/sign_in"
-                               class="col btn btn-jade-reversed">Buy</a>
+                               class="col btn btn-jade-reversed ${cruise.dateArrival.isBefore(currentDate) ? 'disabled':''}">
+                                <fmt:message bundle="${loc}" key="lang.buy"/>
+                            </a>
                         </c:if>
                     </div>
                 </div>
@@ -110,7 +125,9 @@
 <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions"
      aria-labelledby="offcanvasWithBothOptionsLabel">
     <div class="offcanvas-header bg-jade">
-        <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel" style="color:white">Filter cruises</h5>
+        <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel" style="color:white">
+            <fmt:message bundle="${loc}" key="lang.filter_cruises"/>
+        </h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
@@ -118,12 +135,12 @@
             <input type="hidden" name="limit" value="${limit}">
             <div class="row mb-2">
                 <div class="col flex-column ">
-                    <label for="dateFrom">From:</label>
+                    <label for="dateFrom"><fmt:message bundle="${loc}" key="lang.from"/>:</label>
                     <input id="dateFrom" class="form-control" type="date" name="dateFrom" value="${dateFrom}"
                            onchange="setMinDateForDateTo()"/>
                 </div>
                 <div class="col flex-column ">
-                    <label for="dateTo">To:</label>
+                    <label for="dateTo"><fmt:message bundle="${loc}" key="lang.to"/>:</label>
                     <input id="dateTo" class="form-control" type="date" name="dateTo" value="${dateTo}"
                            onchange="setMaxDateForDateFrom()"/>
                 </div>
@@ -132,16 +149,16 @@
                 <hr>
             </div>
             <div class="col flex-column mb-2">
-                <label for="duration">Duration:</label>
+                <label for="duration"><fmt:message bundle="${loc}" key="lang.duration"/>:</label>
                 <select class="form-select" aria-label="Select duration" name="duration" id="duration">
-                    <option ${empty param.duration ? 'selected':''}>All</option>
-                    <option value="1" ${param.duration eq '1' ? 'selected':''}>2 - 5 Days</option>
-                    <option value="2" ${param.duration eq '2' ? 'selected':''}>6 - 9 Days</option>
-                    <option value="3" ${param.duration eq '3' ? 'selected':''}>10+ Days</option>
+                    <option ${empty param.duration ? 'selected':''}><fmt:message bundle="${loc}" key="lang.all"/></option>
+                    <option value="1" ${param.duration eq '1' ? 'selected':''}>2 - 5 <fmt:message bundle="${loc}" key="lang.days"/></option>
+                    <option value="2" ${param.duration eq '2' ? 'selected':''}>6 - 9 <fmt:message bundle="${loc}" key="lang.days"/></option>
+                    <option value="3" ${param.duration eq '3' ? 'selected':''}>10+ <fmt:message bundle="${loc}" key="lang.days"/></option>
                 </select>
             </div>
             <div class="d-flex flex-row justify-content-end">
-                <button class="btn btn-jade-reversed text-wrap" type="submit">Apply</button>
+                <button class="btn btn-jade-reversed text-wrap" type="submit"><fmt:message bundle="${loc}" key="lang.apply"/></button>
             </div>
         </form>
     </div>

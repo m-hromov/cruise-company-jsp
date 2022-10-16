@@ -4,7 +4,6 @@ import com.cruisecompany.exception.DatabaseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
@@ -13,25 +12,18 @@ import java.sql.SQLException;
 
 public class DBProvider {
     final static Logger logger = LogManager.getLogger(DBProvider.class);
-    private static DBProvider INSTANCE;
     private final DataSource dataSource;
 
-    private DBProvider() throws DatabaseException {
+    public DBProvider() throws DatabaseException {
         try {
-            Context ctx = new InitialContext();
-            Context initCtx = (Context) ctx.lookup("java:/comp/env");
-            dataSource = (DataSource) initCtx.lookup("jdbc/cruise_company");
+            dataSource = InitialContext.doLookup("java:comp/env/jdbc/cruise_company");
         } catch (NamingException e) {
             logger.error("Unable to access a database!", e);
             throw new DatabaseException(e);
         }
     }
-
-    public static DBProvider getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new DBProvider();
-        }
-        return INSTANCE;
+    public DBProvider(DataSource dataSource) throws DatabaseException {
+        this.dataSource = dataSource;
     }
 
     public Connection getConnection() throws DatabaseException {
@@ -39,6 +31,33 @@ public class DBProvider {
             return dataSource.getConnection();
         } catch (SQLException e) {
             logger.error("Unable to get a connection!", e);
+            throw new DatabaseException(e);
+        }
+    }
+
+    public void rollback(Connection connection) {
+        try {
+            connection.rollback();
+        } catch (SQLException e) {
+            logger.error("Unable to rollback a connection!", e);
+            throw new DatabaseException(e);
+        }
+    }
+    public void close(Connection connection) {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            logger.error("Unable to close a connection!", e);
+            throw new DatabaseException(e);
+        }
+    }
+    public void commit(Connection connection) {
+        try {
+            connection.commit();
+        } catch (SQLException e) {
+            logger.error("Unable to commit a connection!", e);
             throw new DatabaseException(e);
         }
     }

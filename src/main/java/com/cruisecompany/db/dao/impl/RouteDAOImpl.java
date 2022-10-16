@@ -8,6 +8,8 @@ import com.cruisecompany.db.dao.mapper.RowMapper;
 import com.cruisecompany.entity.Route;
 import com.cruisecompany.exception.DAOException;
 
+import java.sql.Connection;
+
 public class RouteDAOImpl extends AbstractDAO<Route> implements RouteDAO {
 
 
@@ -19,13 +21,13 @@ public class RouteDAOImpl extends AbstractDAO<Route> implements RouteDAO {
     }
 
     @Override
-    public long save(Route route) throws DAOException {
-        return executeInsert(INSERT, route.getCruise().getId(),
+    public long save(Connection connection, Route route) throws DAOException {
+        return executeInsert(connection, INSERT, route.getCruise().getId(),
                 route.getStation().getId(), route.getOrderNumber());
     }
 
     @Override
-    public void update(Route obj) throws DAOException {
+    public void update(Connection connection, Route obj) throws DAOException {
 
     }
 

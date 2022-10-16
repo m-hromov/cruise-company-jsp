@@ -17,9 +17,11 @@ import java.io.IOException;
 public class AddStaffAction implements Action {
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
+        ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
+                .getAttribute("ServiceFactory");
         if (request.getParameterMap().isEmpty()) {
             try {
-                ShipService shipService = ServiceFactory.getInstance().getShipService();
+                ShipService shipService = serviceFactory.getShipService();
                 request.setAttribute("listShip", shipService.getAll());
                 return new ActionMethod("/WEB-INF/view/add_staff.jsp", Method.FORWARD);
             } catch (ServiceException e) {
@@ -41,7 +43,7 @@ public class AddStaffAction implements Action {
                 .setShip(new Ship().setId(shipId));
 
         try {
-            StaffService staffService = ServiceFactory.getInstance().getStaffService();
+            StaffService staffService = serviceFactory.getStaffService();
             staffService.addStaff(staff);
             return new ActionMethod("/cruise/add_staff", Method.REDIRECT);
         } catch (ServiceException e) {

@@ -18,7 +18,9 @@ import java.util.Optional;
 public class FindCruiseAction implements Action {
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
-        CruiseService cruiseService = ServiceFactory.getInstance().getCruiseService();
+        ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
+                .getAttribute("ServiceFactory");
+        CruiseService cruiseService = serviceFactory.getCruiseService();
         LocalDate dateFrom = LocalDate.now().minusYears(5);
         LocalDate dateTo = LocalDate.now().plusYears(5);
         int durationFrom = 1;
@@ -38,6 +40,8 @@ public class FindCruiseAction implements Action {
                 } else {
                     cruiseList.add(optionalCruise.get());
                 }
+                LocalDate currentDate = LocalDate.now();
+                request.setAttribute("currentDate",currentDate);
                 request.setAttribute("listCruise", cruiseList);
                 return new ActionMethod("/WEB-INF/view/find_cruise.jsp", Method.FORWARD);
             } catch (ServiceException e) {

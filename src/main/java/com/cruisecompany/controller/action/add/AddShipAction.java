@@ -22,6 +22,8 @@ public class AddShipAction implements Action {
     final static Logger logger = LogManager.getLogger(CruiseServiceImpl.class);
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
+        ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
+                .getAttribute("ServiceFactory");
         if (request.getParameterMap().isEmpty()) {
             return new ActionMethod("/WEB-INF/view/add_ship.jsp", Method.FORWARD);
         }
@@ -41,7 +43,7 @@ public class AddShipAction implements Action {
                     .setPassengerCapacity(capacity)
                     .setPhotoPath("resources/images/" + fileName);
 
-            ShipService shipService = ServiceFactory.getInstance().getShipService();
+            ShipService shipService = serviceFactory.getShipService();
             shipService.addShip(ship);
             return new ActionMethod("/cruise/add_ship", Method.REDIRECT);
         } catch (IOException | ServletException e) {

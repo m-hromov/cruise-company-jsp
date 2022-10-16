@@ -16,6 +16,8 @@ import java.io.IOException;
 public class AddStationAction implements Action {
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
+        ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
+                .getAttribute("ServiceFactory");
         if (request.getParameterMap().isEmpty()) {
             return new ActionMethod("/WEB-INF/view/add_station.jsp", Method.FORWARD);
         }
@@ -26,7 +28,7 @@ public class AddStationAction implements Action {
                 .setCountry(country);
 
         try {
-            StationService stationService = ServiceFactory.getInstance().getStationService();
+            StationService stationService = serviceFactory.getStationService();
             stationService.addStation(station);
             return new ActionMethod("/cruise/add_station", Method.REDIRECT);
         } catch (ServiceException e) {

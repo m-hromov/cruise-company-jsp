@@ -21,8 +21,10 @@ public class UserOrdersAction implements Action {
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
         try {
+            ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
+                    .getAttribute("ServiceFactory");
             Passenger passenger = (Passenger) request.getSession().getAttribute("user");
-            OrderService orderService = ServiceFactory.getInstance().getOrderService();
+            OrderService orderService = serviceFactory.getOrderService();
             List<Order> orderList = orderService.getAllPassengerOrders(passenger.getId());
             LocalDate currentDate = LocalDate.now();
             request.setAttribute("currentDate",currentDate);

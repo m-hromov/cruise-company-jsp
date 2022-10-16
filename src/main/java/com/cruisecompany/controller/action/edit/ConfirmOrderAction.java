@@ -15,7 +15,9 @@ public class ConfirmOrderAction implements Action {
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
         try {
-            OrderService orderService = ServiceFactory.getInstance().getOrderService();
+            ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
+                    .getAttribute("ServiceFactory");
+            OrderService orderService = serviceFactory.getOrderService();
             long orderId = Long.parseLong(request.getParameter("order_id"));
             orderService.confirm(orderId);
             return new ActionMethod("/cruise/orders", Method.REDIRECT);

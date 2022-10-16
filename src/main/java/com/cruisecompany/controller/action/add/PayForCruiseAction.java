@@ -16,10 +16,12 @@ import java.math.BigDecimal;
 public class PayForCruiseAction implements Action {
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
+        ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
+                .getAttribute("ServiceFactory");
         HttpSession session = request.getSession();
         long orderId = Long.parseLong(request.getParameter("order_id"));
         try {
-            OrderService orderService = ServiceFactory.getInstance().getOrderService();
+            OrderService orderService = serviceFactory.getOrderService();
             BigDecimal paid = orderService.pay(orderId);
             if (paid.longValue() < 0) {
                 session.setAttribute("lowMoney", true);

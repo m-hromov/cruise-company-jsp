@@ -17,7 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 public class BuyCruiseAction implements Action {
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
-        OrderService orderService = ServiceFactory.getInstance().getOrderService();
+        ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
+                .getAttribute("ServiceFactory");
+        OrderService orderService = serviceFactory.getOrderService();
         Passenger passenger = (Passenger) request.getSession().getAttribute("user");
         long cruiseId = Long.parseLong(request.getParameter("cruise_id"));
         try {

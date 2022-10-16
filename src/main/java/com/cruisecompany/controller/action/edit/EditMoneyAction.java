@@ -18,11 +18,13 @@ import java.math.BigDecimal;
 public class EditMoneyAction implements Action {
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
+        ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
+                .getAttribute("ServiceFactory");
         if (request.getParameterMap().isEmpty()) {
             return new ActionMethod("/WEB-INF/view/balance.jsp", Method.FORWARD);
         }
         try {
-            PassengerService passengerService = ServiceFactory.getInstance().getPassengerService();
+            PassengerService passengerService = serviceFactory.getPassengerService();
             BigDecimal money = new BigDecimal(request.getParameter("money"));
             HttpSession session = request.getSession();
             Passenger passenger = (Passenger) session.getAttribute("user");

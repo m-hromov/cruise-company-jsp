@@ -14,7 +14,9 @@ import java.io.IOException;
 public class BlockOrderAction implements Action {
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
-        OrderService orderService = ServiceFactory.getInstance().getOrderService();
+        ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
+                .getAttribute("ServiceFactory");
+        OrderService orderService = serviceFactory.getOrderService();
         boolean block = Boolean.parseBoolean(request.getParameter("block"));
         long orderId = Long.parseLong(request.getParameter("order_id"));
         try {

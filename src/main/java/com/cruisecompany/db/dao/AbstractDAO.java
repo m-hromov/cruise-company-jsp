@@ -4,6 +4,7 @@ import com.cruisecompany.db.dao.mapper.RowMapper;
 import com.cruisecompany.entity.Identifiable;
 import com.cruisecompany.exception.DAOException;
 
+import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,17 +20,18 @@ public abstract class AbstractDAO<T extends Identifiable> extends SimpleQueryExe
     }
 
     @Override
-    public Optional<T> get(long id) throws DAOException {
-        return Optional.ofNullable(executeQuery(String.format(GET, table, table.replace("\"","")), id).get(0));
+    public Optional<T> get(Connection connection, long id) throws DAOException {
+        return executeSingleGetQuery(connection, String.format(GET, table, table.replace("\"", "")),
+                id);
     }
 
     @Override
-    public List<T> getAll() throws DAOException{
-        return executeQuery(String.format(GET_ALL, table));
+    public List<T> getAll(Connection connection) throws DAOException {
+        return executeQuery(connection, String.format(GET_ALL, table));
     }
 
     @Override
-    public void delete(long id) throws DAOException{
-        executeUpdate(String.format(DELETE, table, table.replace("\"","")), id);
+    public void delete(Connection connection, long id) throws DAOException {
+        executeUpdate(connection, String.format(DELETE, table, table.replace("\"", "")), id);
     }
 }

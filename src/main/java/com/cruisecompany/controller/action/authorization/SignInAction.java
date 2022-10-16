@@ -15,23 +15,19 @@ import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 public class SignInAction implements Action {
-    UserAccountService userAccountService;
-    PassengerService passengerService;
-
-    public SignInAction() {
-        userAccountService = ServiceFactory.getInstance().getUserAccountService();
-        passengerService = ServiceFactory.getInstance().getPassengerService();
-    }
 
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
+        ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
+                .getAttribute("ServiceFactory");
+        UserAccountService userAccountService = serviceFactory.getUserAccountService();
+        PassengerService passengerService = serviceFactory.getPassengerService();
         if (request.getParameterMap().isEmpty()) {
             return new ActionMethod("/WEB-INF/view/sign_in.jsp", Method.FORWARD);
         }
 
         String login = request.getParameter("email");
         String password = request.getParameter("password");
-        String rememberMe = request.getParameter("remember_me");
 
         try {
             Optional<UserAccountDTO> optional = userAccountService.signIn(login, password);

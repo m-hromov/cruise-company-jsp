@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -17,14 +18,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
             crossorigin="anonymous"></script>
-
-    <title>Sign in | Cruise company</title>
+    <fmt:setLocale value="${sessionScope.lang}"/>
+    <fmt:setBundle basename="localization.lang" var="loc"/>
+    <title><fmt:message bundle="${loc}" key="lang.sign_in"/> | Cruise company</title>
 </head>
 <body>
 <jsp:include page="${pageContext.request.contextPath}/page_elements/header.jsp"/>
 <c:if test="${sessionScope.error==true}">
     <div class="container alert alert-danger bd-search" role="alert">
-        Email or password is incorrect!
+        <fmt:message bundle="${loc}" key="lang.error_password"/>
     </div>
     <c:remove var="error" scope="session"/>
 </c:if>
@@ -35,31 +37,25 @@
         <div class="row">
             <div class="col px-1 mb-2">
                 <label for="email" class="ms-2 position-absolute mtext">
-                    <span class="h6 small bg-white text-muted px-1">Email</span>
+                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}" key="lang.email"/></span>
                 </label>
                 <input type="text" class="form-control mt-2" name="email" id="email" required>
                 <div class="invalid-feedback">
-                    Wrong email format
+                    <fmt:message bundle="${loc}" key="lang.wrong_email"/>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col px-1 mb-2">
                 <label for="password" class="ms-2 position-absolute mtext">
-                    <span class="h6 small bg-white text-muted px-1">Password</span>
+                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}" key="lang.password"/></span>
                 </label>
                 <input type="password" class="form-control mt-2" name="password" id="password" required>
             </div>
         </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="remember_me" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault">
-                Remember me
-            </label>
-        </div>
         <div class="row justify-content-end">
             <span class="col-auto px-1 mb-2">
-                <button class="btn btn-jade" type="submit">Sign in</button>
+                <button class="btn btn-jade" type="submit"><fmt:message bundle="${loc}" key="lang.sign_in"/></button>
             </span>
         </div>
     </form>

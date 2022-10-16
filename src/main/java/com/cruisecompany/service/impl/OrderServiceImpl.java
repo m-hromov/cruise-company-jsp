@@ -1,5 +1,6 @@
 package com.cruisecompany.service.impl;
 
+import com.cruisecompany.db.DBProvider;
 import com.cruisecompany.db.dao.DAOFactory;
 import com.cruisecompany.db.dao.OrderDAO;
 import com.cruisecompany.db.dao.PassengerDAO;
@@ -13,88 +14,114 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.sql.Connection;
 import java.util.List;
 
 public class OrderServiceImpl implements OrderService {
     final static Logger logger = LogManager.getLogger(OrderServiceImpl.class);
+    private final DBProvider dbProvider;
     private final PassengerDAO passengerDAO;
     private final OrderDAO orderDAO;
 
-    public OrderServiceImpl() {
+    public OrderServiceImpl(DBProvider dbProvider) {
+        this.dbProvider = dbProvider;
         passengerDAO = DAOFactory.getInstance().getPassengerDAO();
         orderDAO = DAOFactory.getInstance().getOrderDAO();
     }
 
     @Override
     public BigDecimal pay(long orderId) throws ServiceException {
+        Connection connection = dbProvider.getConnection();
         try {
-            Order order = orderDAO.get(orderId).get();
+            Order order = orderDAO.get(connection, orderId).get();
             BigDecimal price = order.getCruise().getPrice();
             BigDecimal passengerMoney = order.getPassenger().getMoney();
             if (passengerMoney.compareTo(price) < 0) {
                 return BigDecimal.valueOf(-1);
             }
             BigDecimal newMoney = passengerMoney.subtract(price);
-            passengerDAO.updateMoney(order.getPassenger().getId(), newMoney);
-            orderDAO.updatePaidStatus(orderId);
+            passengerDAO.updateMoney(connection, order.getPassenger().getId(), newMoney);
+            orderDAO.updatePaidStatus(connection, orderId);
+            dbProvider.commit(connection);
             return newMoney;
         } catch (DAOException e) {
+            dbProvider.rollback(connection);
             logger.error("Unable to pay for cruise!");
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e.getMessage(), e);
+        } finally {
+            dbProvider.close(connection);
         }
     }
 
     @Override
     public void buy(long passengerId, long cruiseId) throws ServiceException {
+        Connection connection = dbProvider.getConnection();
         try {
             Order order = new Order();
             order.setCruise(new Cruise().setId(cruiseId))
                     .setPassenger(new Passenger().setId(passengerId));
-            orderDAO.save(order);
+            orderDAO.save(connection, order);
+            dbProvider.commit(connection);
         } catch (DAOException e) {
             logger.error("Unable to buy cruise!");
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e.getMessage(), e);
+        } finally {
+            dbProvider.close(connection);
         }
     }
 
     @Override
     public List<Order> getAllPassengerOrders(long id) throws ServiceException {
+        Connection connection = dbProvider.getConnection();
         try {
-            return orderDAO.getAllPassengerOrders(id);
+            return orderDAO.getAllPassengerOrders(connection, id);
         } catch (DAOException e) {
             logger.error("Unable to get all passengerOrders!");
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e.getMessage(), e);
+        } finally {
+            dbProvider.close(connection);
         }
     }
 
     @Override
     public void block(long orderId) throws ServiceException {
+        Connection connection = dbProvider.getConnection();
         try {
-            orderDAO.block(orderId);
+            orderDAO.block(connection, orderId);
+            dbProvider.commit(connection);
         } catch (DAOException e) {
             logger.error("Unable to block an order!");
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e.getMessage(), e);
+        } finally {
+            dbProvider.close(connection);
         }
     }
 
     @Override
     public void unblock(long orderId) throws ServiceException {
+        Connection connection = dbProvider.getConnection();
         try {
-            orderDAO.unblock(orderId);
+            orderDAO.unblock(connection, orderId);
+            dbProvider.commit(connection);
         } catch (DAOException e) {
             logger.error("Unable to unblock an order!");
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e.getMessage(), e);
+        } finally {
+            dbProvider.close(connection);
         }
     }
 
     @Override
     public void confirm(long orderId) throws ServiceException {
+        Connection connection = dbProvider.getConnection();
         try {
-            orderDAO.confirm(orderId);
+            orderDAO.confirm(connection, orderId);
+            dbProvider.commit(connection);
         } catch (DAOException e) {
             logger.error("Unable to confirm an order!");
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e.getMessage(), e);
+        } finally {
+            dbProvider.close(connection);
         }
     }
 }

@@ -7,6 +7,8 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="utils" uri="WEB-INF/tld/utils.tld" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -17,14 +19,16 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
             crossorigin="anonymous"></script>
-    <title>Cruises | Cruise company</title>
+    <fmt:setLocale value="${sessionScope.lang}"/>
+    <fmt:setBundle basename="localization.lang" var="loc"/>
+    <title><fmt:message bundle="${loc}" key="lang.my_orders"/> | Cruise company</title>
 </head>
 <body>
 <jsp:include page="${pageContext.request.contextPath}/page_elements/header.jsp"/>
 <div class="container">
     <c:if test="${sessionScope.lowMoney==true}">
         <div class="container alert alert-danger bd-search" role="alert">
-            Not enough money on your account!
+            <fmt:message bundle="${loc}" key="lang.error_not_enough_money"/>
         </div>
         <c:remove var="lowMoney" scope="session"/>
     </c:if>
@@ -38,48 +42,57 @@
                         <img src="${pageContext.request.contextPath}/${order.cruise.ship.photoPath}" height="360"
                             width="480" alt="ship"/>
                         <c:if test="${order.cruise.dateArrival.isBefore(currentDate)}">
-                            <div class="finished"> FINISHED</div>
+                            <div class="finished"> <fmt:message bundle="${loc}" key="lang.COMPLETED"/></div>
                         </c:if>
                     </div>
                 </div>
                 <div class="col d-flex flex-column ">
-                    <div class="text-start fw-bold fs-4">Getaway
-                        from ${order.cruise.stationList.get(0).city}, ${order.cruise.stationList.get(0).country}</div>
+                    <div class="text-start fw-bold fs-4">
+                        <fmt:message bundle="${loc}" key="lang.getaway"/>
+                            ${order.cruise.stationList.get(0).city}, ${order.cruise.stationList.get(0).country}
+                    </div>
                     <div class="text-start fw-bold fs-6 mt-sm-0">${order.cruise.ship.name}</div>
                     <div class="align-items-center ">
                         <div class="d-flex flex-row">
                             <div class="sm-circle bg-jade me-2">
                                 <div class="fw-bold fs-5 text-white me-none">${order.cruise.daysTotal}</div>
-                                <div class="text-white">DAY</div>
+                                <div class="text-white"><fmt:message bundle="${loc}" key="lang.day"/></div>
                             </div>
                             <div class="text-start align-self-center">
-                                Start: ${order.cruise.stationList.get(0).city} ->
-                                End: ${order.cruise.stationList.get(order.cruise.stationList.size()-1).city}
+                                <fmt:message bundle="${loc}" key="lang.start"/>: ${order.cruise.stationList.get(0).city} ->
+                                <fmt:message bundle="${loc}" key="lang.end"/>: ${order.cruise.stationList.get(order.cruise.stationList.size()-1).city}
                             </div>
                         </div>
                     </div>
-                    <p class="text-start text-wrap mb-0">Time:${order.cruise.timeDeparture}</p>
-                    <p class="text-start text-wrap mt-0">Departure: ${order.cruise.dateDeparture} Arrival: ${order.cruise.dateArrival}</p>
+                    <p class="text-start text-wrap mb-0">
+                        <fmt:message bundle="${loc}" key="lang.time"/>:${order.cruise.timeDeparture}
+                    </p>
+                    <p class="text-start text-wrap mt-0">
+                        <fmt:message bundle="${loc}" key="lang.departure"/>: ${order.cruise.dateDeparture}
+                        <fmt:message bundle="${loc}" key="lang.arrival"/>: ${order.cruise.dateArrival}
+                    </p>
                     <p class="text-start text-wrap">${order.cruise.description}</p>
                     <div class="row align-self-end mt-auto">
-                        <div class="col fs-4 fw-bold me-2">${order.cruise.price}$</div>
+                        <div class="col fs-4 fw-bold me-2">
+                            <utils:currency value="${order.cruise.price}" convertedcurr="${lang eq 'en' ? 'USD' : 'UAH'}"/>
+                        </div>
                         <c:if test="${order.confirmed==true}">
                             <c:if test="${order.paid==true}">
-                                <button class="col btn btn-jade-reversed" disabled>Paid</button>
+                                <button class="col btn btn-jade-reversed" disabled><fmt:message bundle="${loc}" key="lang.paid"/></button>
                             </c:if>
                             <c:if test="${order.paid==false}">
                                 <form class="col" action="${pageContext.request.contextPath}/cruise/pay" method="post">
                                     <input type="hidden" name="order_id" value="${order.id}">
-                                    <button class="btn btn-jade-reversed" type="submit">Pay</button>
+                                    <button class="btn btn-jade-reversed" type="submit"><fmt:message bundle="${loc}" key="lang.pay"/></button>
                                 </form>
                             </c:if>
                         </c:if>
                         <c:if test="${order.confirmed==false}">
                             <c:if test="${order.banned==false}">
-                                <button class="col btn" disabled>Pending verification</button>
+                                <button class="col btn" disabled><fmt:message bundle="${loc}" key="lang.pending"/></button>
                             </c:if>
                             <c:if test="${order.banned==true}">
-                                <button class="col btn btn-danger" disabled>Blocked</button>
+                                <button class="col btn btn-danger" disabled><fmt:message bundle="${loc}" key="lang.blocked"/></button>
                             </c:if>
                         </c:if>
 

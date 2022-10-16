@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -20,7 +21,9 @@
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"
             integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
             crossorigin="anonymous"></script>
-    <title>Edit Profile | Cruise company</title>
+    <fmt:setLocale value="${sessionScope.lang}"/>
+    <fmt:setBundle basename="localization.lang" var="loc"/>
+    <title><fmt:message bundle="${loc}" key="lang.edit_profile"/> | Cruise company</title>
 </head>
 <body>
 <jsp:include page="${pageContext.request.contextPath}/page_elements/header.jsp"/>
@@ -32,51 +35,51 @@
         <div class="row">
             <div class="col px-1 mb-2">
                 <label for="first_name" class="ms-2 position-absolute mtext">
-                    <span class="h6 small bg-white text-muted px-1">First name</span>
+                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}" key="lang.first_name"/></span>
                 </label>
                 <input type="text" class="form-control mt-2" name="first_name" id="first_name"
                        value="${user.firstName}">
                 <div class="invalid-feedback">
-                    Wrong input format
+                    <fmt:message bundle="${loc}" key="lang.wrong_name"/>
                 </div>
             </div>
             <div class="col px-1 mb-2">
                 <label for="last_name" class="ms-2 position-absolute mtext">
-                    <span class="h6 small bg-white text-muted px-1">Last name</span>
+                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}" key="lang.last_name"/></span>
                 </label>
                 <input type="text" class="form-control mt-2" name="last_name" id="last_name" value="${user.lastName}">
                 <div class="invalid-feedback">
-                    Wrong input format
+                    <fmt:message bundle="${loc}" key="lang.wrong_name"/>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col px-1 mb-2">
                 <label for="phone" class="ms-2 position-absolute mtext">
-                    <span class="h6 small bg-white text-muted px-1">Phone</span>
+                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}" key="lang.phone"/></span>
                 </label>
                 <input type="text" class="form-control mt-2" name="phone" id="phone" value="${user.phone}">
                 <div class="invalid-feedback">
-                    Wrong phone format
+                    <fmt:message bundle="${loc}" key="lang.wrong_phone"/>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col px-1 mb-2">
                 <label for="email" class="ms-2 position-absolute mtext">
-                    <span class="h6 small bg-white text-muted px-1">Email</span>
+                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}" key="lang.email"/></span>
                 </label>
                 <c:if test="${empty wrongEmail}">
                     <input type="text" class="form-control mt-2" name="email" id="email" value="${user.email}">
                     <div class="invalid-feedback">
-                        Wrong email format
+                        <fmt:message bundle="${loc}" key="lang.wrong_email"/>
                     </div>
                 </c:if>
                 <c:if test="${wrongEmail==true}">
                     <input type="text" class="form-control mt-2 is-invalid" name="email" id="email"
                            value="${user.email}">
                     <div class="invalid-feedback">
-                        User with this email already exists
+                        <fmt:message bundle="${loc}" key="lang.error_email_exists"/>
                     </div>
                     <c:remove var="wrongEmail" scope="session"/>
                 </c:if>
@@ -84,7 +87,7 @@
         </div>
         <div class="row justify-content-end">
             <span class="col-auto px-1 mb-2">
-                <button class="btn btn-jade" type="submit">Apply</button>
+                <button class="btn btn-jade" type="submit"><fmt:message bundle="${loc}" key="lang.apply"/></button>
             </span>
         </div>
     </form>
@@ -95,24 +98,19 @@
           method="post" enctype="multipart/form-data">
         <input type="hidden" name="part" value="document">
         <div class="row">
-            <div class="col px-1 my-2">
-
-            </div>
-        </div>
-        <div class="row">
             <span class="col-auto px-1 my-auto">
                 <label for="document" class="ms-2 position-absolute mtext">
-                    <span class="h6 small bg-white text-muted px-1">Document</span>
+                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}" key="lang.document"/></span>
                 </label>
                 <div class="input-group">
                     <input type="file" class="form-control mt-2" name="document" id="document" required>
                     <c:if test="${not empty user.documentPath}">
-                        <a href="${user.documentPath}" class="btn btn-light mt-2">View</a>
+                        <a href="${user.documentPath}" class="btn btn-light mt-2"><fmt:message bundle="${loc}" key="lang.view"/></a>
                     </c:if>
                 </div>
             </span>
             <span class="col-auto px-1 ms-auto">
-                <button class="btn btn-jade mt-2" type="submit">Upload</button>
+                <button class="btn btn-jade mt-2" type="submit"><fmt:message bundle="${loc}" key="lang.upload"/></button>
             </span>
         </div>
     </form>
@@ -126,7 +124,7 @@
         <div class="row pt-4">
             <div class="col px-1 mb-2">
                 <label for="old_password" class="ms-2 position-absolute mtext">
-                    <span class="h6 small bg-white text-muted px-1">Old password</span>
+                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}" key="lang.old_password"/></span>
                 </label>
                 <c:if test="${empty wrongPassword}">
                     <input type="password" class="form-control mt-2" name="old_password" id="old_password">
@@ -136,35 +134,35 @@
                     <c:remove var="wrongPassword" scope="session"/>
                 </c:if>
                 <div class="invalid-feedback">
-                    Wrong password
+                    <fmt:message bundle="${loc}" key="lang.wrong_password"/>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col px-1 mb-2">
                 <label for="new_password" class="ms-2 position-absolute mtext">
-                    <span class="h6 small bg-white text-muted px-1">New password</span>
+                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}" key="lang.new_password"/></span>
                 </label>
                 <input type="password" class="form-control mt-2" name="new_password" id="new_password">
                 <div class="invalid-feedback">
-                    Minimum eight characters, at least one letter and one number
+                    <fmt:message bundle="${loc}" key="lang.wrong_password_format"/>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col px-1 mb-2">
                 <label for="confirm_new_password" class="ms-2 position-absolute mtext">
-                    <span class="h6 small bg-white text-muted px-1">Confirm new password</span>
+                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}" key="lang.confirm_new_password"/></span>
                 </label>
                 <input type="password" class="form-control mt-2" name="confirm_new_password" id="confirm_new_password">
                 <div class="invalid-feedback">
-                    Password is not the same
+                    <fmt:message bundle="${loc}" key="lang.password_is_not_the_same"/>
                 </div>
             </div>
         </div>
         <div class="row justify-content-end">
             <span class="col-auto px-1 mb-2">
-                <button class="btn btn-jade" type="submit">Apply</button>
+                <button class="btn btn-jade" type="submit"><fmt:message bundle="${loc}" key="lang.apply"/></button>
             </span>
         </div>
     </form>

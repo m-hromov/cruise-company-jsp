@@ -1,5 +1,6 @@
 package com.cruisecompany.service.impl;
 
+import com.cruisecompany.db.DBProvider;
 import com.cruisecompany.db.dao.DAOFactory;
 import com.cruisecompany.db.dao.ShipDAO;
 import com.cruisecompany.entity.Ship;
@@ -9,32 +10,43 @@ import com.cruisecompany.service.ShipService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.sql.Connection;
 import java.util.List;
 
 public class ShipServiceImpl implements ShipService {
     final static Logger logger = LogManager.getLogger(ShipServiceImpl.class);
+    private final DBProvider dbProvider;
     private final ShipDAO shipDAO;
 
-    public ShipServiceImpl() {
+    public ShipServiceImpl(DBProvider dbProvider) {
+        this.dbProvider = dbProvider;
         this.shipDAO = DAOFactory.getInstance().getShipDAO();
     }
+
     @Override
     public List<Ship> getAll() throws ServiceException {
+        Connection connection = dbProvider.getConnection();
         try {
-            return shipDAO.getAll();
+            return shipDAO.getAll(connection);
         } catch (DAOException e) {
             logger.error("Unable to get all ships!");
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e.getMessage(), e);
+        } finally {
+            dbProvider.close(connection);
         }
     }
 
     @Override
     public void addShip(Ship ship) throws ServiceException {
+        Connection connection = dbProvider.getConnection();
         try {
-            shipDAO.save(ship);
+            shipDAO.save(connection, ship);
+            dbProvider.commit(connection);
         } catch (DAOException e) {
             logger.error("Unable to add a ship!");
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e.getMessage(), e);
+        } finally {
+            dbProvider.close(connection);
         }
     }
 }

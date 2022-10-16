@@ -1,5 +1,6 @@
 package com.cruisecompany.db.dao.mapper.impl;
 
+import com.cruisecompany.db.DBProvider;
 import com.cruisecompany.db.dao.DAOFactory;
 import com.cruisecompany.db.dao.StationDAO;
 import com.cruisecompany.db.dao.mapper.RowMapper;
@@ -8,8 +9,10 @@ import com.cruisecompany.entity.Cruise;
 import com.cruisecompany.entity.Ship;
 import com.cruisecompany.entity.Station;
 import com.cruisecompany.exception.DAOException;
+import com.cruisecompany.exception.DatabaseException;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -24,7 +27,13 @@ public class CruiseRowMapper implements RowMapper<Cruise> {
         Ship ship = RowMapperFactory.getInstance().getShipRowMapper().map(rs);
 
         StationDAO stationDAO = DAOFactory.getInstance().getStationDAO();
-        List<Station> stationList = stationDAO.getAllStationsByCruiseID(rs.getLong(CRUISE_ID));
+        List<Station> stationList = null;
+        try (Connection connection = new DBProvider().getConnection()){
+            stationList = stationDAO.getAllStationsByCruiseID(connection,
+                    rs.getLong(CRUISE_ID));
+        } catch (DAOException | DatabaseException | SQLException e) {
+            throw new DAOException(e);
+        }
 
         Cruise cruise = new Cruise();
         cruise.setId(rs.getLong(CRUISE_ID))
