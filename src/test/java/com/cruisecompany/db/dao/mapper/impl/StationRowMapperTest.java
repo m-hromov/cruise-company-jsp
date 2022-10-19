@@ -22,7 +22,7 @@ public class StationRowMapperTest {
             StationRowMapper srm = new StationRowMapper();
             station = srm.map(rs);
         } catch (SQLException e) {
-            fail();
+            fail(e);
         }
         assertEquals(station.getId(), 10L);
         assertEquals(station.getCity(), "Odesa");

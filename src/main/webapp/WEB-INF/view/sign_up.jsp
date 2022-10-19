@@ -28,7 +28,7 @@
 <jsp:include page="${pageContext.request.contextPath}/page_elements/header.jsp"/>
 <div class="container auth-box">
     <form id="signUpForm" class="col flex-column"
-          action="${pageContext.request.contextPath}/cruise/sign_up"
+          action="${pageContext.request.contextPath}/cruise/do_sign_up"
           method="post">
         <div class="row">
             <div class="col px-1 mb-2">

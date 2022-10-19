@@ -27,7 +27,7 @@
 <body>
 <jsp:include page="${pageContext.request.contextPath}/page_elements/header.jsp"/>
 <div class="container auth-box">
-    <form id="balanceForm" class="col flex-column" action="${pageContext.request.contextPath}/cruise/edit_money"
+    <form id="balanceForm" class="col flex-column" action="${pageContext.request.contextPath}/cruise/do_edit_money"
           method="post">
         <div class="row">
             <div class="col px-1 mb-2">

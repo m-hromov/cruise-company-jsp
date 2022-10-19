@@ -35,7 +35,6 @@ class SimpleQueryExecutorTest {
             connection = DriverManager.getConnection(url, username, password);
             connection.setAutoCommit(false);
         } catch (SQLException | IOException ex) {
-            System.out.println(ex);
             fail();
         }
         RowMapper<Station> rowMapper = RowMapperFactory.getInstance().getStationRowMapper();

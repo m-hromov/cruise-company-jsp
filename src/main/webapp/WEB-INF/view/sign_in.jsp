@@ -32,7 +32,7 @@
 </c:if>
 <div class="container d-flex auth-box justify-content-center align-items-center">
 
-    <form id="signInForm" action="${pageContext.request.contextPath}/cruise/sign_in"
+    <form id="signInForm" action="${pageContext.request.contextPath}/cruise/do_sign_in"
           method="post">
         <div class="row">
             <div class="col px-1 mb-2">

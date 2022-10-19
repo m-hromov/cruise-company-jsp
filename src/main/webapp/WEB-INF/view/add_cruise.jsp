@@ -35,7 +35,7 @@
 <jsp:useBean id="listStation" scope="request" type="java.util.List<com.cruisecompany.entity.Station>"/>
 <jsp:useBean id="listShip" scope="request" type="java.util.List<com.cruisecompany.entity.Ship>"/>
 <div class="container auth-box">
-    <form class="col flex-column" action="${pageContext.request.contextPath}/cruise/add_cruise" method="post" enctype="multipart/form-data">
+    <form class="col flex-column" action="${pageContext.request.contextPath}/cruise/do_add_cruise" method="post" enctype="multipart/form-data">
         <div class="row">
             <div class="col px-1 mb-2">
                 <label for="ship" class="ms-2 position-absolute mtext">

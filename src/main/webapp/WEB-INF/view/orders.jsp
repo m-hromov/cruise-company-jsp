@@ -72,7 +72,7 @@
                 </div>
                 <div class="col-2 d-flex flex-column bg-table-col2 justify-content-center">
                     <form class="mx-0 my-auto row" method="post"
-                          action="${pageContext.request.contextPath}/cruise/confirm_order">
+                          action="${pageContext.request.contextPath}/cruise/do_confirm_order">
                         <input type="hidden" name="order_id" value="${order.orderId}">
                         <c:if test="${order.confirmed==false && order.banned==false}">
                             <button class="btn btn-jade" type="submit"><fmt:message bundle="${loc}" key="lang.confirm"/></button>
@@ -86,7 +86,7 @@
                     </form>
                     <c:if test="${order.banned==false}">
                         <form class="mx-0 mt-2 mb-auto row" method="post"
-                              action="${pageContext.request.contextPath}/cruise/block_order?block=true">
+                              action="${pageContext.request.contextPath}/cruise/do_block_order?block=true">
                             <input type="hidden" name="order_id" value="${order.orderId}">
                             <c:if test="${order.confirmed==false}">
                                 <button class="btn btn-outline-danger" type="submit"><fmt:message bundle="${loc}" key="lang.block"/></button>
@@ -98,7 +98,7 @@
                     </c:if>
                     <c:if test="${order.banned==true}">
                         <form class="mx-0 mt-2 mb-auto row" method="post"
-                              action="${pageContext.request.contextPath}/cruise/block_order?block=false">
+                              action="${pageContext.request.contextPath}/cruise/do_block_order?block=false">
                             <input type="hidden" name="order_id" value="${order.orderId}">
                             <c:if test="${order.confirmed==false}">
                                 <button class="btn btn-outline-danger" type="submit"><fmt:message bundle="${loc}" key="lang.unblock"/></button>

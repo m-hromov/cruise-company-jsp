@@ -1,13 +1,8 @@
 package com.cruisecompany.controller.action;
 
-import com.cruisecompany.controller.action.add.*;
-import com.cruisecompany.controller.action.authorization.SignInAction;
-import com.cruisecompany.controller.action.authorization.SignOutAction;
-import com.cruisecompany.controller.action.authorization.SignUpAction;
-import com.cruisecompany.controller.action.edit.*;
-import com.cruisecompany.controller.action.show.FindCruiseAction;
-import com.cruisecompany.controller.action.show.OrdersAction;
-import com.cruisecompany.controller.action.show.UserOrdersAction;
+import com.cruisecompany.controller.action.redirect.SignOutAction;
+import com.cruisecompany.controller.action.redirect.*;
+import com.cruisecompany.controller.action.forward.*;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -17,24 +12,33 @@ public class ActionFactory {
     private static ActionFactory INSTANCE;
     private ActionFactory() {
         actions = new HashMap<>();
-        actions.put("add_cruise",new AddCruiseAction());
-        actions.put("add_ship",new AddShipAction());
-        actions.put("add_station",new AddStationAction());
-        actions.put("add_staff",new AddStaffAction());
-        actions.put("buy_cruise",new BuyCruiseAction());
-        actions.put("block_order",new BlockOrderAction());
-        actions.put("edit_cruise",new EditCruiseAction());
-        actions.put("edit_profile",new EditProfileAction());
-        actions.put("edit_ship",new EditShipAction());
-        actions.put("edit_money",new EditMoneyAction());
-        actions.put("confirm_order",new ConfirmOrderAction());
-        actions.put("find_cruise",new FindCruiseAction());
-        actions.put("user_orders",new UserOrdersAction());
-        actions.put("sign_in",new SignInAction());
-        actions.put("sign_out",new SignOutAction());
-        actions.put("sign_up",new SignUpAction());
-        actions.put("orders",new OrdersAction());
-        actions.put("pay",new PayForCruiseAction());
+        actions.put("add_cruise",new LoadAddCruiseAction());
+        actions.put("add_ship",new LoadAddShipAction());
+        actions.put("add_station",new LoadAddStationAction());
+        actions.put("add_staff",new LoadAddStaffAction());
+        actions.put("edit_profile",new LoadEditProfileAction());
+        actions.put("edit_money",new LoadEditMoneyAction());
+        actions.put("find_cruise",new LoadFindCruiseAction());
+        actions.put("user_orders",new LoadUserOrdersAction());
+        actions.put("sign_in",new LoadSignInAction());
+        actions.put("sign_up",new LoadSignUpAction());
+        actions.put("orders",new LoadOrdersAction());
+
+        actions.put("do_add_cruise",new AddCruiseAction());
+        actions.put("do_add_ship",new AddShipAction());
+        actions.put("do_add_staff",new AddStaffAction());
+        actions.put("do_edit_profile",new EditProfileAction());
+        actions.put("do_edit_money",new EditMoneyAction());
+        actions.put("do_find_cruise",new AddCruiseAction());
+        actions.put("do_sign_in",new SignInAction());
+        actions.put("do_sign_up",new SignUpAction());
+        actions.put("do_confirm_order",new ConfirmOrderAction());
+        actions.put("do_buy_cruise",new BuyCruiseAction());
+        actions.put("do_block_order",new BlockOrderAction());
+        actions.put("do_edit_cruise",new EditCruiseAction());
+        actions.put("do_edit_ship",new EditShipAction());
+        actions.put("do_sign_out",new SignOutAction());
+        actions.put("do_pay",new PayForCruiseAction());
     }
 
     public static ActionFactory getInstance() {
@@ -43,6 +47,6 @@ public class ActionFactory {
     }
 
     public Action get(String name) {
-        return Optional.ofNullable(actions.get(name)).orElse(new ErrorAction("404"));
+        return Optional.ofNullable(actions.get(name)).orElse(new LoadErrorAction("404"));
     }
 }

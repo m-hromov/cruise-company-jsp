@@ -15,32 +15,19 @@ import java.io.IOException;
 public class Controller extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request,response);
+        String path = processRequest(request,response);
+        request.getRequestDispatcher(path).forward(request,response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request,response);
+        String path = processRequest(request,response);
+        response.sendRedirect(path);
     }
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response){
+    protected String processRequest(HttpServletRequest request, HttpServletResponse response){
         Action action = ActionFactory.getInstance().get(request.getHttpServletMapping().getMatchValue());
         ActionMethod actionMethod = action.execute(request, response);
-        String path = actionMethod.getPath();
-        if(actionMethod.getMethod() == Method.FORWARD){
-            try {
-                request.getRequestDispatcher(path).forward(request,response);
-            } catch (ServletException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            try {
-                response.sendRedirect(path);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        return actionMethod.getPath();
     }
 }

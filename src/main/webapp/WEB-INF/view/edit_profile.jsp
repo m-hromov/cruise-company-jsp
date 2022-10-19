@@ -29,7 +29,7 @@
 <jsp:include page="${pageContext.request.contextPath}/page_elements/header.jsp"/>
 <jsp:useBean id="user" scope="session" type="com.cruisecompany.entity.Passenger"/>
 <div class="container auth-box parent">
-    <form id="profileForm" class="col flex-column" action="${pageContext.request.contextPath}/cruise/edit_profile"
+    <form id="profileForm" class="col flex-column" action="${pageContext.request.contextPath}/cruise/do_edit_profile"
           method="post">
         <input type="hidden" name="part" value="info">
         <div class="row">
@@ -94,7 +94,7 @@
     <div class="box-divider">
         <hr/>
     </div>
-    <form class="col flex-column" action="${pageContext.request.contextPath}/cruise/edit_profile"
+    <form class="col flex-column" action="${pageContext.request.contextPath}/cruise/do_edit_profile"
           method="post" enctype="multipart/form-data">
         <input type="hidden" name="part" value="document">
         <div class="row">
@@ -118,7 +118,7 @@
         <hr/>
     </div>
     <form id="profilePasswordForm" class="col flex-column"
-          action="${pageContext.request.contextPath}/cruise/edit_profile"
+          action="${pageContext.request.contextPath}/cruise/do_edit_profile"
           method="post">
         <input type="hidden" name="part" value="password">
         <div class="row pt-4">

@@ -81,7 +81,7 @@
                                 <button class="col btn btn-jade-reversed" disabled><fmt:message bundle="${loc}" key="lang.paid"/></button>
                             </c:if>
                             <c:if test="${order.paid==false}">
-                                <form class="col" action="${pageContext.request.contextPath}/cruise/pay" method="post">
+                                <form class="col" action="${pageContext.request.contextPath}/cruise/do_pay" method="post">
                                     <input type="hidden" name="order_id" value="${order.id}">
                                     <button class="btn btn-jade-reversed" type="submit"><fmt:message bundle="${loc}" key="lang.pay"/></button>
                                 </form>

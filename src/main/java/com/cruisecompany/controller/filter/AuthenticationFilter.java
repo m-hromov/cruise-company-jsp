@@ -22,18 +22,29 @@ public class AuthenticationFilter implements Filter {
         urisRestricted.put("/cruise/add_station", "ADMIN");
         urisRestricted.put("/cruise/edit_cruise", "ADMIN");
         urisRestricted.put("/cruise/edit_ship", "ADMIN");
-        urisRestricted.put("/cruise/confirm_order", "ADMIN");
-        urisRestricted.put("/cruise/block_order", "ADMIN");
         urisRestricted.put("/cruise/orders", "ADMIN");
         urisRestricted.put("/cruise/find_cruise", "ADMIN||USER||VISITOR");
-        urisRestricted.put("/cruise/sign_out", "ADMIN||USER||VISITOR");
         urisRestricted.put("/cruise/edit_profile", "USER");
         urisRestricted.put("/cruise/user_orders", "USER");
-        urisRestricted.put("/cruise/buy_cruise", "USER");
         urisRestricted.put("/cruise/edit_money", "USER");
-        urisRestricted.put("/cruise/pay", "USER");
         urisRestricted.put("/cruise/sign_in", "VISITOR");
         urisRestricted.put("/cruise/sign_up", "VISITOR");
+
+        urisRestricted.put("/cruise/do_add_cruise", "ADMIN");
+        urisRestricted.put("/cruise/do_add_ship", "ADMIN");
+        urisRestricted.put("/cruise/do_add_staff", "ADMIN");
+        urisRestricted.put("/cruise/do_add_station", "ADMIN");
+        urisRestricted.put("/cruise/do_edit_cruise", "ADMIN");
+        urisRestricted.put("/cruise/do_edit_ship", "ADMIN");
+        urisRestricted.put("/cruise/do_confirm_order", "ADMIN");
+        urisRestricted.put("/cruise/do_block_order", "ADMIN");
+        urisRestricted.put("/cruise/do_edit_profile", "USER");
+        urisRestricted.put("/cruise/do_do_buy_cruise", "USER");
+        urisRestricted.put("/cruise/do_edit_money", "USER");
+        urisRestricted.put("/cruise/do_pay", "USER");
+        urisRestricted.put("/cruise/do_sign_in", "VISITOR");
+        urisRestricted.put("/cruise/do_sign_up", "VISITOR");
+        urisRestricted.put("/cruise/do_sign_out", "ADMIN||USER||VISITOR");
 
         urisCommon = new HashSet<>();
         urisCommon.add("/index.jsp");

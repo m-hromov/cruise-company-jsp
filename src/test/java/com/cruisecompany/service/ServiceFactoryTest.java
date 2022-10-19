@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 class ServiceFactoryTest {
-    ServiceFactory serviceFactory = new ServiceFactory(null);;
+    ServiceFactory serviceFactory = new ServiceFactory(null);
 
 
     @Test

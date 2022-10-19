@@ -33,7 +33,7 @@
 <jsp:include page="${pageContext.request.contextPath}/page_elements/header.jsp"/>
 
 <div class="container auth-box">
-    <form class="col flex-column" action="${pageContext.request.contextPath}/cruise/add_ship" method="post"
+    <form class="col flex-column" action="${pageContext.request.contextPath}/cruise/do_add_ship" method="post"
           enctype="multipart/form-data">
         <div class="row">
             <div class="col px-1 mb-2">
