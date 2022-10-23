@@ -33,8 +33,8 @@ public class UserAccountDAOImpl extends AbstractDAO<UserAccount> implements User
     }
 
     @Override
-    public Optional<UserAccount> getUserAccountByLogin(Connection connection, String login) throws DAOException {
-        return executeSingleGetQuery(connection, GET_BY_LOGIN, login);
+    public Optional<UserAccount> getUserAccountByLogin(Connection connection, String email) throws DAOException {
+        return executeSingleGetQuery(connection, GET_BY_LOGIN, email);
     }
 
     @Override

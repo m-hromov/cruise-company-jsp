@@ -27,7 +27,9 @@ public class ActionFactory {
         actions.put("do_add_cruise",new AddCruiseAction());
         actions.put("do_add_ship",new AddShipAction());
         actions.put("do_add_staff",new AddStaffAction());
-        actions.put("do_edit_profile",new EditProfileAction());
+        actions.put("do_edit_profile_info",new EditProfileInfoAction());
+        actions.put("do_edit_profile_document",new EditProfileDocumentAction());
+        actions.put("do_edit_profile_password",new EditProfilePasswordAction());
         actions.put("do_edit_money",new EditMoneyAction());
         actions.put("do_find_cruise",new AddCruiseAction());
         actions.put("do_sign_in",new SignInAction());

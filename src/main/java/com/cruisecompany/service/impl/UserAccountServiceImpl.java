@@ -11,7 +11,7 @@ import com.cruisecompany.entity.UserAccount;
 import com.cruisecompany.exception.DAOException;
 import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.UserAccountService;
-import com.cruisecompany.util.PasswordEncryption;
+import com.cruisecompany.util.password.PasswordEncryption;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,10 +31,10 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public Optional<UserAccountDTO> signIn(String login, String password) throws ServiceException {
+    public Optional<UserAccountDTO> signIn(String email, String password) throws ServiceException {
         Connection connection = dbProvider.getConnection();
         try {
-            Optional<UserAccount> optionalUserAccount = userAccountDAO.getUserAccountByLogin(connection, login);
+            Optional<UserAccount> optionalUserAccount = userAccountDAO.getUserAccountByLogin(connection, email);
             if (optionalUserAccount.isPresent()) {
                 UserAccount userAccount = optionalUserAccount.get();
                 if (userAccount.getPassword().equals(PasswordEncryption.passwordToHash(password)))

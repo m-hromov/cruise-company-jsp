@@ -31,7 +31,6 @@
 <div class="container auth-box parent">
     <form id="profileForm" class="col flex-column" action="${pageContext.request.contextPath}/cruise/do_edit_profile"
           method="post">
-        <input type="hidden" name="part" value="info">
         <div class="row">
             <div class="col px-1 mb-2">
                 <label for="first_name" class="ms-2 position-absolute mtext">
@@ -94,9 +93,8 @@
     <div class="box-divider">
         <hr/>
     </div>
-    <form class="col flex-column" action="${pageContext.request.contextPath}/cruise/do_edit_profile"
+    <form class="col flex-column" action="${pageContext.request.contextPath}/cruise/do_edit_profile_document"
           method="post" enctype="multipart/form-data">
-        <input type="hidden" name="part" value="document">
         <div class="row">
             <span class="col-auto px-1 my-auto">
                 <label for="document" class="ms-2 position-absolute mtext">
@@ -105,7 +103,7 @@
                 <div class="input-group">
                     <input type="file" class="form-control mt-2" name="document" id="document" required>
                     <c:if test="${not empty user.documentPath}">
-                        <a href="${user.documentPath}" class="btn btn-light mt-2"><fmt:message bundle="${loc}" key="lang.view"/></a>
+                        <a href="${pageContext.request.contextPath}/${user.documentPath}" class="btn btn-light mt-2"><fmt:message bundle="${loc}" key="lang.view"/></a>
                     </c:if>
                 </div>
             </span>
@@ -118,9 +116,8 @@
         <hr/>
     </div>
     <form id="profilePasswordForm" class="col flex-column"
-          action="${pageContext.request.contextPath}/cruise/do_edit_profile"
+          action="${pageContext.request.contextPath}/cruise/do_edit_profile_password"
           method="post">
-        <input type="hidden" name="part" value="password">
         <div class="row pt-4">
             <div class="col px-1 mb-2">
                 <label for="old_password" class="ms-2 position-absolute mtext">

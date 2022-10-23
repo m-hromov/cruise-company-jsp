@@ -1,5 +1,7 @@
 package com.cruisecompany.controller.filter;
 
+import com.cruisecompany.entity.Passenger;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +16,7 @@ public class AuthenticationFilter implements Filter {
     private static HashMap<String, String> urisRestricted;
     private static HashSet<String> urisCommon;
 
-    public void init(FilterConfig config) throws ServletException {
+    public void init(FilterConfig config) {
         urisRestricted = new HashMap<>();
         urisRestricted.put("/cruise/add_cruise", "ADMIN");
         urisRestricted.put("/cruise/add_ship", "ADMIN");
@@ -38,7 +40,9 @@ public class AuthenticationFilter implements Filter {
         urisRestricted.put("/cruise/do_edit_ship", "ADMIN");
         urisRestricted.put("/cruise/do_confirm_order", "ADMIN");
         urisRestricted.put("/cruise/do_block_order", "ADMIN");
-        urisRestricted.put("/cruise/do_edit_profile", "USER");
+        urisRestricted.put("/cruise/do_edit_profile_info", "USER");
+        urisRestricted.put("/cruise/do_edit_profile_document", "USER");
+        urisRestricted.put("/cruise/do_edit_profile_password", "USER");
         urisRestricted.put("/cruise/do_do_buy_cruise", "USER");
         urisRestricted.put("/cruise/do_edit_money", "USER");
         urisRestricted.put("/cruise/do_pay", "USER");
@@ -56,7 +60,6 @@ public class AuthenticationFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpSession session = httpServletRequest.getSession();
-
         String role = (String) session.getAttribute("role");
 
         String requestURI = httpServletRequest.getRequestURI();
@@ -67,10 +70,19 @@ public class AuthenticationFilter implements Filter {
                 return;
             }
         }
-        boolean isStaticResource = httpServletRequest.getRequestURI().startsWith("/resources/");
-        if (urisCommon.contains(requestURI) || isStaticResource) {
+        boolean isStaticResource = requestURI.startsWith("/resources/");
+        boolean isSecuredFile = requestURI.startsWith("/secured_files/");
+        if (urisCommon.contains(requestURI) || isStaticResource || (isSecuredFile && role.equals("ADMIN"))) {
             chain.doFilter(request, response);
             return;
+        } else if (isSecuredFile && role.equals("USER")) {
+            Passenger passenger = (Passenger) session.getAttribute("user");
+            String docPath = passenger.getDocumentPath();
+            boolean allowed = docPath.endsWith(requestURI.substring(requestURI.lastIndexOf("/") + 1));
+            if (allowed) {
+                chain.doFilter(request, response);
+                return;
+            }
         }
         request.setAttribute("errorMsg", "Access denied");
         httpServletRequest.getRequestDispatcher("/WEB-INF/view/error.jsp").include(request, response);

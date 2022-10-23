@@ -1,4 +1,4 @@
-package com.cruisecompany.util;
+package com.cruisecompany.util.password;
 
 import org.junit.jupiter.api.Test;
 

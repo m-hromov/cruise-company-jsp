@@ -178,7 +178,7 @@
 
 
                         <li>
-                            <a class="dropdown-item" href="${pageContext.request.contextPath}/cruise/sign_out">
+                            <a class="dropdown-item" href="${pageContext.request.contextPath}/cruise/do_sign_out">
                                 <fmt:message bundle="${loc}" key="lang.sign_out"/>
                             </a>
                         </li>

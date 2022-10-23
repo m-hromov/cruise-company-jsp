@@ -11,9 +11,14 @@ import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.exception.DAOException;
 import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.PassengerService;
+import com.cruisecompany.util.files.FileHelperImpl;
+import com.cruisecompany.util.files.FileType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.servlet.http.Part;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.List;
@@ -89,12 +94,19 @@ public class PassengerServiceImpl implements PassengerService {
     }
 
     @Override
-    public void updateDocument(Passenger passenger) throws ServiceException {
+    public void updateDocument(Passenger passenger, Part filePart, String requestRealPath) throws ServiceException {
         Connection connection = dbProvider.getConnection();
+        String filename;
+        String relativePath;
         try {
+            relativePath = "secured_files" + File.separator + "documents";
+            String uploadPath = requestRealPath + relativePath;
+            filename = FileHelperImpl.writeRecord(filePart, uploadPath,
+                    FileType.PASSENGER_DOCUMENT, passenger.getId());
+            passenger.setDocumentPath(relativePath + File.separator + filename);
             passengerDAO.updateDocument(connection, passenger);
             dbProvider.commit(connection);
-        } catch (DAOException e) {
+        } catch (DAOException | IOException e) {
             logger.error("Unable to update document!");
             throw new ServiceException(e.getMessage(), e);
         } finally {

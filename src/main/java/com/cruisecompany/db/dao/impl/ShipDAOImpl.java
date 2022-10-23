@@ -13,6 +13,8 @@ import java.sql.Connection;
 public class ShipDAOImpl extends AbstractDAO<Ship> implements ShipDAO {
     private static final String INSERT = "INSERT INTO " + Tables.SHIP + " (" + Columns.PASSENGER_CAPACITY + ", " +
             Columns.SHIP_NAME + "," + Columns.PHOTO_PATH + ") VALUES (?, ?, ?)";
+    private static final String UPDATE = "UPDATE " + Tables.SHIP + " SET " + Columns.PASSENGER_CAPACITY + "=?, " +
+             Columns.SHIP_NAME + "=?," + Columns.PHOTO_PATH + "=? WHERE " + Columns.SHIP_ID + "=?";
 
     public ShipDAOImpl(RowMapper<Ship> rowMapper, String table) {
         super(rowMapper, table);
@@ -25,7 +27,8 @@ public class ShipDAOImpl extends AbstractDAO<Ship> implements ShipDAO {
     }
 
     @Override
-    public void update(Connection connection, Ship obj) throws DAOException {
-
+    public void update(Connection connection, Ship ship) throws DAOException {
+        executeUpdate(connection,UPDATE,ship.getPassengerCapacity(), ship.getName(),
+                ship.getPhotoPath(), ship.getId());
     }
 }
