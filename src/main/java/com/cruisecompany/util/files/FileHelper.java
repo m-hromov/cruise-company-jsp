@@ -5,7 +5,7 @@ import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
 
-public class FileHelperImpl {
+public class FileHelper {
     /**
      * Creates a directories with specified uploadPath if they do not exist and then creates a file with unique name
      * there.

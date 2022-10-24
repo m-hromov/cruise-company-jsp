@@ -6,6 +6,7 @@ import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.entity.UserAccount;
 import com.cruisecompany.exception.DAOException;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -13,8 +14,8 @@ import static com.cruisecompany.db.Columns.*;
 
 public class PassengerRowMapper implements RowMapper<Passenger> {
     @Override
-    public Passenger map(ResultSet rs) throws SQLException, DAOException {
-        UserAccount userAccount = RowMapperFactory.getInstance().getUserAccountRowMapper().map(rs);
+    public Passenger map(Connection connection, ResultSet rs) throws SQLException, DAOException {
+        UserAccount userAccount = RowMapperFactory.getInstance().getUserAccountRowMapper().map(connection, rs);
 
         Passenger passenger = new Passenger();
         passenger.setId(rs.getLong(PASSENGER_ID))

@@ -8,6 +8,7 @@ import com.cruisecompany.entity.Order;
 import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.exception.DAOException;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -15,10 +16,10 @@ import static com.cruisecompany.db.Columns.*;
 
 public class OrderRowMapper implements RowMapper<Order> {
     @Override
-    public Order map(ResultSet rs) throws DAOException, SQLException {
-        Passenger passenger = RowMapperFactory.getInstance().getPassengerRowMapper().map(rs);
+    public Order map(Connection connection, ResultSet rs) throws DAOException, SQLException {
+        Passenger passenger = RowMapperFactory.getInstance().getPassengerRowMapper().map(connection, rs);
 
-        Cruise cruise = RowMapperFactory.getInstance().getCruiseRowMapper().map(rs);
+        Cruise cruise = RowMapperFactory.getInstance().getCruiseRowMapper().map(connection, rs);
 
         Order order = new Order();
         order.setId(rs.getLong(ORDER_ID))

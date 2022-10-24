@@ -23,17 +23,12 @@ import static com.cruisecompany.db.Columns.*;
 
 public class CruiseRowMapper implements RowMapper<Cruise> {
     @Override
-    public Cruise map(ResultSet rs) throws DAOException, SQLException {
-        Ship ship = RowMapperFactory.getInstance().getShipRowMapper().map(rs);
+    public Cruise map(Connection connection, ResultSet rs) throws DAOException, SQLException {
+        Ship ship = RowMapperFactory.getInstance().getShipRowMapper().map(connection, rs);
 
         StationDAO stationDAO = DAOFactory.getInstance().getStationDAO();
-        List<Station> stationList = null;
-        try (Connection connection = new DBProvider().getConnection()){
-            stationList = stationDAO.getAllStationsByCruiseID(connection,
+        List<Station> stationList = stationDAO.getAllStationsByCruiseID(connection,
                     rs.getLong(CRUISE_ID));
-        } catch (DAOException | DatabaseException | SQLException e) {
-            throw new DAOException(e);
-        }
 
         Cruise cruise = new Cruise();
         cruise.setId(rs.getLong(CRUISE_ID))

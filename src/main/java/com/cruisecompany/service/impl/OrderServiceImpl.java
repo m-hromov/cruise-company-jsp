@@ -54,14 +54,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void buy(long passengerId, long cruiseId) throws ServiceException {
+    public long buy(long passengerId, long cruiseId) throws ServiceException {
         Connection connection = dbProvider.getConnection();
         try {
             Order order = new Order();
             order.setCruise(new Cruise().setId(cruiseId))
                     .setPassenger(new Passenger().setId(passengerId));
-            orderDAO.save(connection, order);
+            long orderId = orderDAO.save(connection, order);
             dbProvider.commit(connection);
+            return orderId;
         } catch (DAOException e) {
             logger.error("Unable to buy cruise!");
             throw new ServiceException(e.getMessage(), e);

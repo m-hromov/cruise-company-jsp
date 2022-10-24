@@ -27,9 +27,10 @@ public interface OrderService {
      * Creates a new order.
      * @param passengerId passenger's ID
      * @param cruiseId cruise's ID
+     * @return order's ID
      * @throws ServiceException if the passenger has already bought it or something went wrong.
      */
-    void buy(long passengerId, long cruiseId) throws ServiceException;
+    long buy(long passengerId, long cruiseId) throws ServiceException;
     /**
      * Blocks a certain order.
      * @param orderId ID of the order

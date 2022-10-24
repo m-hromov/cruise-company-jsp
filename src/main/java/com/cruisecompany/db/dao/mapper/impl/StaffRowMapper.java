@@ -6,6 +6,7 @@ import com.cruisecompany.entity.Ship;
 import com.cruisecompany.entity.Staff;
 import com.cruisecompany.exception.DAOException;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -13,8 +14,8 @@ import static com.cruisecompany.db.Columns.*;
 
 public class StaffRowMapper implements RowMapper<Staff> {
     @Override
-    public Staff map(ResultSet rs) throws DAOException, SQLException {
-        Ship ship = RowMapperFactory.getInstance().getShipRowMapper().map(rs);
+    public Staff map(Connection connection, ResultSet rs) throws DAOException, SQLException {
+        Ship ship = RowMapperFactory.getInstance().getShipRowMapper().map(connection, rs);
 
         Staff staff = new Staff();
         staff.setId(rs.getLong(STAFF_ID))

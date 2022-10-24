@@ -25,7 +25,7 @@ public class SimpleQueryExecutor<T> {
         try (PreparedStatement ps = preparedStatement(query, connection, params);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                list.add(rowMapper.map(rs));
+                list.add(rowMapper.map(connection, rs));
             }
             return list;
         } catch (SQLException e) {
@@ -39,7 +39,7 @@ public class SimpleQueryExecutor<T> {
              ResultSet rs = ps.executeQuery()) {
 
             if (rs.next())
-                return Optional.ofNullable(rowMapper.map(rs));
+                return Optional.ofNullable(rowMapper.map(connection, rs));
             return Optional.empty();
         } catch (SQLException e) {
             logger.error("Unable to execute a single get query!", e);

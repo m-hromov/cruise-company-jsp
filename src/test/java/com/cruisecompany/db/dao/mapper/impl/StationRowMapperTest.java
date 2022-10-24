@@ -20,7 +20,7 @@ public class StationRowMapperTest {
             Mockito.when(rs.getString(Columns.STATION_CITY)).thenReturn("Odesa");
             Mockito.when(rs.getString(Columns.STATION_COUNTRY)).thenReturn("Ukraine");
             StationRowMapper srm = new StationRowMapper();
-            station = srm.map(rs);
+            station = srm.map(null, rs);
         } catch (SQLException e) {
             fail(e);
         }

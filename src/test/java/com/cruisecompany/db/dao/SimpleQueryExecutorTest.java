@@ -88,7 +88,7 @@ class SimpleQueryExecutorTest {
     }
 
     @Test
-    void executeUpdate() throws DAOException {
+    void testExecuteUpdate() throws DAOException {
         long id = executeInsert();
         String UPDATE = "UPDATE " + Tables.STATION + " SET " + Columns.STATION_CITY + "='Kyiv' WHERE " + Columns.STATION_ID + " = ?";
         simpleQueryExecutor.executeUpdate(connection, UPDATE, id);
@@ -100,7 +100,7 @@ class SimpleQueryExecutorTest {
     }
 
     @Test
-    void executeSingleGetLongQuery() throws DAOException {
+    void testExecuteSingleGetLongQuery() throws DAOException {
         String GET = "SELECT count(*) FROM " + Tables.USER_ACCOUNT;
         long value = simpleQueryExecutor.executeSingleGetLongQuery(connection, GET);
         assertTrue(value >= 0);

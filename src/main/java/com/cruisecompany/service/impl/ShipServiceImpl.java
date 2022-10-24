@@ -7,7 +7,7 @@ import com.cruisecompany.entity.Ship;
 import com.cruisecompany.exception.DAOException;
 import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.ShipService;
-import com.cruisecompany.util.files.FileHelperImpl;
+import com.cruisecompany.util.files.FileHelper;
 import com.cruisecompany.util.files.FileType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -48,7 +48,7 @@ public class ShipServiceImpl implements ShipService {
             long shipId = shipDAO.save(connection, ship);
             String relativePath = "resources" + File.separator + "images" + File.separator + "ships";
             String uploadPath = requestRealPath + relativePath;
-            String filename = FileHelperImpl.writeRecord(photoPart,uploadPath, FileType.SHIP_PHOTO,shipId);
+            String filename = FileHelper.writeRecord(photoPart,uploadPath, FileType.SHIP_PHOTO,shipId);
             ship.setId(shipId);
             ship.setPhotoPath(relativePath + File.separator + filename);
             shipDAO.update(connection,ship);

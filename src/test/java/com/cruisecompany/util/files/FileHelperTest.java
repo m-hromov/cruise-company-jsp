@@ -14,7 +14,7 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileHelperImplTest {
+class FileHelperTest {
     @AfterAll
     static void tearDown() throws IOException {
         Files.deleteIfExists(Path.of(File.separator + "TEST123" + File.separator + "documents"));
@@ -27,11 +27,10 @@ class FileHelperImplTest {
         Part part = mock(Part.class);
         when(part.getSubmittedFileName()).thenReturn("file13123.jpg");
         doNothing().when(part).write(ArgumentMatchers.anyString());
-        String fullPath = FileHelperImpl.writeRecord(part,uploadPath, FileType.PASSENGER_DOCUMENT,123);
+        String fullPath = FileHelper.writeRecord(part,uploadPath, FileType.PASSENGER_DOCUMENT,123);
         assertTrue(new File(uploadPath).exists());
         verify(part,times(1)).write(ArgumentMatchers.any());
-        assertEquals("\\TEST123\\documents" +
-                        File.separator + FileType.PASSENGER_DOCUMENT.str+"_123.jpg",
+        assertEquals(FileType.PASSENGER_DOCUMENT.str+"_123.jpg",
                 fullPath);
     }
 
@@ -41,18 +40,17 @@ class FileHelperImplTest {
         Part part = mock(Part.class);
         when(part.getSubmittedFileName()).thenReturn("file13123.jpg");
         doNothing().when(part).write(ArgumentMatchers.anyString());
-        String fullPath = FileHelperImpl.writeRecord(part,uploadPath,FileType.PASSENGER_DOCUMENT,"TEST_UNIQUE");
+        String fullPath = FileHelper.writeRecord(part,uploadPath,FileType.PASSENGER_DOCUMENT,"TEST_UNIQUE");
         verify(part,times(1)).write(ArgumentMatchers.any());
-        assertEquals("\\TEST123\\documents" +
-                        File.separator + FileType.PASSENGER_DOCUMENT.str+"_TEST_UNIQUE.jpg",
+        assertEquals(FileType.PASSENGER_DOCUMENT.str+"_TEST_UNIQUE.jpg",
                 fullPath);
     }
     @Test
     void testWriteRecordInvalidDirectory() throws IOException {
         String uploadPath = "?$#@";
         Part part = mock(Part.class);
-        String fullPath = FileHelperImpl.writeRecord(part,uploadPath,FileType.PASSENGER_DOCUMENT,"TEST_UNIQUE");
-        assertNull(fullPath);
+        assertThrows(IOException.class,()->
+                FileHelper.writeRecord(part,uploadPath,FileType.PASSENGER_DOCUMENT,"TEST_UNIQUE"));
     }
     @Test
     void testWriteRecordOverridesFile() throws IOException {
@@ -60,20 +58,19 @@ class FileHelperImplTest {
         Part part = mock(Part.class);
         when(part.getSubmittedFileName()).thenReturn("file13123.jpg");
         doNothing().when(part).write(ArgumentMatchers.anyString());
-        FileHelperImpl.writeRecord(part,uploadPath,FileType.PASSENGER_DOCUMENT,"TEST_UNIQUE");
-        FileHelperImpl.writeRecord(part,uploadPath,FileType.PASSENGER_DOCUMENT,"TEST_UNIQUE");
-        String fullPath = FileHelperImpl.writeRecord(part,uploadPath,FileType.PASSENGER_DOCUMENT,"TEST_UNIQUE");
+        FileHelper.writeRecord(part,uploadPath,FileType.PASSENGER_DOCUMENT,"TEST_UNIQUE");
+        FileHelper.writeRecord(part,uploadPath,FileType.PASSENGER_DOCUMENT,"TEST_UNIQUE");
+        String fullPath = FileHelper.writeRecord(part,uploadPath,FileType.PASSENGER_DOCUMENT,"TEST_UNIQUE");
         verify(part,times(3)).write(ArgumentMatchers.any());
-        assertEquals("\\TEST123\\documents" +
-                        File.separator + FileType.PASSENGER_DOCUMENT.str+"_TEST_UNIQUE.jpg",
+        assertEquals(FileType.PASSENGER_DOCUMENT.str+"_TEST_UNIQUE.jpg",
                         fullPath);
     }
 
     @Test
     void testExtractExtension() {
-        String extension = FileHelperImpl.extractExtension("file.jpg");
+        String extension = FileHelper.extractExtension("file.jpg");
         assertEquals(".jpg", extension);
-        extension = FileHelperImpl.extractExtension("file.min.jpg");
+        extension = FileHelper.extractExtension("file.min.jpg");
         assertEquals(".jpg", extension);
     }
 }
