@@ -3,6 +3,7 @@ package com.cruisecompany.controller.action.forward;
 import com.cruisecompany.controller.action.Action;
 import com.cruisecompany.controller.action.ActionMethod;
 import com.cruisecompany.controller.action.Method;
+import com.cruisecompany.dto.PassengerDTO;
 import com.cruisecompany.entity.Order;
 import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.exception.ServiceException;
@@ -20,9 +21,9 @@ public class LoadUserOrdersAction implements Action {
         try {
             ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
                     .getAttribute("ServiceFactory");
-            Passenger passenger = (Passenger) request.getSession().getAttribute("user");
+            PassengerDTO passengerDTO = (PassengerDTO) request.getSession().getAttribute("user");
             OrderService orderService = serviceFactory.getOrderService();
-            List<Order> orderList = orderService.getAllPassengerOrders(passenger.getId());
+            List<Order> orderList = orderService.getAllPassengerOrders(passengerDTO.getPassengerId());
             LocalDate currentDate = LocalDate.now();
             request.setAttribute("currentDate",currentDate);
             request.setAttribute("orderList",orderList);

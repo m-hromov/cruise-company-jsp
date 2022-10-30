@@ -6,6 +6,7 @@ import com.cruisecompany.exception.DAOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,6 +65,19 @@ public class SimpleQueryExecutor<T> {
     protected void executeUpdate(Connection connection, String query, Object... params) throws DAOException {
         try (PreparedStatement ps = preparedStatement(query, connection, params)) {
             ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("Unable to execute an update!", e);
+            throw new DAOException(e.getMessage(), e);
+        }
+    }
+
+    protected BigDecimal executeMoneyUpdate(Connection connection, String query, Object... params) throws DAOException {
+        try (PreparedStatement ps = preparedStatement(query, connection, params)) {
+            ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+
+            if (!rs.next()) throw new SQLException("0 rows affected");
+            return rs.getBigDecimal("money");
         } catch (SQLException e) {
             logger.error("Unable to execute an update!", e);
             throw new DAOException(e.getMessage(), e);

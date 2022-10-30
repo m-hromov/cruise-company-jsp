@@ -3,7 +3,9 @@ package com.cruisecompany.controller.action.redirect;
 import com.cruisecompany.controller.action.Action;
 import com.cruisecompany.controller.action.ActionMethod;
 import com.cruisecompany.controller.action.Method;
-import com.cruisecompany.db.dto.UserAccountDTO;
+import com.cruisecompany.dto.PassengerDTO;
+import com.cruisecompany.dto.UserAccountDTO;
+import com.cruisecompany.exception.AuthorizationException;
 import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.PassengerService;
 import com.cruisecompany.service.ServiceFactory;
@@ -21,32 +23,25 @@ public class SignInAction implements Action {
         ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
                 .getAttribute("ServiceFactory");
         UserAccountService userAccountService = serviceFactory.getUserAccountService();
-        PassengerService passengerService = serviceFactory.getPassengerService();
-
-        String login = request.getParameter("email");
-        String password = request.getParameter("password");
-
+        HttpSession session = request.getSession();
         try {
-            Optional<UserAccountDTO> optional = userAccountService.signIn(login, password);
-            if (optional.isEmpty()) {
-                HttpSession session = request.getSession();
-                session.setAttribute("error", true);
-                return new ActionMethod("/cruise/sign_in", Method.REDIRECT);
-
-            }
-
-            UserAccountDTO userAccountDTO = optional.get();
-            HttpSession session = request.getSession();
-            session.setAttribute("role", userAccountDTO.getRole());
-            if (userAccountDTO.getRole().equals("USER")) {
-                session.setAttribute("user",
-                        passengerService.getPassengerByAccountId(userAccountDTO.getId()));
-            }
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+            Optional<PassengerDTO> optional = userAccountService.signIn(email, password);
+            optional.ifPresentOrElse(passengerDTO -> {
+                session.setAttribute("role", "USER");
+                session.setAttribute("user", passengerDTO);
+            },() -> {
+                session.setAttribute("role", "ADMIN");
+            });
             return new ActionMethod("/", Method.REDIRECT);
         } catch (ServiceException e) {
             request.getSession().setAttribute("error", 500);
             request.getSession().setAttribute("errorMsg", "Something went wrong!");
             return new ActionMethod("/cruise/error", Method.REDIRECT);
+        } catch (AuthorizationException e) {
+            session.setAttribute("error", true);
+            return new ActionMethod("/cruise/sign_in", Method.REDIRECT);
         }
     }
 }

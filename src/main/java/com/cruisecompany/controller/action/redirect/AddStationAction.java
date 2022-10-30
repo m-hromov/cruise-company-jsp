@@ -14,16 +14,12 @@ import javax.servlet.http.HttpServletResponse;
 public class AddStationAction implements Action {
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
-        ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
-                .getAttribute("ServiceFactory");
-        String city = request.getParameter("city");
-        String country = request.getParameter("country");
-        Station station = new Station();
-        station.setCity(city)
-                .setCountry(country);
-
         try {
+            ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
+                    .getAttribute("ServiceFactory");
             StationService stationService = serviceFactory.getStationService();
+
+            Station station = mapStation(request);
             stationService.addStation(station);
             return new ActionMethod("/cruise/add_station", Method.REDIRECT);
         } catch (ServiceException e) {
@@ -31,5 +27,13 @@ public class AddStationAction implements Action {
             request.getSession().setAttribute("errorMsg", "Something went wrong!");
             return new ActionMethod("/cruise/error", Method.REDIRECT);
         }
+    }
+
+    private Station mapStation(HttpServletRequest request) {
+        String city = request.getParameter("city");
+        String country = request.getParameter("country");
+        return new Station()
+                .setCity(city)
+                .setCountry(country);
     }
 }

@@ -27,7 +27,7 @@
 </head>
 <body>
 <jsp:include page="${pageContext.request.contextPath}/page_elements/header.jsp"/>
-<jsp:useBean id="user" scope="session" type="com.cruisecompany.entity.Passenger"/>
+<jsp:useBean id="user" scope="session" type="com.cruisecompany.dto.PassengerDTO"/>
 <div class="container auth-box parent">
     <form id="profileForm" class="col flex-column" action="${pageContext.request.contextPath}/cruise/do_edit_profile"
           method="post">

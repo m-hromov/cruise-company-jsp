@@ -1,13 +1,16 @@
 package com.cruisecompany.service.impl;
 
 import com.cruisecompany.db.DBProvider;
-import com.cruisecompany.db.dto.UserAccountDTO;
+import com.cruisecompany.dto.PassengerDTO;
 import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.entity.UserAccount;
+import com.cruisecompany.exception.AuthorizationException;
 import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.ServiceFactory;
 import com.cruisecompany.service.UserAccountService;
+import com.cruisecompany.util.validator.Validators;
 import org.junit.jupiter.api.*;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import java.io.IOException;
@@ -18,6 +21,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mockStatic;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserAccountServiceImplTest {
@@ -72,17 +76,22 @@ class UserAccountServiceImplTest {
         connection.setAutoCommit(false);
     }
 
-    @Test
-    @Order(2)
-    void testSignIn() throws ServiceException, SQLException {
-        UserAccountDTO uadto = userAccountService.signIn("test@gmail.com", "testpassword").get();
-        assertEquals(userAccount.getLogin(), uadto.getLogin());
-        assertEquals(userAccount.getRole(), uadto.getRole());
-    }
+
 
     @Test
     @Order(1)
     void testSignUp() {
-        assertDoesNotThrow(() -> userAccountService.signUp(passenger));
+        try (MockedStatic<Validators> mocked = mockStatic(Validators.class)){
+            assertDoesNotThrow(() -> userAccountService.signUp(passenger));
+        }
+    }
+    @Test
+    @Order(2)
+    void testSignIn() throws ServiceException, AuthorizationException, SQLException {
+        try (MockedStatic<Validators> mocked = mockStatic(Validators.class)){
+            PassengerDTO pdto = userAccountService.signIn("test@gmail.com", "testpassword").get();
+            assertEquals(userAccount.getLogin(), pdto.getEmail());
+            assertEquals(userAccount.getRole(), pdto.getRole());
+        }
     }
 }

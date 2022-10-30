@@ -1,6 +1,6 @@
 package com.cruisecompany.service;
 
-import com.cruisecompany.db.dto.CruiseShowDTO;
+import com.cruisecompany.dto.CruiseShowDTO;
 import com.cruisecompany.entity.Cruise;
 import com.cruisecompany.exception.ServiceException;
 

@@ -1,5 +1,6 @@
 package com.cruisecompany.db.dao;
 
+import com.cruisecompany.dto.PassengerDTO;
 import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.exception.DAOException;
 
@@ -18,33 +19,35 @@ public interface PassengerDAO extends DAO<Passenger> {
      */
     Optional<Passenger> getByUserAccountId(Connection connection, long id) throws DAOException;
 
-    /**
-     * Updates passenger's amount of money.
-     *
-     * @param connection  Connection, on which a query will be executed
-     * @param passengerId ID of the passenger
-     * @param money       new amount of money
-     * @throws DAOException if something went wrong
-     */
-    void updateMoney(Connection connection, long passengerId, BigDecimal money) throws DAOException;
 
     /**
      * Updates information about first/last name, email, phone.
      *
-     * @param connection Connection, on which a query will be executed
-     * @param passenger  Passenger with a new first/last name or email, or phone.
+     * @param connection   Connection, on which a query will be executed
+     * @param passengerDTO Passenger with a new first/last name or email, or phone.
      * @throws DAOException if something went wrong
      */
-    void updateProfile(Connection connection, Passenger passenger) throws DAOException;
+    void updateProfile(Connection connection, PassengerDTO passengerDTO) throws DAOException;
 
     /**
      * Updates passenger's document
      *
-     * @param connection Connection, on which a query will be executed
-     * @param passenger  Passenger with a new document path.
+     * @param connection   Connection, on which a query will be executed
+     * @param passengerDTO Passenger with a new document path.
      * @throws DAOException if something went wrong
      */
-    void updateDocument(Connection connection, Passenger passenger) throws DAOException;
+    void updateDocument(Connection connection, PassengerDTO passengerDTO) throws DAOException;
+
+    /**
+     * Subtracts passenger's amount of money.
+     *
+     * @param connection  Connection, on which a query will be executed
+     * @param passengerId ID of the passenger
+     * @param money       amount of money to be subtracted
+     * @return BigDecimal - updated money
+     * @throws DAOException if something went wrong
+     */
+    BigDecimal subtractMoney(Connection connection, long passengerId, BigDecimal money) throws DAOException;
 
     /**
      * Adds money to passenger's account.
@@ -52,7 +55,8 @@ public interface PassengerDAO extends DAO<Passenger> {
      * @param connection  Connection, on which a query will be executed
      * @param passengerId ID of the passenger
      * @param money       an amount of money to be added
+     * @return BigDecimal - updated money
      * @throws DAOException if something went wrong
      */
-    void addMoney(Connection connection, long passengerId, BigDecimal money) throws DAOException;
+    BigDecimal addMoney(Connection connection, long passengerId, BigDecimal money) throws DAOException;
 }

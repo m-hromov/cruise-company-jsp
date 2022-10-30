@@ -1,6 +1,8 @@
 package com.cruisecompany.service;
 
 import com.cruisecompany.db.DBProvider;
+import com.cruisecompany.dto.PassengerDTO;
+import com.cruisecompany.dto.mapper.DTOMapper;
 import com.cruisecompany.entity.Cruise;
 import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.entity.Ship;
@@ -8,6 +10,7 @@ import com.cruisecompany.entity.UserAccount;
 import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.util.files.FileHelper;
 import com.cruisecompany.util.files.FileType;
+import com.cruisecompany.util.validator.Validators;
 import org.junit.jupiter.api.*;
 import org.mockito.ArgumentMatchers;
 import org.mockito.MockedStatic;
@@ -25,8 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -38,7 +40,9 @@ class OrderServiceTest {
     static ShipService shipService;
     static UserAccountService userAccountService;
     static Cruise cruise;
+    static Cruise cruiseExpensive;
     static Passenger passenger;
+    static PassengerDTO passengerDTO;
     static long orderId;
 
     static void setupConnection() throws IOException, SQLException {
@@ -52,7 +56,8 @@ class OrderServiceTest {
     }
 
     static void setupDatabase() throws ServiceException, IOException {
-        try (MockedStatic<FileHelper> mocked = mockStatic(FileHelper.class)) {
+        try (MockedStatic<FileHelper> mocked = mockStatic(FileHelper.class);
+             MockedStatic<Validators> mocked2 = mockStatic(Validators.class)) {
             Ship ship = new Ship();
             ship.setPhotoPath("test")
                     .setName("test")
@@ -70,8 +75,16 @@ class OrderServiceTest {
                     .setPrice(BigDecimal.valueOf(1))
                     .setStationList(new ArrayList<>())
                     .setTimeDeparture(LocalTime.parse("21:00"));
+            cruiseExpensive = new Cruise();
+            cruiseExpensive.setDateArrival(LocalDate.now())
+                    .setDateDeparture(LocalDate.now())
+                    .setShip(ship)
+                    .setPrice(BigDecimal.valueOf(1000))
+                    .setStationList(new ArrayList<>())
+                    .setTimeDeparture(LocalTime.parse("21:00"));
 
             cruiseService.addCruise(cruise);
+            cruiseService.addCruise(cruiseExpensive);
 
             UserAccount userAccount = new UserAccount();
             userAccount.setLogin("test")
@@ -85,6 +98,7 @@ class OrderServiceTest {
                     .setLastName("test")
                     .setMoney(BigDecimal.valueOf(10));
             userAccountService.signUp(passenger);
+            passengerDTO = DTOMapper.toPassengerDTO(passenger);
         }
     }
 
@@ -125,14 +139,15 @@ class OrderServiceTest {
     @Test
     @Order(6)
     void testPay() throws ServiceException {
-        orderService.pay(orderId);
+        BigDecimal moneyLeft = orderService.pay(orderId);
         verify(dbProvider,times(5)).commit(connection);
+        assertTrue(moneyLeft.longValue()>=0);
     }
 
     @Test
     @Order(1)
     void testBuy() throws ServiceException, SQLException {
-        orderId = orderService.buy(passenger.getId(), cruise.getId());
+        orderId = orderService.buy(passengerDTO, cruise.getId());
         verify(dbProvider, times(1)).commit(connection);
     }
 
@@ -161,8 +176,10 @@ class OrderServiceTest {
     void testNotEnoughMoney() throws SQLException, ServiceException, IOException {
         connection.rollback();
         setupDatabase();
-        clearInvocations(dbProvider);
         passenger.setMoney(BigDecimal.valueOf(0));
+        orderId = orderService.buy(passengerDTO, cruiseExpensive.getId());
+        clearInvocations(dbProvider);
+        assertThrows(ServiceException.class,()->orderService.pay(orderId));
         verify(dbProvider, times(0)).commit(connection);
     }
 }

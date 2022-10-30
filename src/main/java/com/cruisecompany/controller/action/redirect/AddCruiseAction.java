@@ -21,9 +21,22 @@ import java.util.List;
 public class AddCruiseAction implements Action {
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
-        ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
-                .getAttribute("ServiceFactory");
+        try {
+            ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
+                    .getAttribute("ServiceFactory");
+            CruiseService cruiseService = serviceFactory.getCruiseService();
 
+            Cruise cruise = mapCruise(request);
+            cruiseService.addCruise(cruise);
+            return new ActionMethod("/cruise/add_cruise", Method.REDIRECT);
+        } catch (ServiceException e) {
+            request.getSession().setAttribute("error", 500);
+            request.getSession().setAttribute("errorMsg", "Unable to add new cruise");
+            return new ActionMethod("/cruise/error", Method.REDIRECT);
+        }
+    }
+
+    private Cruise mapCruise(HttpServletRequest request) {
         long shipId = Long.parseLong(request.getParameter("ship"));
         LocalTime timeDeparture = LocalTime.parse(request.getParameter("time_departure"));
         LocalDate dateDeparture = LocalDate.parse(request.getParameter("date_departure"));
@@ -35,23 +48,13 @@ public class AddCruiseAction implements Action {
         for (String station : stations) {
             stationList.add(new Station().setId(Long.parseLong(station)));
         }
-        Cruise cruise = new Cruise();
-        cruise.setTimeDeparture(timeDeparture)
+        return new Cruise()
+                .setTimeDeparture(timeDeparture)
                 .setDateDeparture(dateDeparture)
                 .setDateArrival(dateArrival)
                 .setDescription(description)
                 .setPrice(price)
                 .setShip(new Ship().setId(shipId))
                 .setStationList(stationList);
-
-        CruiseService cruiseService = serviceFactory.getCruiseService();
-        try {
-            cruiseService.addCruise(cruise);
-            return new ActionMethod("/cruise/add_cruise", Method.REDIRECT);
-        } catch (ServiceException e) {
-            request.getSession().setAttribute("error",500);
-            request.getSession().setAttribute("errorMsg","Unable to add new cruise");
-            return new ActionMethod("/cruise/error", Method.REDIRECT);
-        }
     }
 }

@@ -22,18 +22,14 @@ public class AddShipAction implements Action {
     final static Logger logger = LogManager.getLogger(CruiseServiceImpl.class);
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
-        ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
-                .getAttribute("ServiceFactory");
-
-        ShipService shipService = serviceFactory.getShipService();
         try {
-            Ship ship = new Ship();
-            String name = request.getParameter("name");
-            int capacity = Integer.parseInt(request.getParameter("capacity"));
+            ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
+                    .getAttribute("ServiceFactory");
+            ShipService shipService = serviceFactory.getShipService();
+
+            Ship ship = mapShip(request);
             String requestRealPath = request.getServletContext().getRealPath("");
             Part part = request.getPart("photo");
-            ship.setName(name)
-                    .setPassengerCapacity(capacity);
 
             shipService.addShip(ship, part, requestRealPath);
             return new ActionMethod("/cruise/add_ship", Method.REDIRECT);
@@ -48,5 +44,13 @@ public class AddShipAction implements Action {
             return new ActionMethod("/cruise/error", Method.REDIRECT);
         }
 
+    }
+
+    private Ship mapShip(HttpServletRequest request) {
+        String name = request.getParameter("name");
+        int capacity = Integer.parseInt(request.getParameter("capacity"));
+        return new Ship()
+                .setName(name)
+                .setPassengerCapacity(capacity);
     }
 }

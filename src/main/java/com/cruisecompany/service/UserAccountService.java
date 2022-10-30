@@ -1,7 +1,9 @@
 package com.cruisecompany.service;
 
-import com.cruisecompany.db.dto.UserAccountDTO;
+import com.cruisecompany.dto.PassengerDTO;
+import com.cruisecompany.dto.UserAccountDTO;
 import com.cruisecompany.entity.Passenger;
+import com.cruisecompany.exception.AuthorizationException;
 import com.cruisecompany.exception.ServiceException;
 
 import java.util.Optional;
@@ -15,7 +17,7 @@ public interface UserAccountService {
      * @return Nullable Optional of UserAccountDTO
      * @throws ServiceException if password/email is incorrect
      */
-    Optional<UserAccountDTO> signIn(String email, String password) throws ServiceException;
+    Optional<PassengerDTO> signIn(String email, String password) throws ServiceException, AuthorizationException;
 
     /**
      * Signs up a passenger.

@@ -1,6 +1,7 @@
 package com.cruisecompany.service;
 
-import com.cruisecompany.db.dto.PassengerOrderDTO;
+import com.cruisecompany.dto.PassengerDTO;
+import com.cruisecompany.dto.PassengerOrderDTO;
 import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.exception.ServiceException;
 
@@ -18,7 +19,7 @@ public interface PassengerService {
     List<PassengerOrderDTO> getAllPassengerOrderDTOList() throws ServiceException;
 
     /**
-     * Gets a passenger by it's UserAccount ID.
+     * Gets a passenger by its UserAccount ID.
      *
      * @param id user's account ID
      * @return Passenger
@@ -29,27 +30,27 @@ public interface PassengerService {
     /**
      * Adds money to passenger's account.
      *
-     * @param passengerId ID of the passenger
+     * @param passengerDTO PassengerDTO with ID of the passenger
      * @param money       an amount of money to be added
      * @throws ServiceException if something went wrong
      */
-    void addMoney(long passengerId, BigDecimal money) throws ServiceException;
+    void addMoney(PassengerDTO passengerDTO, BigDecimal money) throws ServiceException;
 
     /**
      * Updates information about first/last name, email, phone.
      *
-     * @param passenger Passenger with a new first/last name or email, or phone.
+     * @param passengerDTO Passenger with a new first/last name or email, or phone.
      * @throws ServiceException if something went wrong
      */
-    void updateProfile(Passenger passenger) throws ServiceException;
+    void updateProfile(PassengerDTO passengerDTO) throws ServiceException;
 
     /**
      * Updates passenger's document
      *
-     * @param passenger       Passenger with a new document path.
+     * @param passengerDTO    Passenger
      * @param filePart        request part with file
      * @param requestRealPath request real path
      * @throws ServiceException if something went wrong
      */
-    void updateDocument(Passenger passenger, Part filePart, String requestRealPath) throws ServiceException;
+    void updateDocument(PassengerDTO passengerDTO, Part filePart, String requestRealPath) throws ServiceException;
 }

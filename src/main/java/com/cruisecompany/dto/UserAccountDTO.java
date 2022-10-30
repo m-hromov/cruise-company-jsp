@@ -1,4 +1,4 @@
-package com.cruisecompany.db.dto;
+package com.cruisecompany.dto;
 
 public class UserAccountDTO {
     private long id;

@@ -1,11 +1,10 @@
 package com.cruisecompany.service;
 
+import com.cruisecompany.dto.PassengerDTO;
 import com.cruisecompany.entity.Order;
-import com.cruisecompany.exception.DAOException;
 import com.cruisecompany.exception.ServiceException;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderService {
@@ -25,12 +24,13 @@ public interface OrderService {
 
     /**
      * Creates a new order.
-     * @param passengerId passenger's ID
-     * @param cruiseId cruise's ID
+     *
+     * @param passengerDTO PassengerDTO with ID
+     * @param cruiseId     cruise's ID
      * @return order's ID
      * @throws ServiceException if the passenger has already bought it or something went wrong.
      */
-    long buy(long passengerId, long cruiseId) throws ServiceException;
+    long buy(PassengerDTO passengerDTO, long cruiseId) throws ServiceException;
     /**
      * Blocks a certain order.
      * @param orderId ID of the order

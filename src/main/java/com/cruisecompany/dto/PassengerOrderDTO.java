@@ -1,4 +1,4 @@
-package com.cruisecompany.db.dto;
+package com.cruisecompany.dto;
 
 
 public class PassengerOrderDTO   {
@@ -112,4 +112,5 @@ public class PassengerOrderDTO   {
         this.documentPath = documentPath;
         return this;
     }
+
 }

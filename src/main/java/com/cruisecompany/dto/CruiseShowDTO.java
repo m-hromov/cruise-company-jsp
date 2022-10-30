@@ -1,4 +1,4 @@
-package com.cruisecompany.db.dto;
+package com.cruisecompany.dto;
 
 import com.cruisecompany.entity.Station;
 

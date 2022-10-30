@@ -24,7 +24,7 @@
 </head>
 <body>
 <jsp:include page="${pageContext.request.contextPath}/page_elements/header.jsp"/>
-<jsp:useBean id="orderList" scope="request" type="java.util.List<com.cruisecompany.db.dto.PassengerOrderDTO>"/>
+<jsp:useBean id="orderList" scope="request" type="java.util.List<com.cruisecompany.dto.PassengerOrderDTO>"/>
 <div class="container" style="max-width: 90% !important;">
     <div class="d-flex flex-column">
         <c:forEach items="${orderList}" var="order">

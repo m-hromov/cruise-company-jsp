@@ -33,7 +33,6 @@
         <c:remove var="lowMoney" scope="session"/>
     </c:if>
     <jsp:useBean id="orderList" scope="request" type="java.util.List<com.cruisecompany.entity.Order>"/>
-    <jsp:useBean id="user" scope="session" type="com.cruisecompany.entity.Passenger"/>
     <c:forEach items="${orderList}" var="order">
         <div class="container item-box justify-content-center text-center bd-search">
             <div class="row">

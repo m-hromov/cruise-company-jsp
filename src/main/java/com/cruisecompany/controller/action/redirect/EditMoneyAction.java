@@ -3,7 +3,7 @@ package com.cruisecompany.controller.action.redirect;
 import com.cruisecompany.controller.action.Action;
 import com.cruisecompany.controller.action.ActionMethod;
 import com.cruisecompany.controller.action.Method;
-import com.cruisecompany.entity.Passenger;
+import com.cruisecompany.dto.PassengerDTO;
 import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.PassengerService;
 import com.cruisecompany.service.ServiceFactory;
@@ -16,15 +16,15 @@ import java.math.BigDecimal;
 public class EditMoneyAction implements Action {
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
-        ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
-                .getAttribute("ServiceFactory");
         try {
+            ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
+                    .getAttribute("ServiceFactory");
             PassengerService passengerService = serviceFactory.getPassengerService();
-            BigDecimal money = new BigDecimal(request.getParameter("money"));
             HttpSession session = request.getSession();
-            Passenger passenger = (Passenger) session.getAttribute("user");
-            passenger.setMoney(passenger.getMoney().add(money));
-            passengerService.addMoney(passenger.getId(),money);
+
+            BigDecimal money = new BigDecimal(request.getParameter("money"));
+            PassengerDTO passengerDTO = (PassengerDTO) session.getAttribute("user");
+            passengerService.addMoney(passengerDTO, money);
             return new ActionMethod("/cruise/edit_money", Method.REDIRECT);
         } catch (ServiceException e) {
             request.getSession().setAttribute("error", 500);

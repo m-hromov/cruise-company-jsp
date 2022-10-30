@@ -1,5 +1,6 @@
 package com.cruisecompany.controller.filter;
 
+import com.cruisecompany.dto.PassengerDTO;
 import com.cruisecompany.entity.Passenger;
 
 import javax.servlet.*;
@@ -76,8 +77,8 @@ public class AuthenticationFilter implements Filter {
             chain.doFilter(request, response);
             return;
         } else if (isSecuredFile && role.equals("USER")) {
-            Passenger passenger = (Passenger) session.getAttribute("user");
-            String docPath = passenger.getDocumentPath();
+            PassengerDTO passengerDTO = (PassengerDTO) session.getAttribute("user");
+            String docPath = passengerDTO.getDocumentPath();
             boolean allowed = docPath.endsWith(requestURI.substring(requestURI.lastIndexOf("/") + 1));
             if (allowed) {
                 chain.doFilter(request, response);

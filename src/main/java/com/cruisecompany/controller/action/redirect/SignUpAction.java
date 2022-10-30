@@ -3,6 +3,7 @@ package com.cruisecompany.controller.action.redirect;
 import com.cruisecompany.controller.action.Action;
 import com.cruisecompany.controller.action.ActionMethod;
 import com.cruisecompany.controller.action.Method;
+import com.cruisecompany.dto.mapper.DTOMapper;
 import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.entity.UserAccount;
 import com.cruisecompany.exception.ServiceException;
@@ -36,7 +37,7 @@ public class SignUpAction implements Action {
             userAccountService.signUp(passenger);
             HttpSession session = request.getSession();
             session.setAttribute("role",userAccount.getRole());
-            session.setAttribute("user",passenger);
+            session.setAttribute("user", DTOMapper.toPassengerDTO(passenger));
             return new ActionMethod("/", Method.REDIRECT);
         } catch (ServiceException e) {
             request.getSession().setAttribute("error",500);

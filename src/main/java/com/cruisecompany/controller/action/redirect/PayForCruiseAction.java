@@ -18,15 +18,14 @@ public class PayForCruiseAction implements Action {
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
         ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
                 .getAttribute("ServiceFactory");
+        OrderService orderService = serviceFactory.getOrderService();
         HttpSession session = request.getSession();
-        long orderId = Long.parseLong(request.getParameter("order_id"));
         try {
-            OrderService orderService = serviceFactory.getOrderService();
+            long orderId = Long.parseLong(request.getParameter("order_id"));
             BigDecimal paid = orderService.pay(orderId);
             if (paid.longValue() < 0) {
                 session.setAttribute("lowMoney", true);
                 return new ActionMethod("/cruise/user_orders", Method.REDIRECT);
-
             }
             Passenger passenger = (Passenger) session.getAttribute("user");
             passenger.setMoney(paid);

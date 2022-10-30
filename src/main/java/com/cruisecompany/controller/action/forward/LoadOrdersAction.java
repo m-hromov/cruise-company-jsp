@@ -3,7 +3,7 @@ package com.cruisecompany.controller.action.forward;
 import com.cruisecompany.controller.action.Action;
 import com.cruisecompany.controller.action.ActionMethod;
 import com.cruisecompany.controller.action.Method;
-import com.cruisecompany.db.dto.PassengerOrderDTO;
+import com.cruisecompany.dto.PassengerOrderDTO;
 import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.PassengerService;
 import com.cruisecompany.service.ServiceFactory;

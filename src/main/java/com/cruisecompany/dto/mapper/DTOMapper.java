@@ -1,5 +1,9 @@
-package com.cruisecompany.db.dto;
+package com.cruisecompany.dto.mapper;
 
+import com.cruisecompany.dto.CruiseShowDTO;
+import com.cruisecompany.dto.PassengerDTO;
+import com.cruisecompany.dto.PassengerOrderDTO;
+import com.cruisecompany.dto.UserAccountDTO;
 import com.cruisecompany.entity.Cruise;
 import com.cruisecompany.entity.Order;
 import com.cruisecompany.entity.Passenger;
@@ -21,10 +25,6 @@ public class DTOMapper {
                 .setEnd(cruise.getStationList().get(cruise.getStationList().size()-1));
         return cruiseShowDTO;
     }
-    public static CruiseShowDTO toCruiseShowDTO(Order order) {
-        Cruise cruise = order.getCruise();
-        return toCruiseShowDTO(cruise);
-    }
 
     public static PassengerOrderDTO toPassengerOrderDTO(Order order) {
         Passenger passenger = order.getPassenger();
@@ -43,6 +43,20 @@ public class DTOMapper {
                 .setConfirmed(order.isConfirmed())
                 .setDocumentPath(passenger.getDocumentPath());
         return passengerOrderDTO;
+    }
+
+    public static PassengerDTO toPassengerDTO(Passenger passenger) {
+        PassengerDTO passengerDTO = new PassengerDTO();
+        passengerDTO.setPassengerId(passenger.getId())
+                .setFirstName(passenger.getFirstName())
+                .setLastName(passenger.getLastName())
+                .setPhone(passenger.getPhone())
+                .setEmail(passenger.getEmail())
+                .setUserAccountId(passenger.getUserAccount().getId())
+                .setMoney(passenger.getMoney())
+                .setRole(passenger.getUserAccount().getRole())
+                .setDocumentPath(passenger.getDocumentPath());
+        return passengerDTO;
     }
     public static UserAccountDTO toUserAccountDTO(UserAccount userAccount) {
         UserAccountDTO userAccountDTO = new UserAccountDTO();

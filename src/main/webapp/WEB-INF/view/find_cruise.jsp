@@ -29,7 +29,7 @@
 <body>
 <jsp:include page="${pageContext.request.contextPath}/page_elements/header.jsp"/>
 <div class="container">
-    <jsp:useBean id="listCruise" scope="request" type="java.util.List<com.cruisecompany.db.dto.CruiseShowDTO>"/>
+    <jsp:useBean id="listCruise" scope="request" type="java.util.List<com.cruisecompany.dto.CruiseShowDTO>"/>
     <c:if test="${error eq true}">
         <div class="container alert alert-danger bd-search" role="alert">
             <fmt:message bundle="${loc}" key="lang.error_not_found"/>

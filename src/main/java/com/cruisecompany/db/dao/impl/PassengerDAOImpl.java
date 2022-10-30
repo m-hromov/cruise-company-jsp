@@ -5,6 +5,7 @@ import com.cruisecompany.db.Tables;
 import com.cruisecompany.db.dao.AbstractDAO;
 import com.cruisecompany.db.dao.PassengerDAO;
 import com.cruisecompany.db.dao.mapper.RowMapper;
+import com.cruisecompany.dto.PassengerDTO;
 import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.exception.DAOException;
 
@@ -13,10 +14,10 @@ import java.sql.Connection;
 import java.util.Optional;
 
 public class PassengerDAOImpl extends AbstractDAO<Passenger> implements PassengerDAO {
-    private static final String UPDATE_MONEY = "UPDATE " + Tables.PASSENGER + " SET " + Columns.MONEY + " = ? " +
-            "WHERE " + Columns.PASSENGER_ID + " = ?";
+    private static final String SUBTRACT_MONEY = "UPDATE " + Tables.PASSENGER + " SET " + Columns.MONEY + " = " +
+            Columns.MONEY + " - ? " + "WHERE " + Columns.PASSENGER_ID + " = ? RETURNING " + Columns.MONEY;
     private static final String ADD_MONEY = "UPDATE " + Tables.PASSENGER + " SET " + Columns.MONEY + " = " +
-            Columns.MONEY + " + ? " + "WHERE " + Columns.PASSENGER_ID + " = ?";
+            Columns.MONEY + " + ? " + "WHERE " + Columns.PASSENGER_ID + " = ? RETURNING " + Columns.MONEY;
     private static final String GET_BY_USER_ACCOUNT_ID = "SELECT * FROM " + Tables.PASSENGER + " AS p" +
             " JOIN " + Tables.USER_ACCOUNT + " AS ua ON p." + Columns.USER_ACCOUNT_ID + " = ua." + Columns.USER_ACCOUNT_ID +
             " WHERE ua." + Columns.USER_ACCOUNT_ID + " = ?";
@@ -35,7 +36,7 @@ public class PassengerDAOImpl extends AbstractDAO<Passenger> implements Passenge
 
     @Override
     public long save(Connection connection, Passenger passenger) throws DAOException {
-        return executeInsert(connection,INSERT, passenger.getFirstName(), passenger.getLastName(),
+        return executeInsert(connection, INSERT, passenger.getFirstName(), passenger.getLastName(),
                 passenger.getPhone(), passenger.getEmail(), passenger.getMoney(), passenger.getUserAccount().getId());
     }
 
@@ -46,29 +47,28 @@ public class PassengerDAOImpl extends AbstractDAO<Passenger> implements Passenge
 
     @Override
     public Optional<Passenger> getByUserAccountId(Connection connection, long id) throws DAOException {
-        return executeSingleGetQuery(connection,GET_BY_USER_ACCOUNT_ID, id);
+        return executeSingleGetQuery(connection, GET_BY_USER_ACCOUNT_ID, id);
     }
 
     @Override
-    public void updateMoney(Connection connection, long passengerId, BigDecimal money) throws DAOException {
-        executeUpdate(connection,UPDATE_MONEY, money, passengerId);
+    public BigDecimal subtractMoney(Connection connection, long passengerId, BigDecimal money) throws DAOException {
+        return executeMoneyUpdate(connection, SUBTRACT_MONEY, money, passengerId);
     }
 
     @Override
-    public void updateProfile(Connection connection, Passenger passenger) throws DAOException {
-
-        executeUpdate(connection,UPDATE_PROFILE, passenger.getFirstName(), passenger.getLastName(),
-                passenger.getPhone(), passenger.getEmail(), passenger.getId());
+    public void updateProfile(Connection connection, PassengerDTO passengerDTO) throws DAOException {
+        executeUpdate(connection, UPDATE_PROFILE, passengerDTO.getFirstName(), passengerDTO.getLastName(),
+                passengerDTO.getPhone(), passengerDTO.getEmail(), passengerDTO.getPassengerId());
 
     }
 
     @Override
-    public void updateDocument(Connection connection, Passenger passenger) throws DAOException {
-        executeUpdate(connection,UPDATE_DOCUMENT, passenger.getDocumentPath(), passenger.getId());
+    public void updateDocument(Connection connection, PassengerDTO passengerDTO) throws DAOException {
+        executeUpdate(connection, UPDATE_DOCUMENT, passengerDTO.getDocumentPath(), passengerDTO.getPassengerId());
     }
 
     @Override
-    public void addMoney(Connection connection, long passengerId, BigDecimal money) throws DAOException {
-        executeUpdate(connection,ADD_MONEY, money, passengerId);
+    public BigDecimal addMoney(Connection connection, long passengerId, BigDecimal money) throws DAOException {
+        return executeMoneyUpdate(connection, ADD_MONEY, money, passengerId);
     }
 }
