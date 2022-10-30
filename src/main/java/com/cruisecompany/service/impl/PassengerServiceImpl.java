@@ -4,15 +4,18 @@ import com.cruisecompany.db.DBProvider;
 import com.cruisecompany.db.dao.DAOFactory;
 import com.cruisecompany.db.dao.OrderDAO;
 import com.cruisecompany.db.dao.PassengerDAO;
-import com.cruisecompany.db.dto.DTOMapper;
-import com.cruisecompany.db.dto.PassengerOrderDTO;
+import com.cruisecompany.dto.PassengerDTO;
+import com.cruisecompany.dto.PassengerOrderDTO;
+import com.cruisecompany.dto.mapper.DTOMapper;
 import com.cruisecompany.entity.Order;
 import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.exception.DAOException;
 import com.cruisecompany.exception.ServiceException;
+import com.cruisecompany.exception.ValidationException;
 import com.cruisecompany.service.PassengerService;
 import com.cruisecompany.util.files.FileHelper;
 import com.cruisecompany.util.files.FileType;
+import com.cruisecompany.util.validator.Validators;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -66,10 +69,11 @@ public class PassengerServiceImpl implements PassengerService {
     }
 
     @Override
-    public void addMoney(long passengerId, BigDecimal money) throws ServiceException {
+    public void addMoney(PassengerDTO passengerDTO, BigDecimal money) throws ServiceException {
         Connection connection = dbProvider.getConnection();
         try {
-            passengerDAO.addMoney(connection, passengerId, money);
+            BigDecimal newMoney = passengerDAO.addMoney(connection, passengerDTO.getPassengerId(), money);
+            passengerDTO.setMoney(newMoney);
             dbProvider.commit(connection);
         } catch (DAOException e) {
             logger.error("Unable to add money on account!");
@@ -80,10 +84,16 @@ public class PassengerServiceImpl implements PassengerService {
     }
 
     @Override
-    public void updateProfile(Passenger passenger) throws ServiceException {
+    public void updateProfile(PassengerDTO passengerDTO) throws ServiceException {
+        try {
+            Validators.validatePassengerProfile(passengerDTO);
+        } catch (ValidationException e) {
+            logger.error("Unable to validate profile!");
+            throw new ServiceException(e.getMessage(), e);
+        }
         Connection connection = dbProvider.getConnection();
         try {
-            passengerDAO.updateProfile(connection, passenger);
+            passengerDAO.updateProfile(connection, passengerDTO);
             dbProvider.commit(connection);
         } catch (DAOException e) {
             logger.error("Unable to get all CruiseShowDTO!");
@@ -94,17 +104,22 @@ public class PassengerServiceImpl implements PassengerService {
     }
 
     @Override
-    public void updateDocument(Passenger passenger, Part filePart, String requestRealPath) throws ServiceException {
-        Connection connection = dbProvider.getConnection();
-        String filename;
-        String relativePath;
+    public void updateDocument(PassengerDTO passengerDTO, Part photoPart, String requestRealPath) throws ServiceException {
         try {
-            relativePath = "secured_files" + File.separator + "documents";
+            Validators.validatePhoto(photoPart);
+        } catch (ValidationException e) {
+            logger.error("Unable to validate photo!");
+            throw new ServiceException(e.getMessage(), e);
+        }
+
+        Connection connection = dbProvider.getConnection();
+        try {
+            String relativePath = "secured_files" + File.separator + "documents";
             String uploadPath = requestRealPath + relativePath;
-            filename = FileHelper.writeRecord(filePart, uploadPath,
-                    FileType.PASSENGER_DOCUMENT, passenger.getId());
-            passenger.setDocumentPath(relativePath + File.separator + filename);
-            passengerDAO.updateDocument(connection, passenger);
+            String filename = FileHelper.writeRecord(photoPart, uploadPath,
+                    FileType.PASSENGER_DOCUMENT, passengerDTO.getPassengerId());
+            passengerDTO.setDocumentPath(relativePath + File.separator + filename);
+            passengerDAO.updateDocument(connection, passengerDTO);
             dbProvider.commit(connection);
         } catch (DAOException | IOException e) {
             logger.error("Unable to update document!");

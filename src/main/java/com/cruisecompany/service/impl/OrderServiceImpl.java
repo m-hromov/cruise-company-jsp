@@ -4,6 +4,7 @@ import com.cruisecompany.db.DBProvider;
 import com.cruisecompany.db.dao.DAOFactory;
 import com.cruisecompany.db.dao.OrderDAO;
 import com.cruisecompany.db.dao.PassengerDAO;
+import com.cruisecompany.dto.PassengerDTO;
 import com.cruisecompany.entity.Cruise;
 import com.cruisecompany.entity.Order;
 import com.cruisecompany.entity.Passenger;
@@ -34,13 +35,13 @@ public class OrderServiceImpl implements OrderService {
         Connection connection = dbProvider.getConnection();
         try {
             Order order = orderDAO.get(connection, orderId).get();
-            BigDecimal price = order.getCruise().getPrice();
-            BigDecimal passengerMoney = order.getPassenger().getMoney();
-            if (passengerMoney.compareTo(price) < 0) {
-                return BigDecimal.valueOf(-1);
+            BigDecimal newMoney = passengerDAO.subtractMoney(connection,
+                    order.getPassenger().getId(),
+                    order.getCruise().getPrice());
+            if (newMoney.compareTo(BigDecimal.valueOf(0)) < 0) {
+                dbProvider.rollback(connection);
+                throw new ServiceException("Not enough money!");
             }
-            BigDecimal newMoney = passengerMoney.subtract(price);
-            passengerDAO.updateMoney(connection, order.getPassenger().getId(), newMoney);
             orderDAO.updatePaidStatus(connection, orderId);
             dbProvider.commit(connection);
             return newMoney;
@@ -54,12 +55,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public long buy(long passengerId, long cruiseId) throws ServiceException {
+    public long buy(PassengerDTO passengerDTO, long cruiseId) throws ServiceException {
         Connection connection = dbProvider.getConnection();
         try {
             Order order = new Order();
             order.setCruise(new Cruise().setId(cruiseId))
-                    .setPassenger(new Passenger().setId(passengerId));
+                    .setPassenger(new Passenger().setId(passengerDTO.getPassengerId()));
             long orderId = orderDAO.save(connection, order);
             dbProvider.commit(connection);
             return orderId;

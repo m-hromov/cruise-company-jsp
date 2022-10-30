@@ -4,8 +4,8 @@ import com.cruisecompany.db.DBProvider;
 import com.cruisecompany.db.dao.CruiseDAO;
 import com.cruisecompany.db.dao.DAOFactory;
 import com.cruisecompany.db.dao.RouteDAO;
-import com.cruisecompany.db.dto.CruiseShowDTO;
-import com.cruisecompany.db.dto.DTOMapper;
+import com.cruisecompany.dto.CruiseShowDTO;
+import com.cruisecompany.dto.mapper.DTOMapper;
 import com.cruisecompany.entity.Cruise;
 import com.cruisecompany.entity.Route;
 import com.cruisecompany.entity.Station;
@@ -15,7 +15,6 @@ import com.cruisecompany.service.CruiseService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.List;
