@@ -4,7 +4,9 @@ import com.cruisecompany.dto.PassengerDTO;
 import com.cruisecompany.dto.UserAccountDTO;
 import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.exception.AuthorizationException;
+import com.cruisecompany.exception.EmailAlreadyExistsException;
 import com.cruisecompany.exception.ServiceException;
+import com.cruisecompany.exception.WrongPasswordException;
 
 import java.util.Optional;
 
@@ -23,9 +25,10 @@ public interface UserAccountService {
      * Signs up a passenger.
      *
      * @param passenger new passenger
-     * @throws ServiceException if email has already been registered/something went wrong
+     * @throws ServiceException if something went wrong
+     * @throws EmailAlreadyExistsException if email has been already registered
      */
-    void signUp(Passenger passenger) throws ServiceException;
+    void signUp(Passenger passenger) throws ServiceException, EmailAlreadyExistsException;
 
     /**
      * Updates user's password if the old one is the same
@@ -35,6 +38,6 @@ public interface UserAccountService {
      * @param newPassword a new password
      * @throws ServiceException if the old password is not the same/something went wrong
      */
-    void updatePassword(long userId, String oldPassword, String newPassword) throws ServiceException;
+    void updatePassword(long userId, String oldPassword, String newPassword) throws ServiceException, WrongPasswordException;
 
 }

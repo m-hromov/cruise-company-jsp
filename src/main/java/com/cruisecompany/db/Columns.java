@@ -45,6 +45,7 @@ public class Columns {
     public static final String LOGIN = "login";
     public static final String PASSWORD = "password";
     public static final String ROLE = "role";
+    public static final String PASSWORD_SALT = "password_salt";
 
     //STAFF
     public static final String STAFF_ID = "staff_id";

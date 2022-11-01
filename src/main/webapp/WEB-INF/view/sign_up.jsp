@@ -1,4 +1,3 @@
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: hromov
@@ -6,6 +5,8 @@
   Time: 8:34 PM
   To change this template use File | Settings | File Templates.
 --%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -26,6 +27,15 @@
 </head>
 <body>
 <jsp:include page="${pageContext.request.contextPath}/page_elements/header.jsp"/>
+<c:if test="${sessionScope.emailExists==true}">
+    <div class="container alert alert-danger bd-search" role="alert">
+        <fmt:message bundle="${loc}" key="lang.error_email_exists"/>
+        <a href="${pageContext.request.contextPath}/cruise/sign_in">
+            <fmt:message bundle="${loc}" key="lang.sign_in"/>
+        </a>
+    </div>
+    <c:remove var="emailExists" scope="session"/>
+</c:if>
 <div class="container auth-box">
     <form id="signUpForm" class="col flex-column"
           action="${pageContext.request.contextPath}/cruise/do_sign_up"
@@ -33,7 +43,8 @@
         <div class="row">
             <div class="col px-1 mb-2">
                 <label for="first_name" class="ms-2 position-absolute mtext">
-                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}" key="lang.first_name"/></span>
+                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}"
+                                                                                 key="lang.first_name"/></span>
                 </label>
                 <input type="text" class="form-control mt-2" name="first_name" id="first_name" required>
                 <div class="invalid-feedback">
@@ -42,7 +53,8 @@
             </div>
             <div class="col px-1 mb-2">
                 <label for="last_name" class="ms-2 position-absolute mtext">
-                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}" key="lang.last_name"/></span>
+                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}"
+                                                                                 key="lang.last_name"/></span>
                 </label>
                 <input type="text" class="form-control mt-2" name="last_name" id="last_name">
                 <div class="invalid-feedback">
@@ -53,7 +65,8 @@
         <div class="row">
             <div class="col px-1 mb-2">
                 <label for="phone" class="ms-2 position-absolute mtext">
-                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}" key="lang.phone"/></span>
+                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}"
+                                                                                 key="lang.phone"/></span>
                 </label>
                 <input type="text" class="form-control mt-2" name="phone" id="phone">
                 <div class="invalid-feedback">
@@ -64,7 +77,8 @@
         <div class="row">
             <div class="col px-1 mb-2">
                 <label for="email" class="ms-2 position-absolute mtext">
-                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}" key="lang.email"/></span>
+                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}"
+                                                                                 key="lang.email"/></span>
                 </label>
                 <input type="text" class="form-control mt-2" name="email" id="email">
                 <div class="invalid-feedback">
@@ -75,7 +89,8 @@
         <div class="row">
             <div class="col px-1 mb-2">
                 <label for="password" class="ms-2 position-absolute mtext">
-                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}" key="lang.password"/></span>
+                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}"
+                                                                                 key="lang.password"/></span>
                 </label>
                 <input type="password" class="form-control mt-2" name="password" id="password">
                 <div class="invalid-feedback">
@@ -86,7 +101,8 @@
         <div class="row">
             <div class="col px-1 mb-2">
                 <label for="confirm_password" class="ms-2 position-absolute mtext">
-                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}" key="lang.confirm_password"/></span>
+                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}"
+                                                                                 key="lang.confirm_password"/></span>
                 </label>
                 <input type="password" class="form-control mt-2" name="confirm_password"
                        id="confirm_password">
@@ -103,7 +119,9 @@
     </form>
     <script src="${pageContext.request.contextPath}/resources/js/validator/validator.js"></script>
     <script>
-        window.onload = (function (){validateSignUp()});
+        window.onload = (function () {
+            validateSignUp()
+        });
     </script>
 </div>
 </body>

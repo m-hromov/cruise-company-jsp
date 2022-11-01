@@ -6,6 +6,7 @@ import com.cruisecompany.controller.action.Method;
 import com.cruisecompany.dto.mapper.DTOMapper;
 import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.entity.UserAccount;
+import com.cruisecompany.exception.EmailAlreadyExistsException;
 import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.ServiceFactory;
 import com.cruisecompany.service.UserAccountService;
@@ -20,29 +21,36 @@ public class SignUpAction implements Action {
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
         ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
                 .getAttribute("ServiceFactory");
+        HttpSession session = request.getSession();
+        UserAccountService userAccountService = serviceFactory.getUserAccountService();
+        try {
+            Passenger passenger = mapPassenger(request);
+            userAccountService.signUp(passenger);
+            session.setAttribute("role","USER");
+            session.setAttribute("user", DTOMapper.toPassengerDTO(passenger));
+            return new ActionMethod("/", Method.REDIRECT);
+        } catch (ServiceException e) {
+            session.setAttribute("error",500);
+            session.setAttribute("errorMsg","Unable to sign up");
+            return new ActionMethod("/cruise/error", Method.REDIRECT);
+        } catch (EmailAlreadyExistsException e) {
+            session.setAttribute("emailExists",true);
+            return new ActionMethod("/cruise/sign_up", Method.REDIRECT);
+        }
+    }
+
+    private Passenger mapPassenger(HttpServletRequest request) {
         UserAccount userAccount = new UserAccount();
-        userAccount.setLogin(request.getParameter("email"))
+        String email = request.getParameter("email");
+        userAccount.setLogin(email)
                 .setPassword(request.getParameter("password"))
                 .setRole("USER");
-        Passenger passenger = new Passenger();
-        passenger.setFirstName(request.getParameter("first_name"))
+        return new Passenger()
+                .setFirstName(request.getParameter("first_name"))
                 .setLastName(request.getParameter("last_name"))
                 .setPhone(request.getParameter("phone"))
                 .setEmail(request.getParameter("email"))
                 .setMoney(BigDecimal.ZERO)
                 .setUserAccount(userAccount);
-
-        UserAccountService userAccountService = serviceFactory.getUserAccountService();
-        try {
-            userAccountService.signUp(passenger);
-            HttpSession session = request.getSession();
-            session.setAttribute("role",userAccount.getRole());
-            session.setAttribute("user", DTOMapper.toPassengerDTO(passenger));
-            return new ActionMethod("/", Method.REDIRECT);
-        } catch (ServiceException e) {
-            request.getSession().setAttribute("error",500);
-            request.getSession().setAttribute("errorMsg","Unable to sign up");
-            return new ActionMethod("/cruise/error", Method.REDIRECT);
-        }
     }
 }

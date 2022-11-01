@@ -16,6 +16,7 @@ public class UserAccountRowMapper implements RowMapper<UserAccount> {
         userAccount.setId(rs.getLong(USER_ACCOUNT_ID))
                 .setLogin(rs.getString(LOGIN))
                 .setPassword(rs.getString(PASSWORD))
+                .setPasswordSalt(rs.getString(PASSWORD_SALT))
                 .setRole(rs.getString(ROLE));
         return userAccount;
     }

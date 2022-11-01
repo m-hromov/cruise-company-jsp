@@ -4,6 +4,7 @@ public class UserAccount implements Identifiable{
     private long id;
     private String login;
     private String password;
+    private String passwordSalt;
     private String role;
     @Override
     public long getId() {
@@ -39,6 +40,15 @@ public class UserAccount implements Identifiable{
 
     public UserAccount setRole(String role) {
         this.role = role;
+        return this;
+    }
+
+    public String getPasswordSalt() {
+        return passwordSalt;
+    }
+
+    public UserAccount setPasswordSalt(String passwordSalt) {
+        this.passwordSalt = passwordSalt;
         return this;
     }
 }

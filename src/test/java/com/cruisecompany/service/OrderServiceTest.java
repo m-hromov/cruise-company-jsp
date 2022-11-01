@@ -7,6 +7,7 @@ import com.cruisecompany.entity.Cruise;
 import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.entity.Ship;
 import com.cruisecompany.entity.UserAccount;
+import com.cruisecompany.exception.EmailAlreadyExistsException;
 import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.util.files.FileHelper;
 import com.cruisecompany.util.files.FileType;
@@ -55,7 +56,7 @@ class OrderServiceTest {
         connection.setAutoCommit(false);
     }
 
-    static void setupDatabase() throws ServiceException, IOException {
+    static void setupDatabase() throws ServiceException, IOException, EmailAlreadyExistsException {
         try (MockedStatic<FileHelper> mocked = mockStatic(FileHelper.class);
              MockedStatic<Validators> mocked2 = mockStatic(Validators.class)) {
             Ship ship = new Ship();
@@ -103,7 +104,7 @@ class OrderServiceTest {
     }
 
     @BeforeAll
-    static void setUp() {
+    static void setUp() throws EmailAlreadyExistsException {
         try {
             setupConnection();
             dbProvider = mock(DBProvider.class);
@@ -173,7 +174,7 @@ class OrderServiceTest {
     }
 
     @Test
-    void testNotEnoughMoney() throws SQLException, ServiceException, IOException {
+    void testNotEnoughMoney() throws SQLException, ServiceException, IOException, EmailAlreadyExistsException {
         connection.rollback();
         setupDatabase();
         passenger.setMoney(BigDecimal.valueOf(0));
