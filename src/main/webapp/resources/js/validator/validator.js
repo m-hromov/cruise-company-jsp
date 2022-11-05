@@ -49,6 +49,7 @@ function validateSignUp() {
             isValid = validatePhone() && isValid;
             isValid = validatePassword() && isValid;
             isValid = validatePasswordConfirm() && isValid;
+            isValid = validateRecaptcha() && isValid;
             if (
                 !isValid
             ) {
@@ -138,6 +139,16 @@ function validateBalance() {
 
 }
 
+function validateRecaptcha() {
+    let response = grecaptcha.enterprise.getResponse();
+    if (response) {
+        document.getElementById('recaptcha-alert').setAttribute('hidden', '');
+        return true;
+    } else {
+        document.getElementById('recaptcha-alert').removeAttribute('hidden');
+        return false;
+    }
+}
 
 function validateMoney(e) {
     const money = document.querySelector('#money');

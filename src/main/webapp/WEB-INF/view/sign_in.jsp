@@ -18,6 +18,22 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
             crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+            integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+            crossorigin="anonymous"></script>
+    <script src="https://www.google.com/recaptcha/enterprise.js" async
+            defer></script>
+    <script>
+        grecaptcha.enterprise.getResponse()
+        function onSubmit(token) {
+            $('<input>').attr({
+                type: 'hidden',
+                value: token,
+                name: 'g-recaptcha-response'
+            }).appendTo('signInForm')
+            document.getElementById("signInForm").submit();
+        }
+    </script>
     <fmt:setLocale value="${sessionScope.lang}"/>
     <fmt:setBundle basename="localization.lang" var="loc"/>
     <title><fmt:message bundle="${loc}" key="lang.sign_in"/> | Cruise company</title>
@@ -37,7 +53,8 @@
         <div class="row">
             <div class="col px-1 mb-2">
                 <label for="email" class="ms-2 position-absolute mtext">
-                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}" key="lang.email"/></span>
+                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}"
+                                                                                 key="lang.email"/></span>
                 </label>
                 <input type="text" class="form-control mt-2" name="email" id="email" required>
                 <div class="invalid-feedback">
@@ -48,20 +65,26 @@
         <div class="row">
             <div class="col px-1 mb-2">
                 <label for="password" class="ms-2 position-absolute mtext">
-                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}" key="lang.password"/></span>
+                    <span class="h6 small bg-white text-muted px-1"><fmt:message bundle="${loc}"
+                                                                                 key="lang.password"/></span>
                 </label>
                 <input type="password" class="form-control mt-2" name="password" id="password" required>
             </div>
         </div>
         <div class="row justify-content-end">
             <span class="col-auto px-1 mb-2">
-                <button class="btn btn-jade" type="submit"><fmt:message bundle="${loc}" key="lang.sign_in"/></button>
+                <button class="btn btn-jade g-recaptcha" data-sitekey="6Lex-toiAAAAAB2huVa7HT-YlYeqavRXZ-dkDrk_"
+                        data-callback="onSubmit">
+                    <fmt:message bundle="${loc}" key="lang.sign_in"/>
+                </button>
             </span>
         </div>
     </form>
     <script src="${pageContext.request.contextPath}/resources/js/validator/validator.js"></script>
     <script>
-            window.onload = (function (){validateSignIn()});
+        window.onload = (function () {
+            validateSignIn()
+        });
     </script>
 </div>
 </body>

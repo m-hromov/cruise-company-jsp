@@ -21,6 +21,17 @@
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"
             integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
             crossorigin="anonymous"></script>
+    <script src="https://www.google.com/recaptcha/enterprise.js"></script>
+    <script>
+        function onCheck(token) {
+            $('<input>').attr({
+                type: 'hidden',
+                value: token,
+                name: 'g-recaptcha-response'
+            }).appendTo('signUpForm')
+        }
+    </script>
+
     <fmt:setLocale value="${sessionScope.lang}"/>
     <fmt:setBundle basename="localization.lang" var="loc"/>
     <title><fmt:message bundle="${loc}" key="lang.sign_up"/> | Cruise company</title>
@@ -36,6 +47,9 @@
     </div>
     <c:remove var="emailExists" scope="session"/>
 </c:if>
+<div id="recaptcha-alert" class="container alert alert-danger bd-search" role="alert" hidden>
+    <fmt:message bundle="${loc}" key="lang.recaptcha_failed"/>
+</div>
 <div class="container auth-box">
     <form id="signUpForm" class="col flex-column"
           action="${pageContext.request.contextPath}/cruise/do_sign_up"
@@ -110,6 +124,9 @@
                     <fmt:message bundle="${loc}" key="lang.password_is_not_the_same"/>
                 </div>
             </div>
+        </div>
+        <div class="row">
+            <div class="g-recaptcha" data-sitekey="6LdfJc0iAAAAANPYPinSKq5pGbt9EgLx0SpsUqwQ" data-callback="onCheck"></div>
         </div>
         <div class="row justify-content-end">
             <span class="col-auto px-1 mb-2">
