@@ -41,11 +41,11 @@ public class UserAccountServiceImpl implements UserAccountService {
                 String salt = userAccount.getPasswordSalt();
                 boolean passwordEquals = PasswordEncryption.comparePasswords(oldPassword, password, salt);
 
-                if (!passwordEquals) return Optional.empty();
+                if (!passwordEquals) throw new AuthorizationException("Wrong password or email!");
                 Optional<Passenger> optionalPassenger = passengerDAO.getByUserAccountId(connection, userAccount.getId());
                 return optionalPassenger.map(DTOMapper::toPassengerDTO);
             }
-            throw new AuthorizationException("Wrong password or email!");
+            return Optional.empty();
         } catch (DAOException | EncryptionException e) {
             logger.error("Unable to sign in!");
             throw new ServiceException(e.getMessage(), e);

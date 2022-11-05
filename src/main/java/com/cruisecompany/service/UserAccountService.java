@@ -1,7 +1,6 @@
 package com.cruisecompany.service;
 
 import com.cruisecompany.dto.PassengerDTO;
-import com.cruisecompany.dto.UserAccountDTO;
 import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.exception.AuthorizationException;
 import com.cruisecompany.exception.EmailAlreadyExistsException;

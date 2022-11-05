@@ -1,7 +1,6 @@
 package com.cruisecompany.controller.filter;
 
 import com.cruisecompany.dto.PassengerDTO;
-import com.cruisecompany.entity.Passenger;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;

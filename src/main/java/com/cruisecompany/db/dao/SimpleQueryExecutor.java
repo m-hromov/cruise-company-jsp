@@ -1,6 +1,5 @@
 package com.cruisecompany.db.dao;
 
-import com.cruisecompany.db.DBProvider;
 import com.cruisecompany.db.dao.mapper.RowMapper;
 import com.cruisecompany.exception.DAOException;
 import org.apache.logging.log4j.LogManager;
@@ -9,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 

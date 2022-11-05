@@ -1,8 +1,6 @@
 package com.cruisecompany.tag;
 
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,9 +11,10 @@ import org.mockito.MockitoAnnotations;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-
 import java.io.IOException;
 import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 class CurrencyTagTest {
     @Mock
     JspWriter jspWriter;

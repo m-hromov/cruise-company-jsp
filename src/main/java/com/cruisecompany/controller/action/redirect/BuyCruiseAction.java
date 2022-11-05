@@ -4,7 +4,6 @@ import com.cruisecompany.controller.action.Action;
 import com.cruisecompany.controller.action.ActionMethod;
 import com.cruisecompany.controller.action.Method;
 import com.cruisecompany.dto.PassengerDTO;
-import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.OrderService;
 import com.cruisecompany.service.ServiceFactory;

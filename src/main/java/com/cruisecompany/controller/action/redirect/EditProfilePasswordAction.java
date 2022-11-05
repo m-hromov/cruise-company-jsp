@@ -4,14 +4,10 @@ import com.cruisecompany.controller.action.Action;
 import com.cruisecompany.controller.action.ActionMethod;
 import com.cruisecompany.controller.action.Method;
 import com.cruisecompany.dto.PassengerDTO;
-import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.exception.WrongPasswordException;
-import com.cruisecompany.service.PassengerService;
 import com.cruisecompany.service.ServiceFactory;
 import com.cruisecompany.service.UserAccountService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

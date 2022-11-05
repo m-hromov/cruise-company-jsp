@@ -4,8 +4,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 
-import static org.mockito.Mockito.*;
-
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class FileHelperTest {
     @AfterAll

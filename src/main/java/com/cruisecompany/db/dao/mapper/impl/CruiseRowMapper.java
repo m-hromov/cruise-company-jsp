@@ -1,6 +1,5 @@
 package com.cruisecompany.db.dao.mapper.impl;
 
-import com.cruisecompany.db.DBProvider;
 import com.cruisecompany.db.dao.DAOFactory;
 import com.cruisecompany.db.dao.StationDAO;
 import com.cruisecompany.db.dao.mapper.RowMapper;
@@ -9,7 +8,6 @@ import com.cruisecompany.entity.Cruise;
 import com.cruisecompany.entity.Ship;
 import com.cruisecompany.entity.Station;
 import com.cruisecompany.exception.DAOException;
-import com.cruisecompany.exception.DatabaseException;
 
 import java.math.BigDecimal;
 import java.sql.Connection;

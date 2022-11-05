@@ -1,8 +1,6 @@
 package com.cruisecompany.service;
 
 import com.cruisecompany.db.DBProvider;
-import com.cruisecompany.db.dao.mapper.RowMapperFactory;
-import com.cruisecompany.db.dao.mapper.impl.*;
 import com.cruisecompany.service.impl.*;
 
 public class ServiceFactory {

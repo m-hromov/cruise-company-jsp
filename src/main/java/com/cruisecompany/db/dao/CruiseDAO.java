@@ -6,7 +6,6 @@ import com.cruisecompany.exception.DAOException;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public interface CruiseDAO extends DAO<Cruise> {
     /**

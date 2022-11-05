@@ -1,8 +1,7 @@
 package com.cruisecompany.controller.action;
 
-import com.cruisecompany.controller.action.redirect.SignOutAction;
-import com.cruisecompany.controller.action.redirect.*;
 import com.cruisecompany.controller.action.forward.*;
+import com.cruisecompany.controller.action.redirect.*;
 
 import java.util.HashMap;
 import java.util.Optional;

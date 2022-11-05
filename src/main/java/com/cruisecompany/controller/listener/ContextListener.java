@@ -2,9 +2,9 @@ package com.cruisecompany.controller.listener;
 
 import com.cruisecompany.service.ServiceFactory;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
 @WebListener
 public class ContextListener implements ServletContextListener {
