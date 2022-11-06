@@ -20,7 +20,7 @@ public class LoadOrdersAction implements Action {
                     .getAttribute("ServiceFactory");
             PassengerService passengerService = serviceFactory.getPassengerService();
             List<PassengerOrderDTO> passengerOrderDTOList = passengerService.getAllPassengerOrderDTOList();
-            request.setAttribute("orderList", passengerOrderDTOList);
+            request.setAttribute("ticketList", passengerOrderDTOList);
             return new ActionMethod("/WEB-INF/view/orders.jsp", Method.FORWARD);
         } catch (ServiceException e) {
             request.getSession().setAttribute("error", 500);

@@ -4,7 +4,7 @@ import com.cruisecompany.controller.action.Action;
 import com.cruisecompany.controller.action.ActionMethod;
 import com.cruisecompany.controller.action.Method;
 import com.cruisecompany.dto.PassengerDTO;
-import com.cruisecompany.entity.Order;
+import com.cruisecompany.entity.Ticket;
 import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.OrderService;
 import com.cruisecompany.service.ServiceFactory;
@@ -22,10 +22,10 @@ public class LoadUserOrdersAction implements Action {
                     .getAttribute("ServiceFactory");
             PassengerDTO passengerDTO = (PassengerDTO) request.getSession().getAttribute("user");
             OrderService orderService = serviceFactory.getOrderService();
-            List<Order> orderList = orderService.getAllPassengerOrders(passengerDTO.getPassengerId());
+            List<Ticket> ticketList = orderService.getAllPassengerOrders(passengerDTO.getPassengerId());
             LocalDate currentDate = LocalDate.now();
             request.setAttribute("currentDate",currentDate);
-            request.setAttribute("orderList",orderList);
+            request.setAttribute("ticketList", ticketList);
             return new ActionMethod("/WEB-INF/view/user_orders.jsp", Method.FORWARD);
         } catch (ServiceException e) {
             request.getSession().setAttribute("error", 500);

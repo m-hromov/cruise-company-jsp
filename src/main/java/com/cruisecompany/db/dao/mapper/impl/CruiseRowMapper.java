@@ -36,6 +36,7 @@ public class CruiseRowMapper implements RowMapper<Cruise> {
                 .setDaysTotal(rs.getInt(DAYS_TOTAL))
                 .setDescription(rs.getString(CRUISE_DESCRIPTION))
                 .setPrice(BigDecimal.valueOf(rs.getDouble(PRICE)))
+                .setTicketsPurchased(rs.getInt(TICKETS_PURCHASED))
                 .setShip(ship)
                 .setStationList(stationList);
         return cruise;

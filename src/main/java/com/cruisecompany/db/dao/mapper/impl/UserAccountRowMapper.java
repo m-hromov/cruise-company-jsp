@@ -14,7 +14,7 @@ public class UserAccountRowMapper implements RowMapper<UserAccount> {
     public UserAccount map(Connection connection, ResultSet rs) throws SQLException {
         UserAccount userAccount = new UserAccount();
         userAccount.setId(rs.getLong(USER_ACCOUNT_ID))
-                .setLogin(rs.getString(LOGIN))
+                .setEmail(rs.getString(EMAIL))
                 .setPassword(rs.getString(PASSWORD))
                 .setPasswordSalt(rs.getString(PASSWORD_SALT))
                 .setRole(rs.getString(ROLE));

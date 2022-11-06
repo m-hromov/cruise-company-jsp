@@ -18,7 +18,7 @@
     <div id="headerDiv" class="collapse navbar-collapse">
         <ul class="navbar-nav flex-row me-auto">
             <li class="nav-item my-auto">
-                <a class="navbar-brand ms-3" href="../">
+                <a class="navbar-brand ms-3" href="..">
                     <img src="${pageContext.request.contextPath}/resources/images/logo.png" alt="home" height="35px"
                          width="35px"/>
                 </a>

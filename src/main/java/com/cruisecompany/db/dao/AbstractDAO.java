@@ -21,7 +21,7 @@ public abstract class AbstractDAO<T extends Identifiable> extends SimpleQueryExe
 
     @Override
     public Optional<T> get(Connection connection, long id) throws DAOException {
-        return executeSingleGetQuery(connection, String.format(GET, table, table.replace("\"", "")),
+        return executeSingleGetQuery(connection, String.format(GET, table, table),
                 id);
     }
 
@@ -32,6 +32,6 @@ public abstract class AbstractDAO<T extends Identifiable> extends SimpleQueryExe
 
     @Override
     public void delete(Connection connection, long id) throws DAOException {
-        executeUpdate(connection, String.format(DELETE, table, table.replace("\"", "")), id);
+        executeUpdate(connection, String.format(DELETE, table, table), id);
     }
 }

@@ -1,6 +1,6 @@
 package com.cruisecompany.entity;
 
-public class Order implements Identifiable{
+public class Ticket implements Identifiable{
 
     private long id;
     private Passenger passenger;
@@ -13,7 +13,7 @@ public class Order implements Identifiable{
         return id;
     }
 
-    public Order setId(long id) {
+    public Ticket setId(long id) {
         this.id = id;
         return this;
     }
@@ -22,7 +22,7 @@ public class Order implements Identifiable{
         return passenger;
     }
 
-    public Order setPassenger(Passenger passenger) {
+    public Ticket setPassenger(Passenger passenger) {
         this.passenger = passenger;
         return this;
     }
@@ -31,7 +31,7 @@ public class Order implements Identifiable{
         return cruise;
     }
 
-    public Order setCruise(Cruise cruise) {
+    public Ticket setCruise(Cruise cruise) {
         this.cruise = cruise;
         return this;
     }
@@ -40,7 +40,7 @@ public class Order implements Identifiable{
         return paid;
     }
 
-    public Order setPaid(boolean paid) {
+    public Ticket setPaid(boolean paid) {
         this.paid = paid;
         return this;
     }
@@ -49,7 +49,7 @@ public class Order implements Identifiable{
         return banned;
     }
 
-    public Order setBanned(boolean banned) {
+    public Ticket setBanned(boolean banned) {
         this.banned = banned;
         return this;
     }
@@ -58,7 +58,7 @@ public class Order implements Identifiable{
         return confirmed;
     }
 
-    public Order setConfirmed(boolean confirmed) {
+    public Ticket setConfirmed(boolean confirmed) {
         this.confirmed = confirmed;
         return this;
     }

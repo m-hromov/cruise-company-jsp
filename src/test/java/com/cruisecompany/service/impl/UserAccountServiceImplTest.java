@@ -46,14 +46,13 @@ class UserAccountServiceImplTest {
             fail(ex);
         }
         userAccount = new UserAccount();
-        userAccount.setLogin("test@gmail.com")
+        userAccount.setEmail("test@gmail.com")
                 .setPassword("testpassword")
                 .setRole("USER");
         passenger = new Passenger();
         passenger.setFirstName("Test1")
                 .setLastName("Test2")
                 .setPhone("Test3")
-                .setEmail("test@gmail.com")
                 .setMoney(BigDecimal.valueOf(100))
                 .setDocumentPath("Test4")
                 .setUserAccount(userAccount);
@@ -90,7 +89,7 @@ class UserAccountServiceImplTest {
     void testSignIn() throws ServiceException, AuthorizationException, SQLException {
         try (MockedStatic<Validators> mocked = mockStatic(Validators.class)){
             PassengerDTO pdto = userAccountService.signIn("test@gmail.com", "testpassword").get();
-            assertEquals(userAccount.getLogin(), pdto.getEmail());
+            assertEquals(userAccount.getEmail(), pdto.getEmail());
             assertEquals(userAccount.getRole(), pdto.getRole());
         }
     }

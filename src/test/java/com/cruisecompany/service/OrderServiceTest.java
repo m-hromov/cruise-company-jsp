@@ -3,10 +3,7 @@ package com.cruisecompany.service;
 import com.cruisecompany.db.DBProvider;
 import com.cruisecompany.dto.PassengerDTO;
 import com.cruisecompany.dto.mapper.DTOMapper;
-import com.cruisecompany.entity.Cruise;
-import com.cruisecompany.entity.Passenger;
-import com.cruisecompany.entity.Ship;
-import com.cruisecompany.entity.UserAccount;
+import com.cruisecompany.entity.*;
 import com.cruisecompany.exception.EmailAlreadyExistsException;
 import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.util.files.FileHelper;
@@ -88,13 +85,12 @@ class OrderServiceTest {
             cruiseService.addCruise(cruiseExpensive);
 
             UserAccount userAccount = new UserAccount();
-            userAccount.setLogin("test")
+            userAccount.setEmail("test")
                     .setPassword("test")
                     .setRole("USER");
 
             passenger = new Passenger();
-            passenger.setEmail("test")
-                    .setUserAccount(userAccount)
+            passenger.setUserAccount(userAccount)
                     .setFirstName("test")
                     .setLastName("test")
                     .setMoney(BigDecimal.valueOf(10));
@@ -132,7 +128,7 @@ class OrderServiceTest {
     @Test
     @Order(5)
     void testGetAllPassengerOrders() throws ServiceException {
-        List<com.cruisecompany.entity.Order> list = orderService.getAllPassengerOrders(passenger.getId());
+        List<Ticket> list = orderService.getAllPassengerOrders(passenger.getId());
         verify(dbProvider,times(4)).commit(connection);
         assertNotNull(list);
     }

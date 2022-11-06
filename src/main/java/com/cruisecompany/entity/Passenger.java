@@ -8,7 +8,6 @@ public class Passenger implements Identifiable{
     private String firstName;
     private String lastName;
     private String phone;
-    private String email;
     private BigDecimal money;
     private String documentPath;
     private UserAccount userAccount;
@@ -65,15 +64,6 @@ public class Passenger implements Identifiable{
 
     public Passenger setDocumentPath(String documentPath) {
         this.documentPath = documentPath;
-        return this;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public Passenger setEmail(String email) {
-        this.email = email;
         return this;
     }
 

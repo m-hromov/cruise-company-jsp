@@ -10,6 +10,7 @@ public class Columns {
     public static final String DAYS_TOTAL = "days_total";
     public static final String DATE_ARRIVAL = "date_arrival";
     public static final String PRICE = "price";
+    public static final String TICKETS_PURCHASED = "tickets_purchased";
 
     //SHIP
     public static final String SHIP_ID = "ship_id";
@@ -25,8 +26,8 @@ public class Columns {
     public static final String STATION_CITY = "city";
     public static final String STATION_COUNTRY = "country";
 
-    //ORDER
-    public static final String ORDER_ID = "order_id";
+    //TICKET
+    public static final String TICKET_ID = "ticket_id";
     public static final String PAID = "paid";
     public static final String BANNED = "banned";
     public static final String CONFIRMED = "confirmed";
@@ -35,14 +36,13 @@ public class Columns {
     public static final String PASSENGER_ID = "passenger_id";
     public static final String FIRST_NAME = "first_name";
     public static final String LAST_NAME = "last_name";
-    public static final String EMAIL = "email";
     public static final String PHONE = "phone";
     public static final String MONEY = "money";
     public static final String DOCUMENT_PATH = "document_path";
 
     //USER_ACCOUNT
     public static final String USER_ACCOUNT_ID = "user_account_id";
-    public static final String LOGIN = "login";
+    public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
     public static final String ROLE = "role";
     public static final String PASSWORD_SALT = "password_salt";

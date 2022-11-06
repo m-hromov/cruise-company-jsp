@@ -4,11 +4,13 @@ import com.cruisecompany.db.DBProvider;
 import com.cruisecompany.db.dao.DAOFactory;
 import com.cruisecompany.db.dao.OrderDAO;
 import com.cruisecompany.db.dao.PassengerDAO;
+import com.cruisecompany.db.dao.UserAccountDAO;
 import com.cruisecompany.dto.PassengerDTO;
 import com.cruisecompany.dto.PassengerOrderDTO;
 import com.cruisecompany.dto.mapper.DTOMapper;
-import com.cruisecompany.entity.Order;
+import com.cruisecompany.entity.Ticket;
 import com.cruisecompany.entity.Passenger;
+import com.cruisecompany.entity.UserAccount;
 import com.cruisecompany.exception.DAOException;
 import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.exception.ValidationException;
@@ -32,11 +34,13 @@ public class PassengerServiceImpl implements PassengerService {
     final static Logger logger = LogManager.getLogger(PassengerServiceImpl.class);
     private final DBProvider dbProvider;
     private final PassengerDAO passengerDAO;
+    private final UserAccountDAO userAccountDAO;
     private final OrderDAO orderDAO;
 
     public PassengerServiceImpl(DBProvider dbProvider) {
         this.dbProvider = dbProvider;
         passengerDAO = DAOFactory.getInstance().getPassengerDAO();
+        userAccountDAO = DAOFactory.getInstance().getUserAccountDAO();
         orderDAO = DAOFactory.getInstance().getOrderDAO();
     }
 
@@ -44,8 +48,8 @@ public class PassengerServiceImpl implements PassengerService {
     public List<PassengerOrderDTO> getAllPassengerOrderDTOList() throws ServiceException {
         Connection connection = dbProvider.getConnection();
         try {
-            List<Order> orderList = orderDAO.getAll(connection);
-            return orderList.stream().map(DTOMapper::toPassengerOrderDTO).collect(Collectors.toList());
+            List<Ticket> ticketList = orderDAO.getAll(connection);
+            return ticketList.stream().map(DTOMapper::toPassengerOrderDTO).collect(Collectors.toList());
         } catch (DAOException e) {
             logger.error("Unable to get all PassengerOrderDTOList!");
             throw new ServiceException(e.getMessage(), e);
@@ -94,6 +98,11 @@ public class PassengerServiceImpl implements PassengerService {
         Connection connection = dbProvider.getConnection();
         try {
             passengerDAO.updateProfile(connection, passengerDTO);
+
+            UserAccount userAccount = new UserAccount()
+                    .setId(passengerDTO.getUserAccountId())
+                    .setEmail(passengerDTO.getEmail());
+            userAccountDAO.updateEmail(connection, userAccount);
             dbProvider.commit(connection);
         } catch (DAOException e) {
             logger.error("Unable to get all CruiseShowDTO!");

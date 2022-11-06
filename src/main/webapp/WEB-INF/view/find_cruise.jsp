@@ -6,22 +6,12 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="utils" uri="WEB-INF/tld/utils.tld" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="utils" uri="WEB-INF/tld/utils.tld" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/style.css"/>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
-            crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
-            integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
-            crossorigin="anonymous"></script>
+    <jsp:include page="${pageContext.request.contextPath}/page_elements/common_scripts_and_css.jsp"/>
     <fmt:setLocale value="${sessionScope.lang}"/>
     <fmt:setBundle basename="localization.lang" var="loc"/>
     <title><fmt:message bundle="${loc}" key="lang.find_cruise"/> | Cruise company</title>
@@ -42,8 +32,6 @@
                     <ul class="pagination ">
                         <c:forEach begin="1" end="${pageAmount}" var="p">
                             <li class="page-item">
-                                    <%--<a class="page-link ${(p eq param.page || p eq page) ? 'active':''}"
-                                       href="${pageContext.request.contextPath}?page=${p}&dateFrom=${dateFrom}&dateTo=${dateTo}&durationFrom=${durationFrom}&durationTo=${durationTo}">${p}</a>--%>
                                 <button class="page-link ${(p eq page || (p eq 1 && empty page)) ? 'active':''}"
                                         value="${p}">${p}</button>
                             </li>
@@ -96,11 +84,16 @@
                         <fmt:message bundle="${loc}" key="lang.arrival"/>: ${cruise.dateArrival}</p>
                     <p class="text-start text-wrap">${cruise.description}</p>
                     <div class="row align-self-end mt-auto">
+                        <c:set var="ticketsLeft" value="${cruise.shipCapacity - cruise.ticketsPurchased}" scope="page"/>
+                        ${ticketsLeft > 0 ? ticketsLeft : ''}
+                        <fmt:message bundle="${loc}" key="lang.${ticketsLeft > 0 ? 'tickets_left' : 'sold'}"/>
+                    </div>
+                    <div class="row align-self-end">
                         <div class="col fs-4 fw-bold me-2">
                             <utils:currency value="${cruise.price}" convertedcurr="${lang eq 'en' ? 'USD' : 'UAH'}"/>
                         </div>
                         <c:if test="${sessionScope.role.equals('USER')}">
-                            <form class="col" action="${pageContext.request.contextPath}/cruise/buy_cruise"
+                            <form class="col" action="${pageContext.request.contextPath}/cruise/do_buy_cruise"
                                   method="post">
                                 <input type="hidden" name="cruise_id" value="${cruise.id}">
                                 <button type="submit"
@@ -151,14 +144,19 @@
             <div class="col flex-column mb-2">
                 <label for="duration"><fmt:message bundle="${loc}" key="lang.duration"/>:</label>
                 <select class="form-select" aria-label="Select duration" name="duration" id="duration">
-                    <option ${empty param.duration ? 'selected':''}><fmt:message bundle="${loc}" key="lang.all"/></option>
-                    <option value="1" ${param.duration eq '1' ? 'selected':''}>2 - 5 <fmt:message bundle="${loc}" key="lang.days"/></option>
-                    <option value="2" ${param.duration eq '2' ? 'selected':''}>6 - 9 <fmt:message bundle="${loc}" key="lang.days"/></option>
-                    <option value="3" ${param.duration eq '3' ? 'selected':''}>10+ <fmt:message bundle="${loc}" key="lang.days"/></option>
+                    <option ${empty param.duration ? 'selected':''}><fmt:message bundle="${loc}"
+                                                                                 key="lang.all"/></option>
+                    <option value="1" ${param.duration eq '1' ? 'selected':''}>2 - 5 <fmt:message bundle="${loc}"
+                                                                                                  key="lang.days"/></option>
+                    <option value="2" ${param.duration eq '2' ? 'selected':''}>6 - 9 <fmt:message bundle="${loc}"
+                                                                                                  key="lang.days"/></option>
+                    <option value="3" ${param.duration eq '3' ? 'selected':''}>10+ <fmt:message bundle="${loc}"
+                                                                                                key="lang.days"/></option>
                 </select>
             </div>
             <div class="d-flex flex-row justify-content-end">
-                <button class="btn btn-jade-reversed text-wrap" type="submit"><fmt:message bundle="${loc}" key="lang.apply"/></button>
+                <button class="btn btn-jade-reversed text-wrap" type="submit"><fmt:message bundle="${loc}"
+                                                                                           key="lang.apply"/></button>
             </div>
         </form>
     </div>

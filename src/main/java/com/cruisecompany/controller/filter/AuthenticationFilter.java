@@ -43,7 +43,7 @@ public class AuthenticationFilter implements Filter {
         urisRestricted.put("/cruise/do_edit_profile_info", "USER");
         urisRestricted.put("/cruise/do_edit_profile_document", "USER");
         urisRestricted.put("/cruise/do_edit_profile_password", "USER");
-        urisRestricted.put("/cruise/do_do_buy_cruise", "USER");
+        urisRestricted.put("/cruise/do_buy_cruise", "USER");
         urisRestricted.put("/cruise/do_edit_money", "USER");
         urisRestricted.put("/cruise/do_pay", "USER");
         urisRestricted.put("/cruise/do_sign_in", "VISITOR");

@@ -2,7 +2,7 @@ package com.cruisecompany.entity;
 
 public class UserAccount implements Identifiable{
     private long id;
-    private String login;
+    private String email;
     private String password;
     private String passwordSalt;
     private String role;
@@ -16,12 +16,12 @@ public class UserAccount implements Identifiable{
         return this;
     }
 
-    public String getLogin() {
-        return login;
+    public String getEmail() {
+        return email;
     }
 
-    public UserAccount setLogin(String login) {
-        this.login = login;
+    public UserAccount setEmail(String email) {
+        this.email = email;
         return this;
     }
 

@@ -32,7 +32,7 @@ public class Validators {
     public static void validatePassenger(Passenger passenger) throws ValidationException {
         validateName(passenger.getFirstName());
         validateName(passenger.getLastName());
-        validateEmail(passenger.getEmail());
+        validateEmail(passenger.getUserAccount().getEmail());
         validatePhone(passenger.getPhone());
         validatePassword(passenger.getUserAccount().getPassword());
     }

@@ -25,7 +25,7 @@ public class DAOFactory {
         staffDAO = new StaffDAOImpl(rowMapperFactory.getStaffRowMapper(),STAFF );
         stationDAO = new StationDAOImpl(rowMapperFactory.getStationRowMapper(),STATION );
         userAccountDAO = new UserAccountDAOImpl(rowMapperFactory.getUserAccountRowMapper(),USER_ACCOUNT );
-        orderDAO = new OrderDAOImpl(rowMapperFactory.getPassengerCruiseRowMapper(), ORDER);
+        orderDAO = new OrderDAOImpl(rowMapperFactory.getPassengerCruiseRowMapper(), TICKET);
     }
 
     public static DAOFactory getInstance() {

@@ -6,7 +6,7 @@ import com.cruisecompany.db.dao.OrderDAO;
 import com.cruisecompany.db.dao.PassengerDAO;
 import com.cruisecompany.dto.PassengerDTO;
 import com.cruisecompany.entity.Cruise;
-import com.cruisecompany.entity.Order;
+import com.cruisecompany.entity.Ticket;
 import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.exception.DAOException;
 import com.cruisecompany.exception.ServiceException;
@@ -34,10 +34,10 @@ public class OrderServiceImpl implements OrderService {
     public BigDecimal pay(long orderId) throws ServiceException {
         Connection connection = dbProvider.getConnection();
         try {
-            Order order = orderDAO.get(connection, orderId).get();
+            Ticket ticket = orderDAO.get(connection, orderId).get();
             BigDecimal newMoney = passengerDAO.subtractMoney(connection,
-                    order.getPassenger().getId(),
-                    order.getCruise().getPrice());
+                    ticket.getPassenger().getId(),
+                    ticket.getCruise().getPrice());
             if (newMoney.compareTo(BigDecimal.valueOf(0)) < 0) {
                 dbProvider.rollback(connection);
                 throw new ServiceException("Not enough money!");
@@ -58,10 +58,10 @@ public class OrderServiceImpl implements OrderService {
     public long buy(PassengerDTO passengerDTO, long cruiseId) throws ServiceException {
         Connection connection = dbProvider.getConnection();
         try {
-            Order order = new Order();
-            order.setCruise(new Cruise().setId(cruiseId))
+            Ticket ticket = new Ticket();
+            ticket.setCruise(new Cruise().setId(cruiseId))
                     .setPassenger(new Passenger().setId(passengerDTO.getPassengerId()));
-            long orderId = orderDAO.save(connection, order);
+            long orderId = orderDAO.save(connection, ticket);
             dbProvider.commit(connection);
             return orderId;
         } catch (DAOException e) {
@@ -73,7 +73,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getAllPassengerOrders(long id) throws ServiceException {
+    public List<Ticket> getAllPassengerOrders(long id) throws ServiceException {
         Connection connection = dbProvider.getConnection();
         try {
             return orderDAO.getAllPassengerOrders(connection, id);

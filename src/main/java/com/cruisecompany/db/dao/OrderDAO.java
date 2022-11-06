@@ -1,12 +1,12 @@
 package com.cruisecompany.db.dao;
 
-import com.cruisecompany.entity.Order;
+import com.cruisecompany.entity.Ticket;
 import com.cruisecompany.exception.DAOException;
 
 import java.sql.Connection;
 import java.util.List;
 
-public interface OrderDAO extends DAO<Order> {
+public interface OrderDAO extends DAO<Ticket> {
     /**
      * Gets a list of passenger's orders
      *
@@ -15,7 +15,7 @@ public interface OrderDAO extends DAO<Order> {
      * @return List of Orders of a certain passenger
      * @throws DAOException if something went wrong
      */
-    List<Order> getAllPassengerOrders(Connection connection, long id) throws DAOException;
+    List<Ticket> getAllPassengerOrders(Connection connection, long id) throws DAOException;
 
     /**
      * Sets a paid status as true on a certain order.

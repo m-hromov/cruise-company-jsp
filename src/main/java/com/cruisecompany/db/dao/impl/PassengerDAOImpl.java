@@ -22,10 +22,10 @@ public class PassengerDAOImpl extends AbstractDAO<Passenger> implements Passenge
             " JOIN " + Tables.USER_ACCOUNT + " AS ua ON p." + Columns.USER_ACCOUNT_ID + " = ua." + Columns.USER_ACCOUNT_ID +
             " WHERE ua." + Columns.USER_ACCOUNT_ID + " = ?";
     private final static String INSERT = "INSERT INTO " + Tables.PASSENGER + " (" + Columns.FIRST_NAME + "," +
-            Columns.LAST_NAME + "," + Columns.PHONE + "," + Columns.EMAIL + "," + Columns.MONEY + "," +
+            Columns.LAST_NAME + "," + Columns.PHONE + "," + Columns.MONEY + "," +
             Columns.USER_ACCOUNT_ID + ") VALUES (?,?,?,?,?,?)";
     private static final String UPDATE_PROFILE = "UPDATE " + Tables.PASSENGER + " SET " + Columns.FIRST_NAME + " = ? ," +
-            Columns.LAST_NAME + " = ? ," + Columns.PHONE + " = ? ," + Columns.EMAIL + " = ? " +
+            Columns.LAST_NAME + " = ? ," + Columns.PHONE + " = ? " +
             "WHERE " + Columns.PASSENGER_ID + " = ?";
     private static final String UPDATE_DOCUMENT = "UPDATE " + Tables.PASSENGER + " SET " + Columns.DOCUMENT_PATH + " = ? " +
             "WHERE " + Columns.PASSENGER_ID + " = ?";
@@ -37,7 +37,7 @@ public class PassengerDAOImpl extends AbstractDAO<Passenger> implements Passenge
     @Override
     public long save(Connection connection, Passenger passenger) throws DAOException {
         return executeInsert(connection, INSERT, passenger.getFirstName(), passenger.getLastName(),
-                passenger.getPhone(), passenger.getEmail(), passenger.getMoney(), passenger.getUserAccount().getId());
+                passenger.getPhone(), passenger.getMoney(), passenger.getUserAccount().getId());
     }
 
     @Override

@@ -27,11 +27,11 @@ public interface UserAccountDAO extends DAO<UserAccount> {
     boolean checkIfEmailAlreadyExists(Connection connection, String email) throws DAOException;
 
     /**
-     * Updates user's password.
+     * Updates user's email.
      *
      * @param connection  Connection, on which a query will be executed
-     * @param userAccount UserAccount with an ID and a new password.
+     * @param userAccount UserAccount with an ID and a new email.
      * @throws DAOException if something went wrong
      */
-    void updatePassword(Connection connection, UserAccount userAccount) throws DAOException;
+    void updateEmail(Connection connection, UserAccount userAccount) throws DAOException;
 }

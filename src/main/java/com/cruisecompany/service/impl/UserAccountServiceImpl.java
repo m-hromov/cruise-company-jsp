@@ -66,7 +66,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         try {
             UserAccount userAccount = passenger.getUserAccount();
 
-            boolean emailExists = userAccountDAO.checkIfEmailAlreadyExists(connection, userAccount.getLogin());
+            boolean emailExists = userAccountDAO.checkIfEmailAlreadyExists(connection, userAccount.getEmail());
             if (emailExists) throw new EmailAlreadyExistsException("Email already exists!");
 
             String unencryptedPassword = userAccount.getPassword();
@@ -111,7 +111,7 @@ public class UserAccountServiceImpl implements UserAccountService {
             String newEncryptedPassword = PasswordEncryption.hashPassword(newPassword,newSalt);
             userAccount.setPassword(newEncryptedPassword)
                     .setPasswordSalt(newSalt);
-            userAccountDAO.updatePassword(connection, userAccount);
+            userAccountDAO.update(connection, userAccount);
             dbProvider.commit(connection);
         } catch (DAOException | EncryptionException e) {
             logger.error("Unable to update password!");

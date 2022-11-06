@@ -12,6 +12,8 @@ public class CruiseShowDTO {
     private LocalDate dateDeparture;
     private LocalDate dateArrival;
     private int daysTotal;
+    private int ticketsPurchased;
+    private int shipCapacity;
     private BigDecimal price;
     private String description;
     private String shipName;
@@ -61,6 +63,24 @@ public class CruiseShowDTO {
 
     public CruiseShowDTO setDaysTotal(int daysTotal) {
         this.daysTotal = daysTotal;
+        return this;
+    }
+
+    public int getTicketsPurchased() {
+        return ticketsPurchased;
+    }
+
+    public CruiseShowDTO setTicketsPurchased(int ticketsPurchased) {
+        this.ticketsPurchased = ticketsPurchased;
+        return this;
+    }
+
+    public int getShipCapacity() {
+        return shipCapacity;
+    }
+
+    public CruiseShowDTO setShipCapacity(int shipCapacity) {
+        this.shipCapacity = shipCapacity;
         return this;
     }
 

@@ -1,7 +1,7 @@
 package com.cruisecompany.service;
 
 import com.cruisecompany.dto.PassengerDTO;
-import com.cruisecompany.entity.Order;
+import com.cruisecompany.entity.Ticket;
 import com.cruisecompany.exception.ServiceException;
 
 import java.math.BigDecimal;
@@ -14,7 +14,7 @@ public interface OrderService {
      * @return List of Orders of a certain passenger
      * @throws ServiceException if something went wrong
      */
-    List<Order> getAllPassengerOrders(long id) throws ServiceException;
+    List<Ticket> getAllPassengerOrders(long id) throws ServiceException;
     /**
      * Sets a paid status as true on a certain order and subtracts passenger's money.
      * @param orderId ID of the order

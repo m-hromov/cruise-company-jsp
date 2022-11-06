@@ -62,14 +62,13 @@ public class SignUpAction implements Action {
     private Passenger mapPassenger(HttpServletRequest request) {
         UserAccount userAccount = new UserAccount();
         String email = request.getParameter("email");
-        userAccount.setLogin(email)
+        userAccount.setEmail(email)
                 .setPassword(request.getParameter("password"))
                 .setRole("USER");
         return new Passenger()
                 .setFirstName(request.getParameter("first_name"))
                 .setLastName(request.getParameter("last_name"))
                 .setPhone(request.getParameter("phone"))
-                .setEmail(request.getParameter("email"))
                 .setMoney(BigDecimal.ZERO)
                 .setUserAccount(userAccount);
     }

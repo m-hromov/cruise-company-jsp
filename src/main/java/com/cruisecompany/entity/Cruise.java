@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-public class Cruise implements Identifiable{
+public class Cruise implements Identifiable {
 
     private long id;
     private LocalTime timeDeparture;
@@ -14,8 +14,8 @@ public class Cruise implements Identifiable{
     private int daysTotal;
     private BigDecimal price;
     private String description;
+    private int ticketsPurchased;
     private Ship ship;
-
     private List<Station> stationList;
 
     @Override
@@ -91,6 +91,15 @@ public class Cruise implements Identifiable{
         return this;
     }
 
+    public int getTicketsPurchased() {
+        return ticketsPurchased;
+    }
+
+    public Cruise setTicketsPurchased(int ticketsPurchased) {
+        this.ticketsPurchased = ticketsPurchased;
+        return this;
+    }
+
     public List<Station> getStationList() {
         return stationList;
     }
@@ -106,7 +115,7 @@ public class Cruise implements Identifiable{
             return true;
         if (!(obj instanceof Cruise))
             return false;
-        Cruise cruise = (Cruise)obj;
+        Cruise cruise = (Cruise) obj;
         return cruise.getId() == id;
     }
 }
