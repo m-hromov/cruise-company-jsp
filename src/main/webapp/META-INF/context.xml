@@ -7,6 +7,6 @@
               defaultTransactionIsolation="READ_COMMITTED"
               global="jdbc/cruise_company"
               name="jdbc/cruise_company" type="javax.sql.DataSource"
-              url="jdbc:postgresql://ec2-3-248-121-12.eu-west-1.compute.amazonaws.com:5432/d2jkdc00rotv3f"
-              username="jqtjouodyftuzj" password="12530849a25dc0c16a6671c8c8fe75f343d700ec9e59a21cc52f0114e1544864"/>
+              url="jdbc:postgresql://localhost:5432/cruise_company"
+              username="MarkedOne" password="GuysIcaughtAnOlive"/>
 </Context>
