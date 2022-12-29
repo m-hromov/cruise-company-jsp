@@ -46,15 +46,20 @@ public class AddCruiseAction implements Action {
         String[] stations = request.getParameterValues("stations");
         List<Station> stationList = new ArrayList<>();
         for (String station : stations) {
-            stationList.add(new Station().setId(Long.parseLong(station)));
+            stationList.add(Station.builder()
+                    .id(Long.parseLong(station))
+                    .build());
         }
-        return new Cruise()
-                .setTimeDeparture(timeDeparture)
-                .setDateDeparture(dateDeparture)
-                .setDateArrival(dateArrival)
-                .setDescription(description)
-                .setPrice(price)
-                .setShip(new Ship().setId(shipId))
-                .setStationList(stationList);
+        return Cruise.builder()
+                .timeDeparture(timeDeparture)
+                .dateDeparture(dateDeparture)
+                .dateArrival(dateArrival)
+                .description(description)
+                .price(price)
+                .ship(Ship.builder()
+                        .id(shipId)
+                        .build())
+                .stationList(stationList)
+                .build();
     }
 }

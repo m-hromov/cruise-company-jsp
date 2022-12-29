@@ -1,9 +1,9 @@
 package com.cruisecompany.service.impl;
 
-import com.cruisecompany.db.DBProvider;
-import com.cruisecompany.db.dao.DAOFactory;
-import com.cruisecompany.db.dao.PassengerDAO;
-import com.cruisecompany.db.dao.UserAccountDAO;
+import com.cruisecompany.dao.DAOFactory;
+import com.cruisecompany.dao.PassengerDAO;
+import com.cruisecompany.dao.UserAccountDAO;
+import com.cruisecompany.dao.db.DBProvider;
 import com.cruisecompany.dto.PassengerDTO;
 import com.cruisecompany.dto.mapper.DTOMapper;
 import com.cruisecompany.entity.Passenger;
@@ -12,14 +12,13 @@ import com.cruisecompany.exception.*;
 import com.cruisecompany.service.UserAccountService;
 import com.cruisecompany.util.password.PasswordEncryption;
 import com.cruisecompany.util.validator.Validators;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import java.sql.Connection;
 import java.util.Optional;
 
+@Log4j2
 public class UserAccountServiceImpl implements UserAccountService {
-    final static Logger logger = LogManager.getLogger(UserAccountServiceImpl.class);
     private final DBProvider dbProvider;
     private final UserAccountDAO userAccountDAO;
     private final PassengerDAO passengerDAO;
@@ -45,9 +44,9 @@ public class UserAccountServiceImpl implements UserAccountService {
                 Optional<Passenger> optionalPassenger = passengerDAO.getByUserAccountId(connection, userAccount.getId());
                 return optionalPassenger.map(DTOMapper::toPassengerDTO);
             }
-            return Optional.empty();
+            throw new AuthorizationException("Wrong password or email!");
         } catch (DAOException | EncryptionException e) {
-            logger.error("Unable to sign in!");
+            log.error("Unable to sign in!");
             throw new ServiceException(e.getMessage(), e);
         } finally {
             dbProvider.close(connection);
@@ -59,7 +58,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         try {
             Validators.validatePassenger(passenger);
         } catch (ValidationException e) {
-            logger.error("Passenger is not valid!");
+            log.error("Passenger is not valid!");
             throw new ServiceException(e.getMessage(), e);
         }
         Connection connection = dbProvider.getConnection();
@@ -72,8 +71,8 @@ public class UserAccountServiceImpl implements UserAccountService {
             String unencryptedPassword = userAccount.getPassword();
             String salt = PasswordEncryption.generateSalt();
             String encryptedPassword = PasswordEncryption.hashPassword(unencryptedPassword, salt);
-            userAccount.setPassword(encryptedPassword)
-                    .setPasswordSalt(salt);
+            userAccount.setPassword(encryptedPassword);
+            userAccount.setPasswordSalt(salt);
             long userAccountId = userAccountDAO.save(connection, userAccount);
             userAccount.setId(userAccountId);
             long passengerId = passengerDAO.save(connection, passenger);
@@ -81,7 +80,7 @@ public class UserAccountServiceImpl implements UserAccountService {
             dbProvider.commit(connection);
         } catch (DAOException | EncryptionException e) {
             dbProvider.rollback(connection);
-            logger.error("Unable to sign up!");
+            log.error("Unable to sign up!");
             throw new ServiceException(e.getMessage(), e);
         } finally {
             dbProvider.close(connection);
@@ -93,7 +92,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         try {
             Validators.validatePassword(newPassword);
         } catch (ValidationException e) {
-            logger.error("New password is not valid!");
+            log.error("New password is not valid!");
             throw new ServiceException(e.getMessage(), e);
         }
 
@@ -108,13 +107,13 @@ public class UserAccountServiceImpl implements UserAccountService {
             if (!passwordEquals) throw new WrongPasswordException("Password doesn't match!");
 
             String newSalt = PasswordEncryption.generateSalt();
-            String newEncryptedPassword = PasswordEncryption.hashPassword(newPassword,newSalt);
-            userAccount.setPassword(newEncryptedPassword)
-                    .setPasswordSalt(newSalt);
+            String newEncryptedPassword = PasswordEncryption.hashPassword(newPassword, newSalt);
+            userAccount.setPassword(newEncryptedPassword);
+            userAccount.setPasswordSalt(newSalt);
             userAccountDAO.update(connection, userAccount);
             dbProvider.commit(connection);
         } catch (DAOException | EncryptionException e) {
-            logger.error("Unable to update password!");
+            log.error("Unable to update password!");
             throw new ServiceException(e.getMessage(), e);
         } finally {
             dbProvider.close(connection);

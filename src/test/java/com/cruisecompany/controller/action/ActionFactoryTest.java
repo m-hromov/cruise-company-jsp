@@ -51,8 +51,6 @@ class ActionFactoryTest {
                 Arguments.arguments("do_confirm_order",new ConfirmOrderAction()),
                 Arguments.arguments("do_buy_cruise",new BuyCruiseAction()),
                 Arguments.arguments("do_block_order",new BlockOrderAction()),
-                Arguments.arguments("do_edit_cruise",new EditCruiseAction()),
-                Arguments.arguments("do_edit_ship",new EditShipAction()),
                 Arguments.arguments("do_pay",new PayForCruiseAction()),
                 Arguments.arguments("do_sign_out",new SignOutAction()));
     }

@@ -8,6 +8,7 @@ import com.cruisecompany.exception.ServiceException;
 import com.cruisecompany.service.ServiceFactory;
 import com.cruisecompany.service.ShipService;
 import com.cruisecompany.service.impl.CruiseServiceImpl;
+import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,8 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.IOException;
 
+@Log4j2
 public class AddShipAction implements Action {
-    final static Logger logger = LogManager.getLogger(CruiseServiceImpl.class);
     @Override
     public ActionMethod execute(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -33,7 +34,7 @@ public class AddShipAction implements Action {
             shipService.addShip(ship, part, requestRealPath);
             return new ActionMethod("/cruise/add_ship", Method.REDIRECT);
         } catch (IOException | ServletException e) {
-            logger.error("Unable to save an image!");
+            log.error("Unable to save an image!");
             request.getSession().setAttribute("error",500);
             request.getSession().setAttribute("errorMsg","Unable to save an image!");
             return new ActionMethod("/cruise/error", Method.REDIRECT);
@@ -48,8 +49,9 @@ public class AddShipAction implements Action {
     private Ship mapShip(HttpServletRequest request) {
         String name = request.getParameter("name");
         int capacity = Integer.parseInt(request.getParameter("capacity"));
-        return new Ship()
-                .setName(name)
-                .setPassengerCapacity(capacity);
+        return Ship.builder()
+                .name(name)
+                .passengerCapacity(capacity)
+                .build();
     }
 }

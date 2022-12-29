@@ -36,11 +36,14 @@ public class AddStaffAction implements Action {
         String phone = request.getParameter("phone");
         String speciality = request.getParameter("speciality");
         long shipId = Long.parseLong(request.getParameter("ship"));
-        return new Staff()
-                .setFirstName(firstName)
-                .setLastName(lastName)
-                .setPhone(phone)
-                .setSpeciality(speciality)
-                .setShip(new Ship().setId(shipId));
+        return Staff.builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .phone(phone)
+                .speciality(speciality)
+                .ship(Ship.builder()
+                        .id(shipId)
+                        .build())
+                .build();
     }
 }

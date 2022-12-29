@@ -7,52 +7,55 @@ import com.cruisecompany.entity.Cruise;
 import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.entity.Ticket;
 
-public class DTOMapper {
+public final class DTOMapper {
     public static CruiseShowDTO toCruiseShowDTO(Cruise cruise) {
-        return new CruiseShowDTO()
-                .setId(cruise.getId())
-                .setDescription(cruise.getDescription())
-                .setShipName(cruise.getShip().getName())
-                .setPhotoPath(cruise.getShip().getPhotoPath())
-                .setPrice(cruise.getPrice())
-                .setTimeDeparture(cruise.getTimeDeparture())
-                .setDaysTotal(cruise.getDaysTotal())
-                .setTicketsPurchased(cruise.getTicketsPurchased())
-                .setShipCapacity(cruise.getShip().getPassengerCapacity())
-                .setDateArrival(cruise.getDateArrival())
-                .setDateDeparture(cruise.getDateDeparture())
-                .setStart(cruise.getStationList().get(0))
-                .setEnd(cruise.getStationList().get(cruise.getStationList().size() - 1));
+        return CruiseShowDTO.builder()
+                .id(cruise.getId())
+                .description(cruise.getDescription())
+                .shipName(cruise.getShip().getName())
+                .photoPath(cruise.getShip().getPhotoPath())
+                .price(cruise.getPrice())
+                .timeDeparture(cruise.getTimeDeparture())
+                .daysTotal(cruise.getDaysTotal())
+                .ticketsPurchased(cruise.getTicketsPurchased())
+                .shipCapacity(cruise.getShip().getPassengerCapacity())
+                .dateArrival(cruise.getDateArrival())
+                .dateDeparture(cruise.getDateDeparture())
+                .start(cruise.getStationList().get(0))
+                .end(cruise.getStationList().get(cruise.getStationList().size() - 1))
+                .build();
     }
 
     public static PassengerOrderDTO toPassengerOrderDTO(Ticket ticket) {
         Passenger passenger = ticket.getPassenger();
         Cruise cruise = ticket.getCruise();
-        return new PassengerOrderDTO()
-                .setPassengerId(passenger.getId())
-                .setOrderId(ticket.getId())
-                .setCruiseId(cruise.getId())
-                .setFirstName(passenger.getFirstName())
-                .setLastName(passenger.getLastName())
-                .setPhone(passenger.getPhone())
-                .setEmail(passenger.getUserAccount().getEmail())
-                .setPaid(ticket.isPaid())
-                .setBanned(ticket.isBanned())
-                .setConfirmed(ticket.isConfirmed())
-                .setDocumentPath(passenger.getDocumentPath());
+        return PassengerOrderDTO.builder()
+                .passengerId(passenger.getId())
+                .orderId(ticket.getId())
+                .cruiseId(cruise.getId())
+                .firstName(passenger.getFirstName())
+                .lastName(passenger.getLastName())
+                .phone(passenger.getPhone())
+                .email(passenger.getUserAccount().getEmail())
+                .paid(ticket.isPaid())
+                .banned(ticket.isBanned())
+                .confirmed(ticket.isConfirmed())
+                .documentPath(passenger.getDocumentPath())
+                .build();
     }
 
     public static PassengerDTO toPassengerDTO(Passenger passenger) {
-        return new PassengerDTO()
-                .setPassengerId(passenger.getId())
-                .setFirstName(passenger.getFirstName())
-                .setLastName(passenger.getLastName())
-                .setPhone(passenger.getPhone())
-                .setEmail(passenger.getUserAccount().getEmail())
-                .setUserAccountId(passenger.getUserAccount().getId())
-                .setMoney(passenger.getMoney())
-                .setRole(passenger.getUserAccount().getRole())
-                .setDocumentPath(passenger.getDocumentPath());
+        return PassengerDTO.builder()
+                .passengerId(passenger.getId())
+                .firstName(passenger.getFirstName())
+                .lastName(passenger.getLastName())
+                .phone(passenger.getPhone())
+                .email(passenger.getUserAccount().getEmail())
+                .userAccountId(passenger.getUserAccount().getId())
+                .money(passenger.getMoney())
+                .role(passenger.getUserAccount().getRole())
+                .documentPath(passenger.getDocumentPath())
+                .build();
     }
 
 }

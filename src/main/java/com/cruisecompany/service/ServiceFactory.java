@@ -1,6 +1,6 @@
 package com.cruisecompany.service;
 
-import com.cruisecompany.db.DBProvider;
+import com.cruisecompany.dao.db.DBProvider;
 import com.cruisecompany.service.impl.*;
 
 public class ServiceFactory {
@@ -10,7 +10,7 @@ public class ServiceFactory {
     private StaffService staffService;
     private PassengerService passengerService;
     private UserAccountService userAccountService;
-    private OrderService orderService;
+    private TicketService ticketService;
 
     public ServiceFactory() {
         DBProvider dbProvider = new DBProvider();
@@ -24,7 +24,7 @@ public class ServiceFactory {
         cruiseService = new CruiseServiceImpl(dbProvider);
         passengerService = new PassengerServiceImpl(dbProvider);
         userAccountService = new UserAccountServiceImpl(dbProvider);
-        orderService = new OrderServiceImpl(dbProvider);
+        ticketService = new TicketServiceImpl(dbProvider);
         shipService = new ShipServiceImpl(dbProvider);
         stationService = new StationServiceImpl(dbProvider);
         staffService = new StaffServiceImpl(dbProvider);
@@ -42,8 +42,8 @@ public class ServiceFactory {
         return userAccountService;
     }
 
-    public OrderService getOrderService() {
-        return orderService;
+    public TicketService getOrderService() {
+        return ticketService;
     }
 
     public ShipService getShipService() {

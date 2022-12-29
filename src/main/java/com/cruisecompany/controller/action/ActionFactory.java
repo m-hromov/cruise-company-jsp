@@ -36,8 +36,6 @@ public class ActionFactory {
         actions.put("do_confirm_order",new ConfirmOrderAction());
         actions.put("do_buy_cruise",new BuyCruiseAction());
         actions.put("do_block_order",new BlockOrderAction());
-        actions.put("do_edit_cruise",new EditCruiseAction());
-        actions.put("do_edit_ship",new EditShipAction());
         actions.put("do_sign_out",new SignOutAction());
         actions.put("do_pay",new PayForCruiseAction());
     }

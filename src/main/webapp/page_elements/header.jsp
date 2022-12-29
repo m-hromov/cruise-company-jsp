@@ -68,25 +68,6 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                       aria-expanded="false">
-                        <fmt:message bundle="${loc}" key="lang.edit"/>
-                    </a>
-                    <ul class="dropdown-menu" style="right: 0;left: auto;">
-                        <li>
-                            <a class="dropdown-item"
-                               href="${pageContext.request.contextPath}/cruise/edit_cruise">
-                                <fmt:message bundle="${loc}" key="lang.cruise"/>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="${pageContext.request.contextPath}/cruise/edit_ship">
-                                <fmt:message bundle="${loc}" key="lang.ship"/>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
             </c:if>
         </ul>
 

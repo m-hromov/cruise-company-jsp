@@ -32,8 +32,9 @@ public class AddStationAction implements Action {
     private Station mapStation(HttpServletRequest request) {
         String city = request.getParameter("city");
         String country = request.getParameter("country");
-        return new Station()
-                .setCity(city)
-                .setCountry(country);
+        return Station.builder()
+                .city(city)
+                .country(country)
+                .build();
     }
 }

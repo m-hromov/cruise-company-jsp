@@ -13,8 +13,7 @@
 <html >
 <head>
     <jsp:include page="${pageContext.request.contextPath}/page_elements/common_scripts_and_css.jsp"/>
-    <script src="${pageContext.request.contextPath}/resources/js/chosen-js/chosen.jquery.min.js"
-            crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/js/chosen-js/chosen.min.css"/>
     <fmt:setLocale value="${sessionScope.lang}"/>
     <fmt:setBundle basename="localization.lang" var="loc"/>
     <title><fmt:message bundle="${loc}" key="lang.add_cruise"/> | Cruise company</title>
@@ -99,8 +98,10 @@
 
     </form>
 </div>
-<script>
-    $(document).ready(function () {
+<script src="${pageContext.request.contextPath}/resources/js/chosen-js/chosen.jquery.min.js"
+        crossorigin="anonymous"></script>
+<script type="text/javascript">
+    $(function () {
         $(".chosen-select").chosen();
     });
 </script>

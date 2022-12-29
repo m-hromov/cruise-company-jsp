@@ -6,7 +6,7 @@ import com.cruisecompany.controller.action.Method;
 import com.cruisecompany.dto.PassengerDTO;
 import com.cruisecompany.entity.Ticket;
 import com.cruisecompany.exception.ServiceException;
-import com.cruisecompany.service.OrderService;
+import com.cruisecompany.service.TicketService;
 import com.cruisecompany.service.ServiceFactory;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,8 +21,8 @@ public class LoadUserOrdersAction implements Action {
             ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
                     .getAttribute("ServiceFactory");
             PassengerDTO passengerDTO = (PassengerDTO) request.getSession().getAttribute("user");
-            OrderService orderService = serviceFactory.getOrderService();
-            List<Ticket> ticketList = orderService.getAllPassengerOrders(passengerDTO.getPassengerId());
+            TicketService ticketService = serviceFactory.getOrderService();
+            List<Ticket> ticketList = ticketService.getAllPassengerOrders(passengerDTO.getPassengerId());
             LocalDate currentDate = LocalDate.now();
             request.setAttribute("currentDate",currentDate);
             request.setAttribute("ticketList", ticketList);

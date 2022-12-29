@@ -5,7 +5,7 @@ import com.cruisecompany.controller.action.ActionMethod;
 import com.cruisecompany.controller.action.Method;
 import com.cruisecompany.dto.PassengerDTO;
 import com.cruisecompany.exception.ServiceException;
-import com.cruisecompany.service.OrderService;
+import com.cruisecompany.service.TicketService;
 import com.cruisecompany.service.ServiceFactory;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,12 +18,12 @@ public class BuyCruiseAction implements Action {
         try {
             ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
                     .getAttribute("ServiceFactory");
-            OrderService orderService = serviceFactory.getOrderService();
+            TicketService ticketService = serviceFactory.getOrderService();
             HttpSession session = request.getSession();
 
             PassengerDTO passengerDTO = (PassengerDTO) session.getAttribute("user");
             long cruiseId = Long.parseLong(request.getParameter("cruise_id"));
-            orderService.buy(passengerDTO, cruiseId);
+            ticketService.buy(passengerDTO, cruiseId);
         } catch (ServiceException e) {
             request.getSession().setAttribute("error",500);
             request.getSession().setAttribute("error_msg","Unable to buy a ticket!");

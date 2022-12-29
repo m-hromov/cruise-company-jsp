@@ -47,7 +47,7 @@ public class SignInAction implements Action {
             String password = request.getParameter("password");
             Optional<PassengerDTO> optional = userAccountService.signIn(email, password);
             optional.ifPresentOrElse(passengerDTO -> {
-                session.setAttribute("role", "USER");
+                session.setAttribute("role", passengerDTO.getRole());
                 session.setAttribute("user", passengerDTO);
             },() -> {
                 session.setAttribute("role", "ADMIN");

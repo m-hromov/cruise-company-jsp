@@ -1,35 +1,12 @@
 package com.cruisecompany.entity;
 
-public class Station implements Identifiable{
+import lombok.Builder;
+import lombok.Data;
 
-    private long id;
+@Data
+@Builder
+public class Station implements Identifiable{
+    private Long id;
     private String city;
     private String country;
-    @Override
-    public long getId() {
-        return id;
-    }
-
-    public Station setId(long id) {
-        this.id = id;
-        return this;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public Station setCity(String city) {
-        this.city = city;
-        return this;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public Station setCountry(String country) {
-        this.country = country;
-        return this;
-    }
 }

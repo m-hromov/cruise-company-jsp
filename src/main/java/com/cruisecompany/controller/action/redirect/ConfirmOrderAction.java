@@ -4,7 +4,7 @@ import com.cruisecompany.controller.action.Action;
 import com.cruisecompany.controller.action.ActionMethod;
 import com.cruisecompany.controller.action.Method;
 import com.cruisecompany.exception.ServiceException;
-import com.cruisecompany.service.OrderService;
+import com.cruisecompany.service.TicketService;
 import com.cruisecompany.service.ServiceFactory;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,10 +16,10 @@ public class ConfirmOrderAction implements Action {
         try {
             ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext()
                     .getAttribute("ServiceFactory");
-            OrderService orderService = serviceFactory.getOrderService();
+            TicketService ticketService = serviceFactory.getOrderService();
 
             long orderId = Long.parseLong(request.getParameter("order_id"));
-            orderService.confirm(orderId);
+            ticketService.confirm(orderId);
             return new ActionMethod("/cruise/orders", Method.REDIRECT);
         } catch (ServiceException e) {
             request.getSession().setAttribute("error", 500);

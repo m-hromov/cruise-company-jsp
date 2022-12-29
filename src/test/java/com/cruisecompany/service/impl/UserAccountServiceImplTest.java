@@ -1,6 +1,6 @@
 package com.cruisecompany.service.impl;
 
-import com.cruisecompany.db.DBProvider;
+import com.cruisecompany.dao.db.DBProvider;
 import com.cruisecompany.dto.PassengerDTO;
 import com.cruisecompany.entity.Passenger;
 import com.cruisecompany.entity.UserAccount;
@@ -45,17 +45,19 @@ class UserAccountServiceImplTest {
         } catch (SQLException | IOException ex) {
             fail(ex);
         }
-        userAccount = new UserAccount();
-        userAccount.setEmail("test@gmail.com")
-                .setPassword("testpassword")
-                .setRole("USER");
-        passenger = new Passenger();
-        passenger.setFirstName("Test1")
-                .setLastName("Test2")
-                .setPhone("Test3")
-                .setMoney(BigDecimal.valueOf(100))
-                .setDocumentPath("Test4")
-                .setUserAccount(userAccount);
+        userAccount = UserAccount.builder()
+                .email("test@gmail.com")
+                .password("testpassword")
+                .role("USER")
+                .build();
+        passenger = Passenger.builder()
+                .firstName("Test1")
+                .lastName("Test2")
+                .phone("Test3")
+                .money(BigDecimal.valueOf(100))
+                .documentPath("Test4")
+                .userAccount(userAccount)
+                .build();
     }
 
     @AfterAll

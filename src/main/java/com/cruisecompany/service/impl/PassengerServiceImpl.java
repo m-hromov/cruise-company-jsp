@@ -1,10 +1,10 @@
 package com.cruisecompany.service.impl;
 
-import com.cruisecompany.db.DBProvider;
-import com.cruisecompany.db.dao.DAOFactory;
-import com.cruisecompany.db.dao.OrderDAO;
-import com.cruisecompany.db.dao.PassengerDAO;
-import com.cruisecompany.db.dao.UserAccountDAO;
+import com.cruisecompany.dao.db.DBProvider;
+import com.cruisecompany.dao.DAOFactory;
+import com.cruisecompany.dao.TicketDAO;
+import com.cruisecompany.dao.PassengerDAO;
+import com.cruisecompany.dao.UserAccountDAO;
 import com.cruisecompany.dto.PassengerDTO;
 import com.cruisecompany.dto.PassengerOrderDTO;
 import com.cruisecompany.dto.mapper.DTOMapper;
@@ -18,6 +18,7 @@ import com.cruisecompany.service.PassengerService;
 import com.cruisecompany.util.files.FileHelper;
 import com.cruisecompany.util.files.FileType;
 import com.cruisecompany.util.validator.Validators;
+import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,28 +31,28 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Log4j2
 public class PassengerServiceImpl implements PassengerService {
-    final static Logger logger = LogManager.getLogger(PassengerServiceImpl.class);
     private final DBProvider dbProvider;
     private final PassengerDAO passengerDAO;
     private final UserAccountDAO userAccountDAO;
-    private final OrderDAO orderDAO;
+    private final TicketDAO ticketDAO;
 
     public PassengerServiceImpl(DBProvider dbProvider) {
         this.dbProvider = dbProvider;
         passengerDAO = DAOFactory.getInstance().getPassengerDAO();
         userAccountDAO = DAOFactory.getInstance().getUserAccountDAO();
-        orderDAO = DAOFactory.getInstance().getOrderDAO();
+        ticketDAO = DAOFactory.getInstance().getTicketDAO();
     }
 
     @Override
     public List<PassengerOrderDTO> getAllPassengerOrderDTOList() throws ServiceException {
         Connection connection = dbProvider.getConnection();
         try {
-            List<Ticket> ticketList = orderDAO.getAll(connection);
+            List<Ticket> ticketList = ticketDAO.getAll(connection);
             return ticketList.stream().map(DTOMapper::toPassengerOrderDTO).collect(Collectors.toList());
         } catch (DAOException e) {
-            logger.error("Unable to get all PassengerOrderDTOList!");
+            log.error("Unable to get all PassengerOrderDTOList!");
             throw new ServiceException(e.getMessage(), e);
         } finally {
             dbProvider.close(connection);
@@ -63,9 +64,9 @@ public class PassengerServiceImpl implements PassengerService {
         Connection connection = dbProvider.getConnection();
         try {
             Optional<Passenger> optional = passengerDAO.getByUserAccountId(connection, id);
-            return optional.orElseGet(Passenger::new);
+            return optional.orElseGet(()->Passenger.builder().build());
         } catch (DAOException e) {
-            logger.error("Unable to get passenger by account id!");
+            log.error("Unable to get passenger by account id!");
             throw new ServiceException(e.getMessage(), e);
         } finally {
             dbProvider.close(connection);
@@ -80,7 +81,7 @@ public class PassengerServiceImpl implements PassengerService {
             passengerDTO.setMoney(newMoney);
             dbProvider.commit(connection);
         } catch (DAOException e) {
-            logger.error("Unable to add money on account!");
+            log.error("Unable to add money on account!");
             throw new ServiceException(e.getMessage(), e);
         } finally {
             dbProvider.close(connection);
@@ -92,20 +93,21 @@ public class PassengerServiceImpl implements PassengerService {
         try {
             Validators.validatePassengerProfile(passengerDTO);
         } catch (ValidationException e) {
-            logger.error("Unable to validate profile!");
+            log.error("Unable to validate profile!");
             throw new ServiceException(e.getMessage(), e);
         }
         Connection connection = dbProvider.getConnection();
         try {
             passengerDAO.updateProfile(connection, passengerDTO);
 
-            UserAccount userAccount = new UserAccount()
-                    .setId(passengerDTO.getUserAccountId())
-                    .setEmail(passengerDTO.getEmail());
+            UserAccount userAccount = UserAccount.builder()
+                    .id(passengerDTO.getUserAccountId())
+                    .email(passengerDTO.getEmail())
+                    .build();
             userAccountDAO.updateEmail(connection, userAccount);
             dbProvider.commit(connection);
         } catch (DAOException e) {
-            logger.error("Unable to get all CruiseShowDTO!");
+            log.error("Unable to get all CruiseShowDTO!");
             throw new ServiceException(e.getMessage(), e);
         } finally {
             dbProvider.close(connection);
@@ -117,7 +119,7 @@ public class PassengerServiceImpl implements PassengerService {
         try {
             Validators.validatePhoto(photoPart);
         } catch (ValidationException e) {
-            logger.error("Unable to validate photo!");
+            log.error("Unable to validate photo!");
             throw new ServiceException(e.getMessage(), e);
         }
 
@@ -131,7 +133,7 @@ public class PassengerServiceImpl implements PassengerService {
             passengerDAO.updateDocument(connection, passengerDTO);
             dbProvider.commit(connection);
         } catch (DAOException | IOException e) {
-            logger.error("Unable to update document!");
+            log.error("Unable to update document!");
             throw new ServiceException(e.getMessage(), e);
         } finally {
             dbProvider.close(connection);

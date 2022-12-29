@@ -18,7 +18,9 @@ class ValidatorsTest {
     @Test
     void testValidatePassengerProfile() throws ValidationException {
         try(MockedStatic<Validators> mocked = Mockito.mockStatic(Validators.class)) {
-            PassengerDTO passengerDTO = new PassengerDTO().setFirstName("Maksym");
+            PassengerDTO passengerDTO = PassengerDTO.builder()
+                    .firstName("Maksym")
+                    .build();
             mocked.when(()->Validators.validatePassengerProfile(passengerDTO)).thenCallRealMethod();
             Validators.validatePassengerProfile(passengerDTO);
             mocked.verify(()->Validators.validateName(passengerDTO.getFirstName()),Mockito.times(1));
@@ -31,7 +33,10 @@ class ValidatorsTest {
     @Test
     void testValidatePassenger() throws ValidationException {
         try(MockedStatic<Validators> mocked = Mockito.mockStatic(Validators.class)) {
-            Passenger passenger = new Passenger().setFirstName("Maksym").setUserAccount(new UserAccount());
+            Passenger passenger = Passenger.builder()
+                    .firstName("Maksym")
+                    .userAccount(UserAccount.builder().build())
+                    .build();
             mocked.when(()->Validators.validatePassenger(passenger)).thenCallRealMethod();
             Validators.validatePassenger(passenger);
             mocked.verify(()->Validators.validateName(passenger.getFirstName()),Mockito.times(1));
