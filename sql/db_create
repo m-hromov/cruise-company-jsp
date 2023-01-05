@@ -1,0 +1,220 @@
+CREATE DATABASE cruise_company ENCODING = 'UTF8';
+
+
+\connect cruise_company
+
+CREATE FUNCTION public.ticket_purchased_or_deleted() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$DECLARE
+purchased_count smallint :=(SELECT COUNT(t.ticket_id) 
+                             FROM ticket AS t 
+                             WHERE t.cruise_id = OLD.cruise_id
+                           AND t.paid IS TRUE);
+
+BEGIN
+UPDATE cruise AS cr SET tickets_purchased = purchased_count
+WHERE cr.cruise_id = OLD.cruise_id;
+RETURN NEW;
+END;
+$$;
+
+CREATE TABLE public.cruise (
+    cruise_id smallint NOT NULL,
+    time_departure time without time zone,
+    date_departure date,
+    date_arrival date,
+    price numeric(100,2) NOT NULL,
+    ship_id smallint NOT NULL,
+    description text,
+    days_total smallint GENERATED ALWAYS AS ((date_arrival - date_departure)) STORED,
+    tickets_purchased smallint DEFAULT 0
+);
+
+CREATE SEQUENCE public.cruise_id_seq
+    AS smallint
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER SEQUENCE public.cruise_id_seq OWNED BY public.cruise.cruise_id;
+
+CREATE TABLE public.ticket (
+    ticket_id smallint NOT NULL,
+    cruise_id smallint NOT NULL,
+    passenger_id smallint NOT NULL,
+    paid boolean DEFAULT false NOT NULL,
+    banned boolean DEFAULT false NOT NULL,
+    confirmed boolean DEFAULT false NOT NULL
+);
+
+CREATE SEQUENCE public.order_order_id_seq
+    AS smallint
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER SEQUENCE public.order_order_id_seq OWNED BY public.ticket.ticket_id;
+
+CREATE TABLE public.passenger (
+    passenger_id smallint NOT NULL,
+    first_name character varying(100) NOT NULL,
+    last_name character varying(100) NOT NULL,
+    phone character varying(20),
+    user_account_id smallint NOT NULL,
+    document_path character varying(500),
+    money numeric NOT NULL
+);
+
+CREATE SEQUENCE public.passenger_id_seq
+    AS smallint
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER SEQUENCE public.passenger_id_seq OWNED BY public.passenger.passenger_id;
+
+CREATE TABLE public.route (
+    cruise_id smallint NOT NULL,
+    station_id smallint NOT NULL,
+    order_number smallint NOT NULL
+);
+
+CREATE TABLE public.ship (
+    ship_id smallint NOT NULL,
+    passenger_capacity smallint NOT NULL,
+    photo_path text DEFAULT '/static/images/ship.jpg'::text,
+    name character varying(200) NOT NULL
+);
+
+CREATE SEQUENCE public.ship_id_seq
+    AS smallint
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER SEQUENCE public.ship_id_seq OWNED BY public.ship.ship_id;
+
+CREATE TABLE public.staff (
+    staff_id smallint NOT NULL,
+    first_name character varying(200) NOT NULL,
+    last_name character varying(200) NOT NULL,
+    phone character varying(20),
+    ship_id smallint,
+    speciality character varying(200)
+);
+
+CREATE SEQUENCE public.staff_id_seq
+    AS smallint
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER SEQUENCE public.staff_id_seq OWNED BY public.staff.staff_id;
+
+CREATE TABLE public.station (
+    station_id smallint NOT NULL,
+    city character varying(200) NOT NULL,
+    country character varying(200) NOT NULL
+);
+
+CREATE SEQUENCE public.station_id_seq
+    AS smallint
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER SEQUENCE public.station_id_seq OWNED BY public.station.station_id;
+
+CREATE TABLE public.user_account (
+    user_account_id smallint NOT NULL,
+    email character varying(200) NOT NULL,
+    password text NOT NULL,
+    password_salt character varying(100),
+    role character varying(10)
+);
+
+CREATE SEQUENCE public.user_account_id_seq
+    AS smallint
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER SEQUENCE public.user_account_id_seq OWNED BY public.user_account.user_account_id;
+
+ALTER TABLE ONLY public.cruise ALTER COLUMN cruise_id SET DEFAULT nextval('public.cruise_id_seq'::regclass);
+
+ALTER TABLE ONLY public.passenger ALTER COLUMN passenger_id SET DEFAULT nextval('public.passenger_id_seq'::regclass);
+
+ALTER TABLE ONLY public.ship ALTER COLUMN ship_id SET DEFAULT nextval('public.ship_id_seq'::regclass);
+
+ALTER TABLE ONLY public.staff ALTER COLUMN staff_id SET DEFAULT nextval('public.staff_id_seq'::regclass);
+
+ALTER TABLE ONLY public.station ALTER COLUMN station_id SET DEFAULT nextval('public.station_id_seq'::regclass);
+
+ALTER TABLE ONLY public.ticket ALTER COLUMN ticket_id SET DEFAULT nextval('public.order_order_id_seq'::regclass);
+
+ALTER TABLE ONLY public.user_account ALTER COLUMN user_account_id SET DEFAULT nextval('public.user_account_id_seq'::regclass);
+
+ALTER TABLE ONLY public.cruise
+    ADD CONSTRAINT cruise_pkey PRIMARY KEY (cruise_id);
+
+ALTER TABLE ONLY public.ticket
+    ADD CONSTRAINT order_cruise_id_passenger_id_key UNIQUE (cruise_id, passenger_id);
+
+ALTER TABLE ONLY public.ticket
+    ADD CONSTRAINT order_pkey PRIMARY KEY (ticket_id);
+
+ALTER TABLE ONLY public.passenger
+    ADD CONSTRAINT passenger_pkey PRIMARY KEY (passenger_id);
+
+ALTER TABLE ONLY public.route
+    ADD CONSTRAINT route_pkey PRIMARY KEY (cruise_id, station_id);
+
+ALTER TABLE ONLY public.ship
+    ADD CONSTRAINT ship_pkey PRIMARY KEY (ship_id);
+
+ALTER TABLE ONLY public.staff
+    ADD CONSTRAINT staff_pkey PRIMARY KEY (staff_id);
+
+ALTER TABLE ONLY public.station
+    ADD CONSTRAINT station_pkey PRIMARY KEY (station_id);
+
+ALTER TABLE ONLY public.user_account
+    ADD CONSTRAINT user_account_pkey PRIMARY KEY (user_account_id);
+
+CREATE TRIGGER monitor_purchased_tickets AFTER INSERT OR DELETE OR UPDATE ON public.ticket FOR EACH ROW EXECUTE FUNCTION public.ticket_purchased_or_deleted();
+
+ALTER TABLE ONLY public.cruise
+    ADD CONSTRAINT cruise_id_ship_fkey FOREIGN KEY (ship_id) REFERENCES public.ship(ship_id) ON DELETE CASCADE NOT VALID;
+
+ALTER TABLE ONLY public.ticket
+    ADD CONSTRAINT order_cruise_id_fkey FOREIGN KEY (cruise_id) REFERENCES public.cruise(cruise_id) ON DELETE CASCADE NOT VALID;
+
+ALTER TABLE ONLY public.ticket
+    ADD CONSTRAINT order_passenger_id_fkey FOREIGN KEY (passenger_id) REFERENCES public.passenger(passenger_id) ON DELETE CASCADE NOT VALID;
+
+ALTER TABLE ONLY public.passenger
+    ADD CONSTRAINT passenger_id_user_account_fkey FOREIGN KEY (user_account_id) REFERENCES public.user_account(user_account_id) ON DELETE CASCADE NOT VALID;
+
+ALTER TABLE ONLY public.route
+    ADD CONSTRAINT route_id_cruise_fkey FOREIGN KEY (cruise_id) REFERENCES public.cruise(cruise_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY public.route
+    ADD CONSTRAINT route_id_station_fkey FOREIGN KEY (station_id) REFERENCES public.station(station_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY public.staff
+    ADD CONSTRAINT staff_id_ship_fkey FOREIGN KEY (ship_id) REFERENCES public.ship(ship_id);
